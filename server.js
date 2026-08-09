@@ -1,336 +1,150 @@
-"use strict";
-
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+const fs = require("fs");
 
 const app = express();
 
 const PORT = process.env.PORT || 3000;
-const ADMIN_SECRET =
-  process.env.ADMIN_SECRET || "change-this-admin-secret";
 
-const SUPABASE_URL =
-  process.env.SUPABASE_URL || "";
+const PUBLIC_DIR = path.join(__dirname, "public");
+const DATA_DIR = path.join(__dirname, "data");
+const DATA_FILE = path.join(DATA_DIR, "articles.json");
 
-const SUPABASE_SERVICE_KEY =
-  process.env.SUPABASE_SERVICE_KEY || "";
+app.use(cors());
+app.use(express.json({ limit: "2mb" }));
 
-const useSupabase =
-  Boolean(SUPABASE_URL && SUPABASE_SERVICE_KEY);
+/* --------------------------------
+   DATA STORAGE
+-------------------------------- */
 
-
-/* -------------------------------------------------------
-   APP CONFIGURATION
-------------------------------------------------------- */
-
-app.disable("x-powered-by");
-
-app.use(
-  cors({
-    origin: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: [
-      "Content-Type",
-      "Authorization",
-      "X-Admin-Secret"
-    ]
-  })
-);
-
-app.use(
-  express.json({
-    limit: "2mb"
-  })
-);
-
-app.use(
-  express.urlencoded({
-    extended: true,
-    limit: "2mb"
-  })
-);
-
-
-/* -------------------------------------------------------
-   SECURITY HEADERS
-------------------------------------------------------- */
-
-app.use((req, res, next) => {
-  res.setHeader(
-    "X-Content-Type-Options",
-    "nosniff"
-  );
-
-  res.setHeader(
-    "X-Frame-Options",
-    "SAMEORIGIN"
-  );
-
-  res.setHeader(
-    "Referrer-Policy",
-    "strict-origin-when-cross-origin"
-  );
-
-  next();
-});
-
-
-/* -------------------------------------------------------
-   STATIC WEBSITE
-------------------------------------------------------- */
-
-const publicDirectory =
-  path.join(__dirname, "public");
-
-app.use(
-  express.static(publicDirectory, {
-    extensions: ["html"]
-  })
-);
-
-
-/* -------------------------------------------------------
-   DEMO DATABASE
-   Used until Supabase is connected.
-------------------------------------------------------- */
-
-let demoArticles = [
-  {
-    id: 1,
-    title: "IMU EDITZ News-এর যাত্রা শুরু",
-    summary:
-      "আধুনিক প্রযুক্তিনির্ভর একটি নতুন ডিজিটাল নিউজ প্ল্যাটফর্ম হিসেবে IMU EDITZ News-এর যাত্রা শুরু হয়েছে।",
-    content:
-      "IMU EDITZ News একটি আধুনিক ডিজিটাল সংবাদ প্ল্যাটফর্ম হিসেবে তৈরি করা হচ্ছে। এখানে দেশ-বিদেশের গুরুত্বপূর্ণ সংবাদ পাঠকদের কাছে দ্রুত ও সুন্দরভাবে উপস্থাপন করা হবে।",
-    category: "জাতীয়",
-    image:
-      "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=80",
-    source_name: "IMU EDITZ News",
-    source_url: "",
-    status: "published",
-    views: 0,
-    created_at: new Date().toISOString(),
-    published_at: new Date().toISOString()
+function ensureDataFile() {
+  if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
   }
-];
 
-
-/* -------------------------------------------------------
-   SUPABASE HELPER
-------------------------------------------------------- */
-
-async function supabaseRequest(
-  endpoint,
-  options = {}
-) {
-  if (!useSupabase) {
-    throw new Error(
-      "Supabase is not configured."
+  if (!fs.existsSync(DATA_FILE)) {
+    fs.writeFileSync(
+      DATA_FILE,
+      JSON.stringify([], null, 2),
+      "utf8"
     );
   }
-
-  const response =
-    await fetch(
-      `${SUPABASE_URL}/rest/v1/${endpoint}`,
-      {
-        ...options,
-        headers: {
-          "apikey": SUPABASE_SERVICE_KEY,
-          "Authorization":
-            `Bearer ${SUPABASE_SERVICE_KEY}`,
-          "Content-Type":
-            "application/json",
-          "Prefer":
-            "return=representation",
-          ...(options.headers || {})
-        }
-      }
-    );
-
-  const text =
-    await response.text();
-
-  let data = null;
-
-  try {
-    data = text ? JSON.parse(text) : null;
-  } catch {
-    data = text;
-  }
-
-  if (!response.ok) {
-    const error =
-      new Error(
-        data?.message ||
-        data?.hint ||
-        "Supabase request failed."
-      );
-
-    error.status =
-      response.status;
-
-    throw error;
-  }
-
-  return data;
 }
 
+function readArticles() {
+  ensureDataFile();
 
-/* -------------------------------------------------------
-   VALIDATION
-------------------------------------------------------- */
+  try {
+    const content = fs.readFileSync(
+      DATA_FILE,
+      "utf8"
+    );
 
-function cleanText(
-  value,
-  maxLength = 5000
-) {
-  if (
-    typeof value !== "string"
-  ) {
+    const articles = JSON.parse(content);
+
+    return Array.isArray(articles)
+      ? articles
+      : [];
+  } catch (error) {
+    console.error(
+      "Database read error:",
+      error
+    );
+
+    return [];
+  }
+}
+
+function writeArticles(articles) {
+  ensureDataFile();
+
+  fs.writeFileSync(
+    DATA_FILE,
+    JSON.stringify(articles, null, 2),
+    "utf8"
+  );
+}
+
+function getNextId(articles) {
+  if (!articles.length) {
+    return 1;
+  }
+
+  return (
+    Math.max(
+      ...articles.map(
+        article =>
+          Number(article.id) || 0
+      )
+    ) + 1
+  );
+}
+
+/* --------------------------------
+   HELPERS
+-------------------------------- */
+
+function cleanText(value) {
+  if (typeof value !== "string") {
     return "";
   }
 
-  return value
-    .trim()
-    .slice(0, maxLength);
+  return value.trim();
 }
 
-
-function normalizeArticle(input) {
+function normalizeArticle(article) {
   return {
-    title:
-      cleanText(input.title, 300),
-
-    summary:
-      cleanText(input.summary, 1000),
-
-    content:
-      cleanText(input.content, 20000),
-
+    id: Number(article.id),
+    title: cleanText(article.title),
     category:
-      cleanText(
-        input.category || "অন্যান্য",
-        80
-      ),
-
-    image:
-      cleanText(input.image, 2000),
-
+      cleanText(article.category) ||
+      "সর্বশেষ",
     source_name:
-      cleanText(
-        input.source_name ||
-        "IMU EDITZ News",
-        200
-      ),
-
-    source_url:
-      cleanText(input.source_url, 2000)
+      cleanText(article.source_name) ||
+      "IMU EDITZ News",
+    image: cleanText(article.image),
+    summary: cleanText(article.summary),
+    content: cleanText(article.content),
+    status:
+      article.status === "draft"
+        ? "draft"
+        : "published",
+    views: Number(article.views) || 0,
+    created_at:
+      article.created_at ||
+      new Date().toISOString(),
+    updated_at:
+      article.updated_at ||
+      new Date().toISOString()
   };
 }
 
-
-/* -------------------------------------------------------
-   ADMIN AUTHENTICATION
-------------------------------------------------------- */
-
-function requireAdmin(
-  req,
-  res,
-  next
-) {
-  const suppliedSecret =
-    req.headers["x-admin-secret"];
-
-  if (
-    !suppliedSecret ||
-    suppliedSecret !== ADMIN_SECRET
-  ) {
-    return res.status(401).json({
-      success: false,
-      message:
-        "Unauthorized admin request."
-    });
-  }
-
-  next();
-}
-
-
-/* -------------------------------------------------------
-   HEALTH CHECK
-------------------------------------------------------- */
-
-app.get(
-  "/api/health",
-  (req, res) => {
-    res.json({
-      success: true,
-      service: "IMU EDITZ News API",
-      status: "online",
-      database:
-        useSupabase
-          ? "supabase"
-          : "demo-memory",
-      time:
-        new Date().toISOString()
-    });
-  }
-);
-
-
-/* -------------------------------------------------------
-   GET PUBLISHED ARTICLES
-------------------------------------------------------- */
+/* --------------------------------
+   API: GET ALL ARTICLES
+-------------------------------- */
 
 app.get(
   "/api/articles",
-  async (req, res) => {
+  (req, res) => {
     try {
-
-      if (useSupabase) {
-
-        const articles =
-          await supabaseRequest(
-            "articles?select=*&status=eq.published&order=created_at.desc"
-          );
-
-        return res.json({
-          success: true,
-          articles: Array.isArray(articles)
-            ? articles
-            : []
-        });
-      }
-
-
       const articles =
-        demoArticles
-          .filter(
-            article =>
-              article.status ===
-              "published"
-          )
+        readArticles()
+          .map(normalizeArticle)
           .sort(
             (a, b) =>
               new Date(b.created_at) -
               new Date(a.created_at)
           );
 
-
-      return res.json({
+      res.json({
         success: true,
         articles
       });
-
     } catch (error) {
+      console.error(error);
 
-      console.error(
-        "GET /api/articles:",
-        error
-      );
-
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message:
           "সংবাদ লোড করা যায়নি।"
@@ -339,654 +153,425 @@ app.get(
   }
 );
 
-
-/* -------------------------------------------------------
-   GET SINGLE ARTICLE
-------------------------------------------------------- */
+/* --------------------------------
+   API: GET SINGLE ARTICLE
+-------------------------------- */
 
 app.get(
   "/api/articles/:id",
-  async (req, res) => {
-
-    const id =
-      Number(req.params.id);
-
-    if (
-      !Number.isInteger(id) ||
-      id <= 0
-    ) {
-      return res.status(400).json({
-        success: false,
-        message:
-          "Invalid article ID."
-      });
-    }
-
-
+  (req, res) => {
     try {
+      const id =
+        Number(req.params.id);
 
-      if (useSupabase) {
-
-        const result =
-          await supabaseRequest(
-            `articles?id=eq.${id}&status=eq.published&select=*`
-          );
-
-        if (
-          !Array.isArray(result) ||
-          result.length === 0
-        ) {
-          return res.status(404).json({
-            success: false,
-            message:
-              "Article not found."
-          });
-        }
-
-        return res.json({
-          success: true,
-          article: result[0]
-        });
-      }
-
+      const articles =
+        readArticles();
 
       const article =
-        demoArticles.find(
+        articles.find(
           item =>
-            item.id === id &&
-            item.status ===
-              "published"
+            Number(item.id) === id
         );
-
 
       if (!article) {
         return res.status(404).json({
           success: false,
           message:
-            "Article not found."
+            "সংবাদ পাওয়া যায়নি।"
         });
       }
 
-
-      article.views =
-        Number(article.views || 0) + 1;
-
-
-      return res.json({
+      res.json({
         success: true,
-        article
+        article:
+          normalizeArticle(article)
       });
-
     } catch (error) {
+      console.error(error);
 
-      console.error(
-        "GET /api/articles/:id:",
-        error
-      );
-
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message:
-          "Article load failed."
+          "সংবাদ লোড করা যায়নি।"
       });
     }
   }
 );
 
-
-/* -------------------------------------------------------
-   ADMIN - GET ALL ARTICLES
-------------------------------------------------------- */
-
-app.get(
-  "/api/admin/articles",
-  requireAdmin,
-  async (req, res) => {
-
-    try {
-
-      if (useSupabase) {
-
-        const articles =
-          await supabaseRequest(
-            "articles?select=*&order=created_at.desc"
-          );
-
-        return res.json({
-          success: true,
-          articles
-        });
-      }
-
-
-      return res.json({
-        success: true,
-        articles:
-          [...demoArticles].sort(
-            (a, b) =>
-              new Date(b.created_at) -
-              new Date(a.created_at)
-          )
-      });
-
-    } catch (error) {
-
-      console.error(
-        "ADMIN GET ARTICLES:",
-        error
-      );
-
-      return res.status(500).json({
-        success: false,
-        message:
-          "Admin news load failed."
-      });
-    }
-  }
-);
-
-
-/* -------------------------------------------------------
-   ADMIN - CREATE ARTICLE
-------------------------------------------------------- */
+/* --------------------------------
+   API: CREATE ARTICLE
+-------------------------------- */
 
 app.post(
-  "/api/admin/articles",
-  requireAdmin,
-  async (req, res) => {
-
+  "/api/articles",
+  (req, res) => {
     try {
+      const title =
+        cleanText(req.body.title);
 
-      const article =
-        normalizeArticle(req.body);
+      const content =
+        cleanText(req.body.content);
 
-
-      if (!article.title) {
+      if (!title) {
         return res.status(400).json({
           success: false,
           message:
-            "Headline is required."
+            "সংবাদের শিরোনাম প্রয়োজন।"
         });
       }
 
+      if (!content) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "সংবাদের বিস্তারিত লেখা প্রয়োজন।"
+        });
+      }
 
-      const status =
-        req.body.status ===
-        "published"
-          ? "published"
-          : "draft";
-
+      const articles =
+        readArticles();
 
       const now =
         new Date().toISOString();
 
+      const article = {
+        id: getNextId(articles),
 
-      if (useSupabase) {
+        title,
 
-        const payload = {
-          ...article,
-          status,
-          views: 0,
-          created_at: now,
-          published_at:
-            status === "published"
-              ? now
-              : null
-        };
+        category:
+          cleanText(req.body.category) ||
+          "সর্বশেষ",
 
+        source_name:
+          cleanText(
+            req.body.source_name
+          ) ||
+          "IMU EDITZ News",
 
-        const result =
-          await supabaseRequest(
-            "articles",
-            {
-              method: "POST",
-              body:
-                JSON.stringify(payload)
-            }
-          );
+        image:
+          cleanText(req.body.image),
 
+        summary:
+          cleanText(
+            req.body.summary
+          ),
 
-        return res.status(201).json({
-          success: true,
-          article: result[0]
-        });
-      }
+        content,
 
-
-      const newArticle = {
-        id:
-          demoArticles.length
-            ? Math.max(
-                ...demoArticles.map(
-                  item => item.id
-                )
-              ) + 1
-            : 1,
-
-        ...article,
-
-        status,
+        status:
+          req.body.status === "draft"
+            ? "draft"
+            : "published",
 
         views: 0,
 
         created_at: now,
 
-        published_at:
-          status === "published"
-            ? now
-            : null
+        updated_at: now
       };
 
+      articles.push(article);
 
-      demoArticles.push(
-        newArticle
-      );
+      writeArticles(articles);
 
-
-      return res.status(201).json({
+      res.status(201).json({
         success: true,
-        article: newArticle
+        message:
+          "সংবাদ সফলভাবে সংরক্ষণ হয়েছে।",
+        article:
+          normalizeArticle(article)
       });
-
     } catch (error) {
+      console.error(error);
 
-      console.error(
-        "ADMIN CREATE:",
-        error
-      );
-
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message:
-          "সংবাদ তৈরি করা যায়নি।"
+          "সংবাদ সংরক্ষণ করা যায়নি।"
       });
     }
   }
 );
 
-
-/* -------------------------------------------------------
-   ADMIN - UPDATE ARTICLE
-------------------------------------------------------- */
+/* --------------------------------
+   API: UPDATE ARTICLE
+-------------------------------- */
 
 app.put(
-  "/api/admin/articles/:id",
-  requireAdmin,
-  async (req, res) => {
-
-    const id =
-      Number(req.params.id);
-
-    if (
-      !Number.isInteger(id) ||
-      id <= 0
-    ) {
-      return res.status(400).json({
-        success: false,
-        message:
-          "Invalid article ID."
-      });
-    }
-
-
+  "/api/articles/:id",
+  (req, res) => {
     try {
+      const id =
+        Number(req.params.id);
 
-      const updates =
-        normalizeArticle(req.body);
-
-
-      if (req.body.status) {
-
-        updates.status =
-          req.body.status ===
-          "published"
-            ? "published"
-            : "draft";
-      }
-
-
-      if (useSupabase) {
-
-        if (
-          updates.status ===
-          "published"
-        ) {
-          updates.published_at =
-            new Date().toISOString();
-        }
-
-
-        const result =
-          await supabaseRequest(
-            `articles?id=eq.${id}`,
-            {
-              method: "PATCH",
-              body:
-                JSON.stringify(updates)
-            }
-          );
-
-
-        if (
-          !Array.isArray(result) ||
-          result.length === 0
-        ) {
-          return res.status(404).json({
-            success: false,
-            message:
-              "Article not found."
-          });
-        }
-
-
-        return res.json({
-          success: true,
-          article: result[0]
-        });
-      }
-
+      const articles =
+        readArticles();
 
       const index =
-        demoArticles.findIndex(
-          item => item.id === id
+        articles.findIndex(
+          article =>
+            Number(article.id) === id
         );
-
 
       if (index === -1) {
         return res.status(404).json({
           success: false,
           message:
-            "Article not found."
+            "সংবাদ পাওয়া যায়নি।"
         });
       }
 
+      const title =
+        cleanText(req.body.title);
 
-      const existing =
-        demoArticles[index];
+      const content =
+        cleanText(req.body.content);
 
-
-      demoArticles[index] = {
-        ...existing,
-        ...updates
-      };
-
-
-      if (
-        updates.status ===
-        "published"
-      ) {
-        demoArticles[index]
-          .published_at =
-          new Date().toISOString();
+      if (!title) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "সংবাদের শিরোনাম প্রয়োজন।"
+        });
       }
 
+      if (!content) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "সংবাদের বিস্তারিত লেখা প্রয়োজন।"
+        });
+      }
 
-      return res.json({
+      const oldArticle =
+        articles[index];
+
+      const updatedArticle = {
+        ...oldArticle,
+
+        title,
+
+        category:
+          cleanText(req.body.category) ||
+          "সর্বশেষ",
+
+        source_name:
+          cleanText(
+            req.body.source_name
+          ) ||
+          "IMU EDITZ News",
+
+        image:
+          cleanText(req.body.image),
+
+        summary:
+          cleanText(
+            req.body.summary
+          ),
+
+        content,
+
+        status:
+          req.body.status === "draft"
+            ? "draft"
+            : "published",
+
+        views:
+          Number(oldArticle.views) ||
+          0,
+
+        updated_at:
+          new Date().toISOString()
+      };
+
+      articles[index] =
+        updatedArticle;
+
+      writeArticles(articles);
+
+      res.json({
         success: true,
+        message:
+          "সংবাদ সফলভাবে আপডেট হয়েছে।",
         article:
-          demoArticles[index]
+          normalizeArticle(
+            updatedArticle
+          )
       });
-
     } catch (error) {
+      console.error(error);
 
-      console.error(
-        "ADMIN UPDATE:",
-        error
-      );
-
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message:
-          "সংবাদ update করা যায়নি।"
+          "সংবাদ আপডেট করা যায়নি।"
       });
     }
   }
 );
 
-
-/* -------------------------------------------------------
-   ADMIN - DELETE ARTICLE
-------------------------------------------------------- */
+/* --------------------------------
+   API: DELETE ARTICLE
+-------------------------------- */
 
 app.delete(
-  "/api/admin/articles/:id",
-  requireAdmin,
-  async (req, res) => {
-
-    const id =
-      Number(req.params.id);
-
-
-    if (
-      !Number.isInteger(id) ||
-      id <= 0
-    ) {
-      return res.status(400).json({
-        success: false,
-        message:
-          "Invalid article ID."
-      });
-    }
-
-
+  "/api/articles/:id",
+  (req, res) => {
     try {
+      const id =
+        Number(req.params.id);
 
-      if (useSupabase) {
+      const articles =
+        readArticles();
 
-        const result =
-          await supabaseRequest(
-            `articles?id=eq.${id}`,
-            {
-              method: "DELETE"
-            }
-          );
-
-
-        return res.json({
-          success: true,
-          deleted:
-            Array.isArray(result)
-              ? result.length
-              : 0
-        });
-      }
-
-
-      const oldLength =
-        demoArticles.length;
-
-
-      demoArticles =
-        demoArticles.filter(
-          item => item.id !== id
+      const index =
+        articles.findIndex(
+          article =>
+            Number(article.id) === id
         );
 
-
-      if (
-        demoArticles.length ===
-        oldLength
-      ) {
+      if (index === -1) {
         return res.status(404).json({
           success: false,
           message:
-            "Article not found."
+            "সংবাদ পাওয়া যায়নি।"
         });
       }
 
+      articles.splice(index, 1);
 
-      return res.json({
+      writeArticles(articles);
+
+      res.json({
         success: true,
-        deleted: 1
+        message:
+          "সংবাদ Delete হয়েছে।"
       });
-
     } catch (error) {
+      console.error(error);
 
-      console.error(
-        "ADMIN DELETE:",
-        error
-      );
-
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message:
-          "সংবাদ delete করা যায়নি।"
+          "সংবাদ Delete করা যায়নি।"
       });
     }
   }
 );
 
+/* --------------------------------
+   API: INCREMENT VIEWS
+-------------------------------- */
 
-/* -------------------------------------------------------
-   ADMIN DASHBOARD STATS
-------------------------------------------------------- */
-
-app.get(
-  "/api/admin/stats",
-  requireAdmin,
-  async (req, res) => {
-
+app.post(
+  "/api/articles/:id/view",
+  (req, res) => {
     try {
+      const id =
+        Number(req.params.id);
 
-      let articles;
+      const articles =
+        readArticles();
 
+      const article =
+        articles.find(
+          item =>
+            Number(item.id) === id
+        );
 
-      if (useSupabase) {
-
-        articles =
-          await supabaseRequest(
-            "articles?select=id,status"
-          );
-
-      } else {
-
-        articles =
-          demoArticles;
+      if (!article) {
+        return res.status(404).json({
+          success: false,
+          message:
+            "সংবাদ পাওয়া যায়নি।"
+        });
       }
 
+      article.views =
+        (Number(article.views) || 0) +
+        1;
 
-      const total =
-        articles.length;
+      writeArticles(articles);
 
-      const published =
-        articles.filter(
-          item =>
-            item.status ===
-            "published"
-        ).length;
-
-      const drafts =
-        articles.filter(
-          item =>
-            item.status ===
-            "draft"
-        ).length;
-
-      const pending =
-        articles.filter(
-          item =>
-            item.status ===
-            "pending"
-        ).length;
-
-
-      return res.json({
+      res.json({
         success: true,
-        stats: {
-          total,
-          published,
-          drafts,
-          pending
-        }
+        views: article.views
       });
-
     } catch (error) {
+      console.error(error);
 
-      console.error(
-        "ADMIN STATS:",
-        error
-      );
-
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message:
-          "Stats load failed."
+          "View count update করা যায়নি।"
       });
     }
   }
 );
 
+/* --------------------------------
+   HEALTH CHECK
+-------------------------------- */
 
-/* -------------------------------------------------------
-   404 API
-------------------------------------------------------- */
-
-app.use(
-  "/api",
+app.get(
+  "/api/health",
   (req, res) => {
-    res.status(404).json({
-      success: false,
-      message:
-        "API endpoint not found."
+    res.json({
+      success: true,
+      site:
+        "IMU EDITZ News",
+      status: "online",
+      time:
+        new Date().toISOString()
     });
   }
 );
 
-
-/* -------------------------------------------------------
-   GENERAL ERROR HANDLER
-------------------------------------------------------- */
+/* --------------------------------
+   STATIC WEBSITE
+-------------------------------- */
 
 app.use(
-  (error, req, res, next) => {
+  express.static(PUBLIC_DIR)
+);
 
-    console.error(error);
+/* --------------------------------
+   SPA FALLBACK
+-------------------------------- */
 
+app.get(
+  "*",
+  (req, res) => {
     if (
-      res.headersSent
+      req.path.startsWith("/api/")
     ) {
-      return next(error);
+      return res.status(404).json({
+        success: false,
+        message:
+          "API endpoint পাওয়া যায়নি।"
+      });
     }
 
-    res.status(500).json({
-      success: false,
-      message:
-        "Internal server error."
-    });
+    res.sendFile(
+      path.join(
+        PUBLIC_DIR,
+        "index.html"
+      )
+    );
   }
 );
 
-
-/* -------------------------------------------------------
+/* --------------------------------
    START SERVER
-------------------------------------------------------- */
+-------------------------------- */
 
 app.listen(
   PORT,
   "0.0.0.0",
   () => {
-
     console.log(
-      "===================================="
-    );
-
-    console.log(
-      " IMU EDITZ News Server"
-    );
-
-    console.log(
-      ` Port: ${PORT}`
-    );
-
-    console.log(
-      ` Database: ${
-        useSupabase
-          ? "Supabase"
-          : "Demo Memory"
-      }`
-    );
-
-    console.log(
-      "===================================="
+      `IMU EDITZ News running on port ${PORT}`
     );
   }
 );
