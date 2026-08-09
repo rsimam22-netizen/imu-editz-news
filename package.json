@@ -1,0 +1,19 @@
+{
+  "name": "imu-editz-news",
+  "version": "1.0.0",
+  "description": "IMU EDITZ News - AI Powered News Portal",
+  "private": true,
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "engines": {
+    "node": "22.x"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0"
+  }
+}
