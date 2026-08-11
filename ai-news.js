@@ -3,7 +3,6 @@
 const fs = require("fs/promises");
 const path = require("path");
 const Parser = require("rss-parser");
-const OpenAI = require("openai");
 
 const parser = new Parser({
   timeout: 15000,
@@ -33,7 +32,8 @@ const NEWS_FEEDS = process.env.NEWS_RSS_URLS
       }))
   : DEFAULT_FEEDS;
 
-const AI_MODEL = process.env.OPENAI_MODEL || "gpt-5.5";
+const AI_MODEL =
+  process.env.GEMINI_MODEL || "gemini-2.5-flash-lite";
 
 function cleanText(value = "") {
   return String(value)
@@ -44,6 +44,7 @@ function cleanText(value = "") {
 
 function makeId(title, link) {
   const source = `${title}|${link}`;
+
   let hash = 0;
 
   for (let i = 0; i < source.length; i += 1) {
@@ -56,7 +57,11 @@ function makeId(title, link) {
 
 async function readArticles() {
   try {
-    const content = await fs.readFile(ARTICLES_FILE, "utf8");
+    const content = await fs.readFile(
+      ARTICLES_FILE,
+      "utf8"
+    );
+
     const articles = JSON.parse(content);
 
     return Array.isArray(articles) ? articles : [];
@@ -71,7 +76,9 @@ async function readArticles() {
 }
 
 async function saveArticles(articles) {
-  await fs.mkdir(DATA_DIR, { recursive: true });
+  await fs.mkdir(DATA_DIR, {
+    recursive: true
+  });
 
   await fs.writeFile(
     ARTICLES_FILE,
@@ -94,24 +101,31 @@ async function fetchFeed(feed) {
           ""
       ),
       link: item.link || "",
-      publishedAt: item.isoDate || item.pubDate || new Date().toISOString()
+      publishedAt:
+        item.isoDate ||
+        item.pubDate ||
+        new Date().toISOString()
     }));
   } catch (error) {
-    console.error(`RSS error [${feed.name}]:`, error.message);
+    console.error(
+      `RSS error [${feed.name}]:`,
+      error.message
+    );
+
     return [];
   }
 }
 
+/**
+ * Generate a professional Bangla news article
+ * using Google's Gemini API.
+ */
 async function generateBanglaArticle(news) {
-  if (!process.env.OPENAI_API_KEY) {
+  if (!process.env.GEMINI_API_KEY) {
     throw new Error(
-      "OPENAI_API_KEY is not configured. Add it as a secure environment variable."
+      "GEMINI_API_KEY is not configured. Add it as a secure environment variable."
     );
   }
-
-  const client = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
-  });
 
   const prompt = `
 তুমি IMU EDITZ News-এর একজন পেশাদার বাংলা নিউজ ডেস্ক এডিটর।
@@ -119,23 +133,39 @@ async function generateBanglaArticle(news) {
 নিচের RSS তথ্য ব্যবহার করে একটি নতুন বাংলা নিউজ draft তৈরি করো।
 
 গুরুত্বপূর্ণ নিয়ম:
+
 1. কোনো তথ্য বানিয়ে লিখবে না।
 2. মূল উৎসের তথ্যের বাইরে অনুমান করবে না।
-3. হুবহু বাক্য কপি করবে না।
+3. মূল উৎসের বাক্য হুবহু কপি করবে না।
 4. সংক্ষিপ্ত, পরিষ্কার ও পেশাদার বাংলা ব্যবহার করবে।
 5. সংবাদটি neutral tone-এ লিখবে।
 6. এটি এখনো DRAFT, তাই নিজে থেকে প্রকাশিত খবর হিসেবে দাবি করবে না।
 7. মূল উৎসের link সংরক্ষণ করতে হবে।
-8. যদি তথ্য পর্যাপ্ত না হয়, সেটি draft হিসেবে স্পষ্ট রাখবে।
+8. তথ্য পর্যাপ্ত না হলে অতিরিক্ত তথ্য বানাবে না।
+9. শিরোনাম আকর্ষণীয় কিন্তু clickbait হবে না।
+10. সম্ভব হলে category নির্বাচন করবে: জাতীয়, আন্তর্জাতিক, রাজনীতি, প্রযুক্তি, খেলাধুলা, বিনোদন, অর্থনীতি, বিজ্ঞান, অন্যান্য।
+11. tags সর্বোচ্চ ৮টি হবে।
+12. শুধু JSON object ফেরত দেবে।
+13. JSON-এর বাইরে কোনো Markdown, explanation বা code fence দেবে না।
 
 RSS SOURCE:
-Source: ${news.source}
-Title: ${news.title}
-Description: ${news.description}
-Published: ${news.publishedAt}
-Original URL: ${news.link}
 
-শুধু নিচের JSON format-এ উত্তর দাও:
+Source:
+${news.source}
+
+Title:
+${news.title}
+
+Description:
+${news.description}
+
+Published:
+${news.publishedAt}
+
+Original URL:
+${news.link}
+
+নিচের JSON format অনুসরণ করো:
 
 {
   "title": "বাংলা শিরোনাম",
@@ -143,28 +173,75 @@ Original URL: ${news.link}
   "content": "৩-৬টি ছোট অনুচ্ছেদে বিস্তারিত বাংলা সংবাদ",
   "category": "জাতীয়",
   "tags": ["বাংলাদেশ", "সংবাদ"],
-  "editorNote": "যাচাই করে প্রকাশ করতে হবে"
+  "editorNote": "প্রকাশের আগে সম্পাদকীয় যাচাই প্রয়োজন।"
 }
 `;
 
-  const response = await client.responses.create({
-    model: AI_MODEL,
-    instructions:
-      "You are a careful professional Bangla newsroom editor. Return valid JSON only.",
-    input: prompt
-  });
+  const response = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(
+      AI_MODEL
+    )}:generateContent`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-goog-api-key": process.env.GEMINI_API_KEY
+      },
+      body: JSON.stringify({
+        contents: [
+          {
+            role: "user",
+            parts: [
+              {
+                text: prompt
+              }
+            ]
+          }
+        ],
+        generationConfig: {
+          responseMimeType: "application/json",
+          temperature: 0.2,
+          maxOutputTokens: 2500
+        }
+      })
+    }
+  );
 
-  const output = response.output_text.trim();
+  const data = await response.json();
+
+  if (!response.ok) {
+    const apiMessage =
+      data?.error?.message ||
+      `Gemini API request failed with HTTP ${response.status}`;
+
+    throw new Error(apiMessage);
+  }
+
+  const output =
+    data?.candidates?.[0]?.content?.parts
+      ?.map((part) => part.text || "")
+      .join("")
+      .trim();
+
+  if (!output) {
+    throw new Error(
+      "Gemini returned an empty response."
+    );
+  }
 
   let generated;
 
   try {
     generated = JSON.parse(output);
   } catch {
-    const jsonMatch = output.match(/\{[\s\S]*\}/);
+    const jsonMatch = output.match(
+      /\{[\s\S]*\}/
+    );
 
     if (!jsonMatch) {
-      throw new Error("AI returned invalid JSON.");
+      throw new Error(
+        "Gemini returned invalid JSON."
+      );
     }
 
     generated = JSON.parse(jsonMatch[0]);
@@ -172,26 +249,48 @@ Original URL: ${news.link}
 
   return {
     title: cleanText(generated.title),
-    summary: cleanText(generated.summary),
-    content: String(generated.content || "").trim(),
-    category: cleanText(generated.category || "অন্যান্য"),
+
+    summary: cleanText(
+      generated.summary
+    ),
+
+    content: String(
+      generated.content || ""
+    ).trim(),
+
+    category: cleanText(
+      generated.category ||
+        "অন্যান্য"
+    ),
+
     tags: Array.isArray(generated.tags)
-      ? generated.tags.map(cleanText).filter(Boolean).slice(0, 8)
+      ? generated.tags
+          .map(cleanText)
+          .filter(Boolean)
+          .slice(0, 8)
       : [],
+
     editorNote: cleanText(
-      generated.editorNote || "প্রকাশের আগে সম্পাদকীয় যাচাই প্রয়োজন।"
+      generated.editorNote ||
+        "প্রকাশের আগে সম্পাদকীয় যাচাই প্রয়োজন।"
     )
   };
 }
 
 async function collectNews(options = {}) {
-  const limit = Number(options.limit || 5);
+  const limit = Number(
+    options.limit || 5
+  );
 
-  const existingArticles = await readArticles();
+  const existingArticles =
+    await readArticles();
 
   const existingLinks = new Set(
     existingArticles
-      .map((article) => article.sourceUrl)
+      .map(
+        (article) =>
+          article.sourceUrl
+      )
       .filter(Boolean)
   );
 
@@ -213,43 +312,77 @@ async function collectNews(options = {}) {
     }
   }
 
-  const selectedNews = allNews.slice(0, limit);
+  const selectedNews =
+    allNews.slice(0, limit);
+
   const createdDrafts = [];
 
   for (const news of selectedNews) {
     try {
-      console.log(`Generating draft: ${news.title}`);
+      console.log(
+        `Generating draft: ${news.title}`
+      );
 
-      const generated = await generateBanglaArticle(news);
+      const generated =
+        await generateBanglaArticle(
+          news
+        );
 
       const article = {
-        id: makeId(news.title, news.link),
+        id: makeId(
+          news.title,
+          news.link
+        ),
+
         title: generated.title,
-        summary: generated.summary,
-        content: generated.content,
-        category: generated.category,
-        tags: generated.tags,
+
+        summary:
+          generated.summary,
+
+        content:
+          generated.content,
+
+        category:
+          generated.category,
+
+        tags:
+          generated.tags,
 
         image: "",
 
-        source: news.source,
-        sourceUrl: news.link,
+        source:
+          news.source,
 
-        originalTitle: news.title,
-        originalPublishedAt: news.publishedAt,
+        sourceUrl:
+          news.link,
+
+        originalTitle:
+          news.title,
+
+        originalPublishedAt:
+          news.publishedAt,
 
         status: "draft",
+
         aiGenerated: true,
+
         verified: false,
 
-        editorNote: generated.editorNote,
+        editorNote:
+          generated.editorNote,
 
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        createdAt:
+          new Date().toISOString(),
+
+        updatedAt:
+          new Date().toISOString()
       };
 
       createdDrafts.push(article);
-      existingLinks.add(news.link);
+
+      existingLinks.add(
+        news.link
+      );
     } catch (error) {
       console.error(
         `AI generation failed for "${news.title}":`,
@@ -264,66 +397,109 @@ async function collectNews(options = {}) {
       ...existingArticles
     ].slice(0, 500);
 
-    await saveArticles(updatedArticles);
+    await saveArticles(
+      updatedArticles
+    );
   }
 
   return {
     success: true,
-    found: allNews.length,
-    created: createdDrafts.length,
-    articles: createdDrafts
+
+    found:
+      allNews.length,
+
+    created:
+      createdDrafts.length,
+
+    articles:
+      createdDrafts
   };
 }
 
 async function getNews(options = {}) {
-  const articles = await readArticles();
+  const articles =
+    await readArticles();
 
-  const status = options.status || "all";
-  const limit = Number(options.limit || 50);
+  const status =
+    options.status || "all";
+
+  const limit = Number(
+    options.limit || 50
+  );
 
   const filtered =
     status === "all"
       ? articles
-      : articles.filter((article) => article.status === status);
+      : articles.filter(
+          (article) =>
+            article.status ===
+            status
+        );
 
-  return filtered.slice(0, limit);
+  return filtered.slice(
+    0,
+    limit
+  );
 }
 
 async function publishNews(articleId) {
-  const articles = await readArticles();
+  const articles =
+    await readArticles();
 
-  const index = articles.findIndex(
-    (article) => article.id === articleId
-  );
+  const index =
+    articles.findIndex(
+      (article) =>
+        article.id ===
+        articleId
+    );
 
   if (index === -1) {
-    throw new Error("Article not found.");
+    throw new Error(
+      "Article not found."
+    );
   }
 
   articles[index] = {
     ...articles[index],
+
     status: "published",
+
     verified: true,
-    updatedAt: new Date().toISOString()
+
+    updatedAt:
+      new Date().toISOString()
   };
 
-  await saveArticles(articles);
+  await saveArticles(
+    articles
+  );
 
   return articles[index];
 }
 
 async function deleteNews(articleId) {
-  const articles = await readArticles();
+  const articles =
+    await readArticles();
 
-  const filtered = articles.filter(
-    (article) => article.id !== articleId
-  );
+  const filtered =
+    articles.filter(
+      (article) =>
+        article.id !==
+        articleId
+    );
 
-  if (filtered.length === articles.length) {
-    throw new Error("Article not found.");
+  if (
+    filtered.length ===
+    articles.length
+  ) {
+    throw new Error(
+      "Article not found."
+    );
   }
 
-  await saveArticles(filtered);
+  await saveArticles(
+    filtered
+  );
 
   return {
     success: true,
@@ -332,21 +508,34 @@ async function deleteNews(articleId) {
 }
 
 async function main() {
-  console.log("======================================");
-  console.log(" IMU EDITZ News - AI News Collector");
-  console.log("======================================");
+  console.log(
+    "======================================"
+  );
 
-  if (!process.env.OPENAI_API_KEY) {
+  console.log(
+    " IMU EDITZ News - Gemini News Collector"
+  );
+
+  console.log(
+    "======================================"
+  );
+
+  if (!process.env.GEMINI_API_KEY) {
     console.error(
-      "OPENAI_API_KEY is missing. Collector was not started."
+      "GEMINI_API_KEY is missing. Collector was not started."
     );
+
     process.exitCode = 1;
+
     return;
   }
 
-  const result = await collectNews({
-    limit: Number(process.env.NEWS_LIMIT || 5)
-  });
+  const result =
+    await collectNews({
+      limit: Number(
+        process.env.NEWS_LIMIT || 5
+      )
+    });
 
   console.log(
     `Finished. Found: ${result.found}, Created drafts: ${result.created}`
@@ -362,7 +551,11 @@ module.exports = {
 
 if (require.main === module) {
   main().catch((error) => {
-    console.error("Collector error:", error);
+    console.error(
+      "Collector error:",
+      error
+    );
+
     process.exitCode = 1;
   });
 }
