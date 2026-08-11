@@ -1,7 +1,7 @@
 {
   "name": "imu-editz-news",
   "version": "1.0.0",
-  "description": "IMU EDITZ News - AI Powered News Portal",
+  "description": "IMU EDITZ News - AI Powered News Collector",
   "private": true,
   "main": "server.js",
   "scripts": {
@@ -15,7 +15,6 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
-    "openai": "^5.12.2",
     "rss-parser": "^3.13.0"
   }
 }
