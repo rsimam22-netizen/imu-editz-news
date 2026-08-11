@@ -541,7 +541,7 @@ app.use(
 -------------------------------- */
 
 app.get(
-  "*",
+  "/*splat",
   (req, res) => {
     if (
       req.path.startsWith("/api/")
