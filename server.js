@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 const PUBLIC_DIR = path.join(__dirname, "public");
 const DATA_DIR = path.join(__dirname, "data");
 
-const DATA_FILE = path.join(
+const ARTICLES_FILE = path.join(
   DATA_DIR,
   "articles.json"
 );
@@ -20,6 +20,10 @@ const SETTINGS_FILE = path.join(
   "settings.json"
 );
 
+/* =========================================================
+   MIDDLEWARE
+========================================================= */
+
 app.use(cors());
 
 app.use(
@@ -28,100 +32,41 @@ app.use(
   })
 );
 
-/* =================================
-   DATA STORAGE
-================================= */
+/* =========================================================
+   DATA DIRECTORY
+========================================================= */
 
-function ensureDataFiles() {
+function ensureDataDirectory() {
   if (!fs.existsSync(DATA_DIR)) {
     fs.mkdirSync(DATA_DIR, {
       recursive: true
     });
   }
+}
 
-  if (!fs.existsSync(DATA_FILE)) {
+/* =========================================================
+   ARTICLES STORAGE
+========================================================= */
+
+function ensureArticlesFile() {
+  ensureDataDirectory();
+
+  if (!fs.existsSync(ARTICLES_FILE)) {
     fs.writeFileSync(
-      DATA_FILE,
+      ARTICLES_FILE,
       JSON.stringify([], null, 2),
       "utf8"
     );
   }
-
-  if (!fs.existsSync(SETTINGS_FILE)) {
-    fs.writeFileSync(
-      SETTINGS_FILE,
-      JSON.stringify(
-        getDefaultSettings(),
-        null,
-        2
-      ),
-      "utf8"
-    );
-  }
 }
-
-
-/* =================================
-   DEFAULT SETTINGS
-================================= */
-
-function getDefaultSettings() {
-  return {
-    ads: {
-      header: {
-        enabled: false,
-        code: ""
-      },
-
-      footer: {
-        enabled: false,
-        code: ""
-      },
-
-      sidebar: {
-        enabled: false,
-        code: ""
-      },
-
-      popup: {
-        enabled: false,
-        code: "",
-        delay: 5000
-      }
-    },
-
-    video: {
-      enabled: false,
-      embed: ""
-    },
-
-    social: {
-      facebook: "",
-      youtube: "",
-      instagram: "",
-      tiktok: "",
-      x: ""
-    },
-
-    live: {
-      facebook: "",
-      youtube: ""
-    }
-  };
-}
-
-
-/* =================================
-   ARTICLES
-================================= */
 
 function readArticles() {
-  ensureDataFiles();
+  ensureArticlesFile();
 
   try {
     const content =
       fs.readFileSync(
-        DATA_FILE,
+        ARTICLES_FILE,
         "utf8"
       );
 
@@ -131,11 +76,9 @@ function readArticles() {
     return Array.isArray(articles)
       ? articles
       : [];
-
   } catch (error) {
-
     console.error(
-      "Database read error:",
+      "Articles read error:",
       error
     );
 
@@ -143,12 +86,13 @@ function readArticles() {
   }
 }
 
-
-function writeArticles(articles) {
-  ensureDataFiles();
+function writeArticles(
+  articles
+) {
+  ensureArticlesFile();
 
   fs.writeFileSync(
-    DATA_FILE,
+    ARTICLES_FILE,
     JSON.stringify(
       articles,
       null,
@@ -158,9 +102,9 @@ function writeArticles(articles) {
   );
 }
 
-
-function getNextId(articles) {
-
+function getNextArticleId(
+  articles
+) {
   if (!articles.length) {
     return 1;
   }
@@ -175,16 +119,94 @@ function getNextId(articles) {
   );
 }
 
+/* =========================================================
+   SETTINGS STORAGE
+========================================================= */
 
-/* =================================
-   SETTINGS
-================================= */
+const DEFAULT_SETTINGS = {
+  headerAd: {
+    enabled: false,
+    type: "code",
+    content: ""
+  },
+
+  footerAd: {
+    enabled: false,
+    type: "code",
+    content: ""
+  },
+
+  sidebarAd: {
+    enabled: false,
+    type: "code",
+    content: ""
+  },
+
+  popupAd: {
+    enabled: false,
+    type: "code",
+    content: "",
+    delay: 5000
+  },
+
+  videoNews: {
+    enabled: false,
+    title: "ভিডিও নিউজ",
+    videoUrl: "",
+    embedCode: ""
+  },
+
+  social: {
+    facebook: "",
+    youtube: "",
+    instagram: "",
+    twitter: "",
+    tiktok: "",
+    telegram: "",
+    whatsapp: ""
+  },
+
+  facebookLive: {
+    enabled: false,
+    pageUrl: "",
+    embedCode: ""
+  },
+
+  youtubeLive: {
+    enabled: false,
+    channelUrl: "",
+    embedCode: ""
+  },
+
+  site: {
+    name: "IMU EDITZ News",
+    tagline: "সত্যের সঙ্গে, মানুষের পাশে",
+    logo: "",
+    favicon: "",
+    description: ""
+  }
+};
+
+function ensureSettingsFile() {
+  ensureDataDirectory();
+
+  if (!fs.existsSync(SETTINGS_FILE)) {
+    fs.writeFileSync(
+      SETTINGS_FILE,
+      JSON.stringify(
+        DEFAULT_SETTINGS,
+        null,
+        2
+      ),
+      "utf8"
+    );
+  }
+}
 
 function readSettings() {
-  ensureDataFiles();
+  ensureSettingsFile();
 
   try {
-
     const content =
       fs.readFileSync(
         SETTINGS_FILE,
@@ -194,25 +216,36 @@ function readSettings() {
     const settings =
       JSON.parse(content);
 
+    if (
+      !settings ||
+      typeof settings !== "object" ||
+      Array.isArray(settings)
+    ) {
+      return {
+        ...DEFAULT_SETTINGS
+      };
+    }
+
     return mergeSettings(
-      getDefaultSettings(),
+      DEFAULT_SETTINGS,
       settings
     );
-
   } catch (error) {
-
     console.error(
       "Settings read error:",
       error
     );
 
-    return getDefaultSettings();
+    return {
+      ...DEFAULT_SETTINGS
+    };
   }
 }
 
-
-function writeSettings(settings) {
-  ensureDataFiles();
+function writeSettings(
+  settings
+) {
+  ensureSettingsFile();
 
   fs.writeFileSync(
     SETTINGS_FILE,
@@ -225,63 +258,50 @@ function writeSettings(settings) {
   );
 }
 
-
 function mergeSettings(
   defaults,
-  custom
+  saved
 ) {
-
-  return {
-
-    ads: {
-
-      header: {
-        ...defaults.ads.header,
-        ...(custom.ads?.header || {})
-      },
-
-      footer: {
-        ...defaults.ads.footer,
-        ...(custom.ads?.footer || {})
-      },
-
-      sidebar: {
-        ...defaults.ads.sidebar,
-        ...(custom.ads?.sidebar || {})
-      },
-
-      popup: {
-        ...defaults.ads.popup,
-        ...(custom.ads?.popup || {})
-      }
-
-    },
-
-    video: {
-      ...defaults.video,
-      ...(custom.video || {})
-    },
-
-    social: {
-      ...defaults.social,
-      ...(custom.social || {})
-    },
-
-    live: {
-      ...defaults.live,
-      ...(custom.live || {})
-    }
-
+  const result = {
+    ...defaults
   };
+
+  Object.keys(defaults).forEach(
+    key => {
+      if (
+        defaults[key] &&
+        typeof defaults[key] === "object" &&
+        !Array.isArray(
+          defaults[key]
+        )
+      ) {
+        result[key] = {
+          ...defaults[key],
+          ...(saved[key] &&
+          typeof saved[key] === "object"
+            ? saved[key]
+            : {})
+        };
+      } else if (
+        Object.prototype.hasOwnProperty.call(
+          saved,
+          key
+        )
+      ) {
+        result[key] =
+          saved[key];
+      }
+    }
+  );
+
+  return result;
 }
 
-
-/* =================================
+/* =========================================================
    HELPERS
-================================= */
+========================================================= */
 
 function cleanText(value) {
-
   if (
     typeof value !== "string"
   ) {
@@ -291,36 +311,41 @@ function cleanText(value) {
   return value.trim();
 }
 
-
 function normalizeArticle(
   article
 ) {
-
   return {
-
     id: Number(article.id),
 
     title:
-      cleanText(article.title),
+      cleanText(
+        article.title
+      ),
 
     category:
-      cleanText(article.category) ||
-      "সর্বশেষ",
+      cleanText(
+        article.category
+      ) || "সর্বশেষ",
 
     source_name:
       cleanText(
         article.source_name
-      ) ||
-      "IMU EDITZ News",
+      ) || "IMU EDITZ News",
 
     image:
-      cleanText(article.image),
+      cleanText(
+        article.image
+      ),
 
     summary:
-      cleanText(article.summary),
+      cleanText(
+        article.summary
+      ),
 
     content:
-      cleanText(article.content),
+      cleanText(
+        article.content
+      ),
 
     status:
       article.status === "draft"
@@ -337,25 +362,34 @@ function normalizeArticle(
     updated_at:
       article.updated_at ||
       new Date().toISOString()
-
   };
 }
 
+/* =========================================================
+   API: HEALTH
+========================================================= */
 
-/* =================================
-   SETTINGS API
-================================= */
+app.get(
+  "/api/health",
+  (req, res) => {
+    res.json({
+      success: true,
+      site: "IMU EDITZ News",
+      status: "online",
+      time:
+        new Date().toISOString()
+    });
+  }
+);
 
-/*
-   GET SETTINGS
-*/
+/* =========================================================
+   API: SETTINGS GET
+========================================================= */
 
 app.get(
   "/api/settings",
   (req, res) => {
-
     try {
-
       const settings =
         readSettings();
 
@@ -363,167 +397,275 @@ app.get(
         success: true,
         settings
       });
-
     } catch (error) {
-
-      console.error(error);
+      console.error(
+        "Settings GET error:",
+        error
+      );
 
       res.status(500).json({
         success: false,
         message:
           "Settings লোড করা যায়নি।"
       });
-
     }
-
   }
 );
 
-
-/*
-   UPDATE SETTINGS
-*/
+/* =========================================================
+   API: SETTINGS UPDATE
+========================================================= */
 
 app.put(
   "/api/settings",
   (req, res) => {
-
     try {
-
       const currentSettings =
         readSettings();
+
+      const incomingSettings =
+        req.body &&
+        typeof req.body === "object" &&
+        !Array.isArray(req.body)
+          ? req.body
+          : {};
 
       const newSettings =
         mergeSettings(
           currentSettings,
-          req.body || {}
+          incomingSettings
         );
 
+      /* -----------------------------------------
+         CLEAN ADS
+      ----------------------------------------- */
 
-      /*
-         AD SETTINGS
-      */
+      newSettings.headerAd = {
+        enabled:
+          Boolean(
+            newSettings.headerAd.enabled
+          ),
 
-      newSettings.ads.header.enabled =
-        Boolean(
-          newSettings.ads.header.enabled
-        );
+        type:
+          newSettings.headerAd.type ===
+          "link"
+            ? "link"
+            : "code",
 
-      newSettings.ads.footer.enabled =
-        Boolean(
-          newSettings.ads.footer.enabled
-        );
+        content:
+          cleanText(
+            newSettings.headerAd.content
+          )
+      };
 
-      newSettings.ads.sidebar.enabled =
-        Boolean(
-          newSettings.ads.sidebar.enabled
-        );
+      newSettings.footerAd = {
+        enabled:
+          Boolean(
+            newSettings.footerAd.enabled
+          ),
 
-      newSettings.ads.popup.enabled =
-        Boolean(
-          newSettings.ads.popup.enabled
-        );
+        type:
+          newSettings.footerAd.type ===
+          "link"
+            ? "link"
+            : "code",
 
+        content:
+          cleanText(
+            newSettings.footerAd.content
+          )
+      };
 
-      newSettings.ads.header.code =
-        cleanText(
-          newSettings.ads.header.code
-        );
+      newSettings.sidebarAd = {
+        enabled:
+          Boolean(
+            newSettings.sidebarAd.enabled
+          ),
 
-      newSettings.ads.footer.code =
-        cleanText(
-          newSettings.ads.footer.code
-        );
+        type:
+          newSettings.sidebarAd.type ===
+          "link"
+            ? "link"
+            : "code",
 
-      newSettings.ads.sidebar.code =
-        cleanText(
-          newSettings.ads.sidebar.code
-        );
+        content:
+          cleanText(
+            newSettings.sidebarAd.content
+          )
+      };
 
-      newSettings.ads.popup.code =
-        cleanText(
-          newSettings.ads.popup.code
-        );
+      newSettings.popupAd = {
+        enabled:
+          Boolean(
+            newSettings.popupAd.enabled
+          ),
 
+        type:
+          newSettings.popupAd.type ===
+          "link"
+            ? "link"
+            : "code",
 
-      const popupDelay =
-        Number(
-          newSettings.ads.popup.delay
-        );
+        content:
+          cleanText(
+            newSettings.popupAd.content
+          ),
 
-      newSettings.ads.popup.delay =
-        Number.isFinite(
-          popupDelay
-        ) &&
-        popupDelay >= 0
-          ? popupDelay
-          : 5000;
+        delay:
+          Math.max(
+            0,
+            Number(
+              newSettings.popupAd.delay
+            ) || 5000
+          )
+      };
 
-
-      /*
+      /* -----------------------------------------
          VIDEO
-      */
+      ----------------------------------------- */
 
-      newSettings.video.enabled =
-        Boolean(
-          newSettings.video.enabled
-        );
+      newSettings.videoNews = {
+        enabled:
+          Boolean(
+            newSettings.videoNews.enabled
+          ),
 
-      newSettings.video.embed =
-        cleanText(
-          newSettings.video.embed
-        );
+        title:
+          cleanText(
+            newSettings.videoNews.title
+          ) ||
+          "ভিডিও নিউজ",
 
+        videoUrl:
+          cleanText(
+            newSettings.videoNews.videoUrl
+          ),
 
-      /*
-         SOCIAL MEDIA
-      */
+        embedCode:
+          cleanText(
+            newSettings.videoNews.embedCode
+          )
+      };
 
-      newSettings.social.facebook =
-        cleanText(
-          newSettings.social.facebook
-        );
+      /* -----------------------------------------
+         SOCIAL
+      ----------------------------------------- */
 
-      newSettings.social.youtube =
-        cleanText(
-          newSettings.social.youtube
-        );
+      newSettings.social = {
+        facebook:
+          cleanText(
+            newSettings.social.facebook
+          ),
 
-      newSettings.social.instagram =
-        cleanText(
-          newSettings.social.instagram
-        );
+        youtube:
+          cleanText(
+            newSettings.social.youtube
+          ),
 
-      newSettings.social.tiktok =
-        cleanText(
-          newSettings.social.tiktok
-        );
+        instagram:
+          cleanText(
+            newSettings.social.instagram
+          ),
 
-      newSettings.social.x =
-        cleanText(
-          newSettings.social.x
-        );
+        twitter:
+          cleanText(
+            newSettings.social.twitter
+          ),
 
+        tiktok:
+          cleanText(
+            newSettings.social.tiktok
+          ),
 
-      /*
-         LIVE
-      */
+        telegram:
+          cleanText(
+            newSettings.social.telegram
+          ),
 
-      newSettings.live.facebook =
-        cleanText(
-          newSettings.live.facebook
-        );
+        whatsapp:
+          cleanText(
+            newSettings.social.whatsapp
+          )
+      };
 
-      newSettings.live.youtube =
-        cleanText(
-          newSettings.live.youtube
-        );
+      /* -----------------------------------------
+         FACEBOOK LIVE
+      ----------------------------------------- */
 
+      newSettings.facebookLive = {
+        enabled:
+          Boolean(
+            newSettings.facebookLive.enabled
+          ),
+
+        pageUrl:
+          cleanText(
+            newSettings.facebookLive.pageUrl
+          ),
+
+        embedCode:
+          cleanText(
+            newSettings.facebookLive.embedCode
+          )
+      };
+
+      /* -----------------------------------------
+         YOUTUBE LIVE
+      ----------------------------------------- */
+
+      newSettings.youtubeLive = {
+        enabled:
+          Boolean(
+            newSettings.youtubeLive.enabled
+          ),
+
+        channelUrl:
+          cleanText(
+            newSettings.youtubeLive.channelUrl
+          ),
+
+        embedCode:
+          cleanText(
+            newSettings.youtubeLive.embedCode
+          )
+      };
+
+      /* -----------------------------------------
+         SITE
+      ----------------------------------------- */
+
+      newSettings.site = {
+        name:
+          cleanText(
+            newSettings.site.name
+          ) ||
+          "IMU EDITZ News",
+
+        tagline:
+          cleanText(
+            newSettings.site.tagline
+          ) ||
+          "সত্যের সঙ্গে, মানুষের পাশে",
+
+        logo:
+          cleanText(
+            newSettings.site.logo
+          ),
+
+        favicon:
+          cleanText(
+            newSettings.site.favicon
+          ),
+
+        description:
+          cleanText(
+            newSettings.site.description
+          )
+      };
 
       writeSettings(
         newSettings
       );
-
 
       res.json({
         success: true,
@@ -532,49 +674,40 @@ app.put(
         settings:
           newSettings
       });
-
     } catch (error) {
-
-      console.error(error);
+      console.error(
+        "Settings PUT error:",
+        error
+      );
 
       res.status(500).json({
         success: false,
         message:
           "Settings সংরক্ষণ করা যায়নি।"
       });
-
     }
-
   }
 );
 
-
-/* =================================
-   ARTICLES API
-================================= */
-
-
-/*
-   GET ALL ARTICLES
-*/
+/* =========================================================
+   API: GET ALL ARTICLES
+========================================================= */
 
 app.get(
   "/api/articles",
   (req, res) => {
-
     try {
-
       const articles =
         readArticles()
-          .map(normalizeArticle)
+          .map(
+            normalizeArticle
+          )
           .sort(
             (a, b) =>
               new Date(
-                b.published_at ||
                 b.created_at
               ) -
               new Date(
-                a.published_at ||
                 a.created_at
               )
           );
@@ -583,35 +716,44 @@ app.get(
         success: true,
         articles
       });
-
     } catch (error) {
-
-      console.error(error);
+      console.error(
+        "Articles GET error:",
+        error
+      );
 
       res.status(500).json({
         success: false,
         message:
           "সংবাদ লোড করা যায়নি।"
       });
-
     }
-
   }
 );
 
-
-/*
-   GET SINGLE ARTICLE
-*/
+/* =========================================================
+   API: GET SINGLE ARTICLE
+========================================================= */
 
 app.get(
   "/api/articles/:id",
   (req, res) => {
-
     try {
-
       const id =
-        Number(req.params.id);
+        Number(
+          req.params.id
+        );
+
+      if (
+        !Number.isInteger(id) ||
+        id <= 0
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "সঠিক সংবাদ ID প্রয়োজন।"
+        });
+      }
 
       const articles =
         readArticles();
@@ -623,47 +765,43 @@ app.get(
         );
 
       if (!article) {
-
         return res.status(404).json({
           success: false,
           message:
             "সংবাদ পাওয়া যায়নি।"
         });
-
       }
 
       res.json({
         success: true,
         article:
-          normalizeArticle(article)
+          normalizeArticle(
+            article
+          )
       });
-
     } catch (error) {
-
-      console.error(error);
+      console.error(
+        "Single article error:",
+        error
+      );
 
       res.status(500).json({
         success: false,
         message:
           "সংবাদ লোড করা যায়নি।"
       });
-
     }
-
   }
 );
 
-
-/*
-   CREATE ARTICLE
-*/
+/* =========================================================
+   API: CREATE ARTICLE
+========================================================= */
 
 app.post(
   "/api/articles",
   (req, res) => {
-
     try {
-
       const title =
         cleanText(
           req.body.title
@@ -675,23 +813,19 @@ app.post(
         );
 
       if (!title) {
-
         return res.status(400).json({
           success: false,
           message:
             "সংবাদের শিরোনাম প্রয়োজন।"
         });
-
       }
 
       if (!content) {
-
         return res.status(400).json({
           success: false,
           message:
             "সংবাদের বিস্তারিত লেখা প্রয়োজন।"
         });
-
       }
 
       const articles =
@@ -701,9 +835,8 @@ app.post(
         new Date().toISOString();
 
       const article = {
-
         id:
-          getNextId(
+          getNextArticleId(
             articles
           ),
 
@@ -734,7 +867,8 @@ app.post(
         content,
 
         status:
-          req.body.status === "draft"
+          req.body.status ===
+          "draft"
             ? "draft"
             : "published",
 
@@ -743,7 +877,6 @@ app.post(
         created_at: now,
 
         updated_at: now
-
       };
 
       articles.push(
@@ -755,47 +888,41 @@ app.post(
       );
 
       res.status(201).json({
-
         success: true,
-
         message:
           "সংবাদ সফলভাবে সংরক্ষণ হয়েছে।",
-
         article:
           normalizeArticle(
             article
           )
-
       });
-
     } catch (error) {
-
-      console.error(error);
+      console.error(
+        "Create article error:",
+        error
+      );
 
       res.status(500).json({
         success: false,
         message:
           "সংবাদ সংরক্ষণ করা যায়নি।"
       });
-
     }
-
   }
 );
 
-
-/*
-   UPDATE ARTICLE
-*/
+/* =========================================================
+   API: UPDATE ARTICLE
+========================================================= */
 
 app.put(
   "/api/articles/:id",
   (req, res) => {
-
     try {
-
       const id =
-        Number(req.params.id);
+        Number(
+          req.params.id
+        );
 
       const articles =
         readArticles();
@@ -803,17 +930,17 @@ app.put(
       const index =
         articles.findIndex(
           article =>
-            Number(article.id) === id
+            Number(
+              article.id
+            ) === id
         );
 
       if (index === -1) {
-
         return res.status(404).json({
           success: false,
           message:
             "সংবাদ পাওয়া যায়নি।"
         });
-
       }
 
       const title =
@@ -827,30 +954,25 @@ app.put(
         );
 
       if (!title) {
-
         return res.status(400).json({
           success: false,
           message:
             "সংবাদের শিরোনাম প্রয়োজন।"
         });
-
       }
 
       if (!content) {
-
         return res.status(400).json({
           success: false,
           message:
             "সংবাদের বিস্তারিত লেখা প্রয়োজন।"
         });
-
       }
 
       const oldArticle =
         articles[index];
 
       const updatedArticle = {
-
         ...oldArticle,
 
         title,
@@ -880,7 +1002,8 @@ app.put(
         content,
 
         status:
-          req.body.status === "draft"
+          req.body.status ===
+          "draft"
             ? "draft"
             : "published",
 
@@ -891,7 +1014,6 @@ app.put(
 
         updated_at:
           new Date().toISOString()
-
       };
 
       articles[index] =
@@ -902,47 +1024,41 @@ app.put(
       );
 
       res.json({
-
         success: true,
-
         message:
           "সংবাদ সফলভাবে আপডেট হয়েছে।",
-
         article:
           normalizeArticle(
             updatedArticle
           )
-
       });
-
     } catch (error) {
-
-      console.error(error);
+      console.error(
+        "Update article error:",
+        error
+      );
 
       res.status(500).json({
         success: false,
         message:
           "সংবাদ আপডেট করা যায়নি।"
       });
-
     }
-
   }
 );
 
-
-/*
-   DELETE ARTICLE
-*/
+/* =========================================================
+   API: DELETE ARTICLE
+========================================================= */
 
 app.delete(
   "/api/articles/:id",
   (req, res) => {
-
     try {
-
       const id =
-        Number(req.params.id);
+        Number(
+          req.params.id
+        );
 
       const articles =
         readArticles();
@@ -950,17 +1066,17 @@ app.delete(
       const index =
         articles.findIndex(
           article =>
-            Number(article.id) === id
+            Number(
+              article.id
+            ) === id
         );
 
       if (index === -1) {
-
         return res.status(404).json({
           success: false,
           message:
             "সংবাদ পাওয়া যায়নি।"
         });
-
       }
 
       articles.splice(
@@ -975,37 +1091,35 @@ app.delete(
       res.json({
         success: true,
         message:
-          "সংবাদ Delete হয়েছে।"
+          "সংবাদ সফলভাবে Delete হয়েছে।"
       });
-
     } catch (error) {
-
-      console.error(error);
+      console.error(
+        "Delete article error:",
+        error
+      );
 
       res.status(500).json({
         success: false,
         message:
           "সংবাদ Delete করা যায়নি।"
       });
-
     }
-
   }
 );
 
-
-/*
-   INCREMENT VIEWS
-*/
+/* =========================================================
+   API: INCREMENT ARTICLE VIEWS
+========================================================= */
 
 app.post(
   "/api/articles/:id/view",
   (req, res) => {
-
     try {
-
       const id =
-        Number(req.params.id);
+        Number(
+          req.params.id
+        );
 
       const articles =
         readArticles();
@@ -1013,25 +1127,27 @@ app.post(
       const article =
         articles.find(
           item =>
-            Number(item.id) === id
+            Number(
+              item.id
+            ) === id
         );
 
       if (!article) {
-
         return res.status(404).json({
           success: false,
           message:
             "সংবাদ পাওয়া যায়নি।"
         });
-
       }
 
       article.views =
-        (
-          Number(
-            article.views
-          ) || 0
-        ) + 1;
+        (Number(
+          article.views
+        ) || 0) + 1;
+
+      article.updated_at =
+        article.updated_at ||
+        new Date().toISOString();
 
       writeArticles(
         articles
@@ -1042,53 +1158,24 @@ app.post(
         views:
           article.views
       });
-
     } catch (error) {
-
-      console.error(error);
+      console.error(
+        "View update error:",
+        error
+      );
 
       res.status(500).json({
         success: false,
         message:
           "View count update করা যায়নি।"
       });
-
     }
-
   }
 );
 
-
-/* =================================
-   HEALTH CHECK
-================================= */
-
-app.get(
-  "/api/health",
-  (req, res) => {
-
-    res.json({
-
-      success: true,
-
-      site:
-        "IMU EDITZ News",
-
-      status:
-        "online",
-
-      time:
-        new Date().toISOString()
-
-    });
-
-  }
-);
-
-
-/* =================================
+/* =========================================================
    STATIC WEBSITE
-================================= */
+========================================================= */
 
 app.use(
   express.static(
@@ -1096,57 +1183,73 @@ app.use(
   )
 );
 
-
-/* =================================
-   FALLBACK
-================================= */
+/* =========================================================
+   SPA FALLBACK
+========================================================= */
 
 app.get(
   "/*splat",
   (req, res) => {
-
     if (
       req.path.startsWith(
         "/api/"
       )
     ) {
-
       return res.status(404).json({
-
         success: false,
-
         message:
           "API endpoint পাওয়া যায়নি।"
-
       });
-
     }
 
-    res.sendFile(
+    const indexFile =
       path.join(
         PUBLIC_DIR,
         "index.html"
-      )
-    );
+      );
 
+    if (
+      fs.existsSync(
+        indexFile
+      )
+    ) {
+      return res.sendFile(
+        indexFile
+      );
+    }
+
+    return res.status(404).send(
+      "Website index.html পাওয়া যায়নি।"
+    );
   }
 );
 
-
-/* =================================
+/* =========================================================
    START SERVER
-================================= */
+========================================================= */
 
-ensureDataFiles();
+ensureDataDirectory();
+ensureArticlesFile();
+ensureSettingsFile();
 
 app.listen(
   PORT,
   "0.0.0.0",
   () => {
-
     console.log(
       `IMU EDITZ News running on port ${PORT}`
     );
 
+    console.log(
+      `PORT: ${PORT}`
+    );
+
+    console.log(
+      `Public directory: ${PUBLIC_DIR}`
+    );
+
+    console.log(
+      `Settings file: ${SETTINGS_FILE}`
+    );
   }
 );
