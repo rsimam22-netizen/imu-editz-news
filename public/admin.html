@@ -35,6 +35,10 @@
       padding: 0;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       font-family:
         "Noto Sans Bengali",
@@ -45,6 +49,10 @@
       background: var(--bg);
       color: var(--text);
       line-height: 1.6;
+    }
+
+    body.menu-open {
+      overflow: hidden;
     }
 
     button,
@@ -67,12 +75,14 @@
       margin: 0 auto;
     }
 
-    /* HEADER */
+    /* ==========================================
+       HEADER
+    ========================================== */
 
     .admin-header {
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 1000;
 
       background: var(--black);
       color: #fff;
@@ -95,6 +105,8 @@
       display: flex;
       align-items: center;
       gap: 12px;
+
+      min-width: 0;
     }
 
     .logo {
@@ -103,6 +115,8 @@
 
       display: grid;
       place-items: center;
+
+      flex-shrink: 0;
 
       border-radius: 8px;
 
@@ -116,6 +130,10 @@
     .brand-title {
       font-size: 19px;
       font-weight: 900;
+
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .brand-subtitle {
@@ -133,13 +151,45 @@
 
       font-size: 13px;
       font-weight: 700;
+
+      text-decoration: none;
+
+      white-space: nowrap;
     }
 
     .site-link:hover {
       background: #1f2937;
     }
 
-    /* LAYOUT */
+    /* MOBILE MENU BUTTON */
+
+    .menu-toggle {
+      display: none;
+
+      width: 42px;
+      height: 42px;
+
+      flex-shrink: 0;
+
+      border: 1px solid #374151;
+      border-radius: 8px;
+
+      background: #1f2937;
+      color: #fff;
+
+      font-size: 23px;
+      line-height: 1;
+
+      place-items: center;
+    }
+
+    .menu-toggle:hover {
+      background: #374151;
+    }
+
+    /* ==========================================
+       LAYOUT
+    ========================================== */
 
     .admin-layout {
       display: grid;
@@ -151,7 +201,9 @@
       min-height: calc(100vh - 70px);
     }
 
-    /* SIDEBAR */
+    /* ==========================================
+       SIDEBAR
+    ========================================== */
 
     .admin-sidebar {
       background: #fff;
@@ -209,13 +261,26 @@
     .menu-icon {
       width: 23px;
 
+      flex-shrink: 0;
+
       text-align: center;
     }
 
-    /* CONTENT */
+    /* ==========================================
+       MOBILE SIDEBAR OVERLAY
+    ========================================== */
+
+    .sidebar-overlay {
+      display: none;
+    }
+
+    /* ==========================================
+       CONTENT
+    ========================================== */
 
     .admin-content {
       padding: 28px;
+      min-width: 0;
     }
 
     .page-title {
@@ -233,7 +298,9 @@
       font-size: 13px;
     }
 
-    /* PANELS */
+    /* ==========================================
+       PANELS
+    ========================================== */
 
     .panel {
       display: none;
@@ -243,7 +310,9 @@
       display: block;
     }
 
-    /* CARD */
+    /* ==========================================
+       CARD
+    ========================================== */
 
     .card {
       margin-bottom: 20px;
@@ -287,7 +356,9 @@
       padding: 18px;
     }
 
-    /* FORM */
+    /* ==========================================
+       FORM
+    ========================================== */
 
     .form-grid {
       display: grid;
@@ -362,7 +433,9 @@
       font-size: 11px;
     }
 
-    /* SWITCH */
+    /* ==========================================
+       SWITCH
+    ========================================== */
 
     .switch-row {
       display: flex;
@@ -448,7 +521,9 @@
       transform: translateX(21px);
     }
 
-    /* BUTTON */
+    /* ==========================================
+       BUTTON
+    ========================================== */
 
     .button-row {
       display: flex;
@@ -485,7 +560,14 @@
       color: #374151;
     }
 
-    /* STATUS */
+    .btn:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    /* ==========================================
+       STATUS
+    ========================================== */
 
     .status {
       display: none;
@@ -514,7 +596,9 @@
       color: #991b1b;
     }
 
-    /* AD PREVIEW */
+    /* ==========================================
+       AD PREVIEW
+    ========================================== */
 
     .preview-box {
       margin-top: 12px;
@@ -542,7 +626,9 @@
       font-size: 12px;
     }
 
-    /* SOCIAL */
+    /* ==========================================
+       SOCIAL
+    ========================================== */
 
     .social-item {
       display: grid;
@@ -558,12 +644,18 @@
       margin-bottom: 10px;
     }
 
+    .social-item:last-child {
+      margin-bottom: 0;
+    }
+
     .social-name {
       font-size: 13px;
       font-weight: 800;
     }
 
-    /* INFO */
+    /* ==========================================
+       INFO
+    ========================================== */
 
     .info-box {
       margin-bottom: 18px;
@@ -580,43 +672,129 @@
       font-size: 12px;
     }
 
-    /* RESPONSIVE */
+    /* ==========================================
+       DESKTOP / TABLET
+    ========================================== */
 
     @media (max-width: 850px) {
 
-      .admin-layout {
-        grid-template-columns: 1fr;
+      .admin-header {
+        z-index: 1000;
       }
 
-      .admin-sidebar {
-        border-right: 0;
+      .header-inner {
+        min-height: 62px;
 
-        border-bottom:
+        gap: 10px;
+      }
+
+      .menu-toggle {
+        display: grid;
+      }
+
+      .admin-layout {
+        display: block;
+
+        min-height: calc(100vh - 62px);
+      }
+
+      /* Slide-out sidebar */
+
+      .admin-sidebar {
+        position: fixed;
+
+        top: 62px;
+        left: 0;
+        bottom: 0;
+
+        z-index: 1100;
+
+        width: 275px;
+
+        padding: 20px 12px;
+
+        overflow-y: auto;
+
+        border-right:
           1px solid var(--border);
 
-        padding: 10px;
+        border-bottom: 0;
+
+        transform:
+          translateX(-105%);
+
+        transition:
+          transform .25s ease;
+
+        box-shadow:
+          5px 0 25px
+          rgba(0, 0, 0, .18);
+      }
+
+      .admin-sidebar.open {
+        transform:
+          translateX(0);
       }
 
       .sidebar-menu {
-        display: flex;
+        display: grid;
 
-        overflow-x: auto;
+        overflow: visible;
       }
 
       .sidebar-label {
-        display: none;
+        display: block;
       }
 
       .menu-button {
-        width: auto;
+        width: 100%;
 
-        white-space: nowrap;
+        white-space: normal;
+      }
+
+      /* Overlay */
+
+      .sidebar-overlay {
+        position: fixed;
+
+        inset: 0;
+
+        z-index: 1050;
+
+        display: block;
+
+        background:
+          rgba(0, 0, 0, .45);
+
+        opacity: 0;
+
+        visibility: hidden;
+
+        pointer-events: none;
+
+        transition:
+          opacity .25s ease,
+          visibility .25s ease;
+      }
+
+      .sidebar-overlay.show {
+        opacity: 1;
+
+        visibility: visible;
+
+        pointer-events: auto;
       }
 
       .admin-content {
+        width: 100%;
+
         padding: 20px 15px;
       }
     }
+
+    /* ==========================================
+       MOBILE
+    ========================================== */
 
     @media (max-width: 600px) {
 
@@ -624,8 +802,20 @@
         min-height: 62px;
       }
 
+      .menu-toggle {
+        width: 40px;
+        height: 40px;
+
+        font-size: 21px;
+      }
+
+      .logo {
+        width: 38px;
+        height: 38px;
+      }
+
       .brand-title {
-        font-size: 16px;
+        font-size: 15px;
       }
 
       .brand-subtitle {
@@ -633,7 +823,9 @@
       }
 
       .site-link {
-        font-size: 11px;
+        padding: 7px 9px;
+
+        font-size: 10px;
       }
 
       .form-grid {
@@ -646,11 +838,54 @@
 
       .social-item {
         grid-template-columns: 1fr;
+
         gap: 4px;
       }
 
       .page-title {
         font-size: 22px;
+      }
+
+      .page-description {
+        font-size: 12px;
+      }
+
+      .card-body {
+        padding: 14px;
+      }
+
+      .card-header {
+        padding: 13px 14px;
+      }
+
+      .button-row {
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+
+    /* ==========================================
+       VERY SMALL PHONE
+    ========================================== */
+
+    @media (max-width: 380px) {
+
+      .site-link {
+        font-size: 9px;
+
+        padding:
+          6px 7px;
+      }
+
+      .brand-title {
+        font-size: 14px;
+      }
+
+      .admin-sidebar {
+        width: 250px;
       }
     }
   </style>
@@ -658,11 +893,28 @@
 
 <body>
 
-  <!-- HEADER -->
+  <!-- ==========================================
+       HEADER
+  ========================================== -->
 
   <header class="admin-header">
 
     <div class="container header-inner">
+
+      <!-- MOBILE MENU -->
+
+      <button
+        id="menuToggle"
+        class="menu-toggle"
+        type="button"
+        aria-label="Menu খুলুন"
+        aria-expanded="false"
+      >
+        ☰
+      </button>
+
+
+      <!-- BRAND -->
 
       <div class="brand">
 
@@ -684,10 +936,14 @@
 
       </div>
 
+
+      <!-- WEBSITE -->
+
       <a
         class="site-link"
         href="/"
         target="_blank"
+        rel="noopener noreferrer"
       >
         🌐 ওয়েবসাইট দেখুন
       </a>
@@ -697,84 +953,148 @@
   </header>
 
 
-  <!-- LAYOUT -->
+  <!-- ==========================================
+       LAYOUT
+  ========================================== -->
 
   <div class="admin-layout">
 
 
-    <!-- SIDEBAR -->
+    <!-- ========================================
+         SIDEBAR
+    ========================================= -->
 
-    <aside class="admin-sidebar">
+    <aside
+      id="adminSidebar"
+      class="admin-sidebar"
+    >
 
       <div class="sidebar-label">
         Settings
       </div>
 
+
       <div class="sidebar-menu">
+
+
+        <!-- ADS -->
 
         <button
           class="menu-button active"
           data-panel="ads"
           type="button"
         >
-          <span class="menu-icon">📢</span>
+
+          <span class="menu-icon">
+            📢
+          </span>
+
           বিজ্ঞাপন
+
         </button>
+
+
+        <!-- VIDEO -->
 
         <button
           class="menu-button"
           data-panel="video"
           type="button"
         >
-          <span class="menu-icon">🎬</span>
+
+          <span class="menu-icon">
+            🎬
+          </span>
+
           ভিডিও নিউজ
+
         </button>
+
+
+        <!-- SOCIAL -->
 
         <button
           class="menu-button"
           data-panel="social"
           type="button"
         >
-          <span class="menu-icon">🔗</span>
+
+          <span class="menu-icon">
+            🔗
+          </span>
+
           Social Media
+
         </button>
+
+
+        <!-- LIVE -->
 
         <button
           class="menu-button"
           data-panel="live"
           type="button"
         >
-          <span class="menu-icon">🔴</span>
+
+          <span class="menu-icon">
+            🔴
+          </span>
+
           Live Show
+
         </button>
+
+
+        <!-- SITE -->
 
         <button
           class="menu-button"
           data-panel="site"
           type="button"
         >
-          <span class="menu-icon">⚙️</span>
+
+          <span class="menu-icon">
+            ⚙️
+          </span>
+
           Site Settings
+
         </button>
+
 
       </div>
 
     </aside>
 
 
-    <!-- MAIN CONTENT -->
+    <!-- MOBILE OVERLAY -->
+
+    <div
+      id="sidebarOverlay"
+      class="sidebar-overlay"
+      aria-hidden="true"
+    ></div>
+
+
+    <!-- ========================================
+         MAIN CONTENT
+    ========================================= -->
 
     <main class="admin-content">
+
+      <!-- STATUS -->
 
       <div
         id="status"
         class="status"
+        role="alert"
+        aria-live="polite"
       ></div>
 
 
-      <!-- ==========================================
+      <!-- ======================================
            ADS PANEL
-      =========================================== -->
+      ======================================= -->
 
       <section
         id="panel-ads"
@@ -807,6 +1127,7 @@
 
           </div>
 
+
           <div class="card-body">
 
             <div class="switch-row">
@@ -823,6 +1144,7 @@
 
               </div>
 
+
               <label class="switch">
 
                 <input
@@ -836,7 +1158,9 @@
 
             </div>
 
+
             <br>
+
 
             <div class="form-grid">
 
@@ -860,7 +1184,9 @@
 
               </div>
 
+
               <div></div>
+
 
               <div class="form-group full">
 
@@ -902,6 +1228,7 @@
 
           </div>
 
+
           <div class="card-body">
 
             <div class="switch-row">
@@ -918,6 +1245,7 @@
 
               </div>
 
+
               <label class="switch">
 
                 <input
@@ -931,7 +1259,9 @@
 
             </div>
 
+
             <br>
+
 
             <div class="form-group">
 
@@ -953,7 +1283,9 @@
 
             </div>
 
+
             <br>
+
 
             <div class="form-group">
 
@@ -989,6 +1321,7 @@
 
           </div>
 
+
           <div class="card-body">
 
             <div class="switch-row">
@@ -1005,6 +1338,7 @@
 
               </div>
 
+
               <label class="switch">
 
                 <input
@@ -1018,7 +1352,9 @@
 
             </div>
 
+
             <br>
+
 
             <div class="form-grid">
 
@@ -1042,7 +1378,9 @@
 
               </div>
 
+
               <div></div>
+
 
               <div class="form-group full">
 
@@ -1080,6 +1418,7 @@
 
           </div>
 
+
           <div class="card-body">
 
             <div class="switch-row">
@@ -1096,6 +1435,7 @@
 
               </div>
 
+
               <label class="switch">
 
                 <input
@@ -1109,7 +1449,9 @@
 
             </div>
 
+
             <br>
+
 
             <div class="form-grid">
 
@@ -1133,6 +1475,7 @@
 
               </div>
 
+
               <div class="form-group">
 
                 <label>
@@ -1151,6 +1494,7 @@
                 </div>
 
               </div>
+
 
               <div class="form-group full">
 
@@ -1187,9 +1531,9 @@
       </section>
 
 
-      <!-- ==========================================
+      <!-- ======================================
            VIDEO PANEL
-      =========================================== -->
+      ======================================= -->
 
       <section
         id="panel-video"
@@ -1215,6 +1559,7 @@
 
           </div>
 
+
           <div class="card-body">
 
             <div class="switch-row">
@@ -1231,6 +1576,7 @@
 
               </div>
 
+
               <label class="switch">
 
                 <input
@@ -1244,7 +1590,9 @@
 
             </div>
 
+
             <br>
+
 
             <div class="form-grid">
 
@@ -1262,6 +1610,7 @@
 
               </div>
 
+
               <div class="form-group">
 
                 <label>
@@ -1275,6 +1624,7 @@
                 >
 
               </div>
+
 
               <div class="form-group full">
 
@@ -1315,9 +1665,9 @@
       </section>
 
 
-      <!-- ==========================================
+      <!-- ======================================
            SOCIAL PANEL
-      =========================================== -->
+      ======================================= -->
 
       <section
         id="panel-social"
@@ -1343,7 +1693,9 @@
 
           </div>
 
+
           <div class="card-body">
+
 
             <div class="social-item">
 
@@ -1449,6 +1801,7 @@
 
             </div>
 
+
           </div>
 
         </div>
@@ -1469,9 +1822,9 @@
       </section>
 
 
-      <!-- ==========================================
+      <!-- ======================================
            LIVE PANEL
-      =========================================== -->
+      ======================================= -->
 
       <section
         id="panel-live"
@@ -1503,6 +1856,7 @@
 
           </div>
 
+
           <div class="card-body">
 
             <div class="switch-row">
@@ -1519,6 +1873,7 @@
 
               </div>
 
+
               <label class="switch">
 
                 <input
@@ -1532,7 +1887,9 @@
 
             </div>
 
+
             <br>
+
 
             <div class="form-group">
 
@@ -1548,7 +1905,9 @@
 
             </div>
 
+
             <br>
+
 
             <div class="form-group">
 
@@ -1588,6 +1947,7 @@
 
           </div>
 
+
           <div class="card-body">
 
             <div class="switch-row">
@@ -1604,6 +1964,7 @@
 
               </div>
 
+
               <label class="switch">
 
                 <input
@@ -1617,7 +1978,9 @@
 
             </div>
 
+
             <br>
+
 
             <div class="form-group">
 
@@ -1633,7 +1996,9 @@
 
             </div>
 
+
             <br>
+
 
             <div class="form-group">
 
@@ -1672,9 +2037,9 @@
       </section>
 
 
-      <!-- ==========================================
+      <!-- ======================================
            SITE SETTINGS
-      =========================================== -->
+      ======================================= -->
 
       <section
         id="panel-site"
@@ -1700,9 +2065,11 @@
 
           </div>
 
+
           <div class="card-body">
 
             <div class="form-grid">
+
 
               <div class="form-group">
 
@@ -1777,6 +2144,7 @@
 
               </div>
 
+
             </div>
 
           </div>
@@ -1803,79 +2171,326 @@
   </div>
 
 
+  <!-- ==========================================
+       JAVASCRIPT
+  ========================================== -->
+
   <script>
     "use strict";
 
 
-    /* =================================================
+    /* ==========================================
        ELEMENTS
-    ================================================= */
+    ========================================== */
 
     const statusBox =
       document.getElementById(
         "status"
       );
 
+    const menuToggle =
+      document.getElementById(
+        "menuToggle"
+      );
 
-    /* =================================================
+    const sidebar =
+      document.getElementById(
+        "adminSidebar"
+      );
+
+    const sidebarOverlay =
+      document.getElementById(
+        "sidebarOverlay"
+      );
+
+    const menuButtons =
+      document.querySelectorAll(
+        ".menu-button"
+      );
+
+    const panels =
+      document.querySelectorAll(
+        ".panel"
+      );
+
+
+    /* ==========================================
        STATUS
-    ================================================= */
+    ========================================== */
+
+    let statusTimer = null;
+
 
     function showStatus(
       message,
       type = "success"
     ) {
 
+      clearTimeout(
+        statusTimer
+      );
+
+
       statusBox.textContent =
         message;
+
 
       statusBox.className =
         "status show " +
         type;
+
 
       window.scrollTo({
         top: 0,
         behavior: "smooth"
       });
 
-      setTimeout(
-        () => {
 
-          statusBox.className =
-            "status";
+      statusTimer =
+        setTimeout(
+          () => {
 
-        },
-        4000
-      );
+            statusBox.className =
+              "status";
+
+          },
+          4000
+        );
+
     }
 
 
-    /* =================================================
-       API
-    ================================================= */
+    /* ==========================================
+       MOBILE MENU
+    ========================================== */
+
+    function openSidebar() {
+
+      sidebar.classList.add(
+        "open"
+      );
+
+      sidebarOverlay.classList.add(
+        "show"
+      );
+
+      document.body.classList.add(
+        "menu-open"
+      );
+
+      menuToggle.setAttribute(
+        "aria-expanded",
+        "true"
+      );
+
+      menuToggle.setAttribute(
+        "aria-label",
+        "Menu বন্ধ করুন"
+      );
+
+      menuToggle.textContent =
+        "✕";
+
+    }
+
+
+    function closeSidebar() {
+
+      sidebar.classList.remove(
+        "open"
+      );
+
+      sidebarOverlay.classList.remove(
+        "show"
+      );
+
+      document.body.classList.remove(
+        "menu-open"
+      );
+
+      menuToggle.setAttribute(
+        "aria-expanded",
+        "false"
+      );
+
+      menuToggle.setAttribute(
+        "aria-label",
+        "Menu খুলুন"
+      );
+
+      menuToggle.textContent =
+        "☰";
+
+    }
+
+
+    function toggleSidebar() {
+
+      if (
+        sidebar.classList.contains(
+          "open"
+        )
+      ) {
+
+        closeSidebar();
+
+      } else {
+
+        openSidebar();
+
+      }
+
+    }
+
+
+    menuToggle.addEventListener(
+      "click",
+      toggleSidebar
+    );
+
+
+    sidebarOverlay.addEventListener(
+      "click",
+      closeSidebar
+    );
+
+
+    /* ==========================================
+       NAVIGATION
+    ========================================== */
+
+    function showPanel(
+      panelName
+    ) {
+
+      menuButtons.forEach(
+        button => {
+
+          button.classList.toggle(
+            "active",
+            button.dataset.panel ===
+            panelName
+          );
+
+        }
+      );
+
+
+      panels.forEach(
+        panel => {
+
+          panel.classList.toggle(
+            "active",
+            panel.id ===
+            "panel-" +
+            panelName
+          );
+
+        }
+      );
+
+    }
+
+
+    menuButtons.forEach(
+      button => {
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            const panelName =
+              button.dataset.panel;
+
+
+            showPanel(
+              panelName
+            );
+
+
+            if (
+              window.innerWidth <= 850
+            ) {
+
+              closeSidebar();
+
+            }
+
+          }
+        );
+
+      }
+    );
+
+
+    /* ==========================================
+       ESC KEY
+    ========================================== */
+
+    document.addEventListener(
+      "keydown",
+      event => {
+
+        if (
+          event.key === "Escape"
+        ) {
+
+          closeSidebar();
+
+        }
+
+      }
+    );
+
+
+    /* ==========================================
+       RESIZE
+    ========================================== */
+
+    window.addEventListener(
+      "resize",
+      () => {
+
+        if (
+          window.innerWidth > 850
+        ) {
+
+          closeSidebar();
+
+        }
+
+      }
+    );
+
+
+    /* ==========================================
+       API REQUEST
+    ========================================== */
 
     async function apiRequest(
       url,
       options = {}
     ) {
 
+      const requestOptions = {
+        ...options,
+        headers: {
+          "Content-Type":
+            "application/json",
+          ...(options.headers || {})
+        }
+      };
+
+
       const response =
         await fetch(
           url,
-          {
-            ...options,
-
-            headers: {
-              "Content-Type":
-                "application/json",
-
-              ...(options.headers || {})
-            }
-          }
+          requestOptions
         );
 
 
       let data = {};
+
 
       try {
 
@@ -1900,81 +2515,13 @@
 
 
       return data;
+
     }
 
 
-    /* =================================================
-       NAVIGATION
-    ================================================= */
-
-    const menuButtons =
-      document.querySelectorAll(
-        ".menu-button"
-      );
-
-    const panels =
-      document.querySelectorAll(
-        ".panel"
-      );
-
-
-    menuButtons.forEach(
-      button => {
-
-        button.addEventListener(
-          "click",
-          () => {
-
-            const panelName =
-              button.dataset.panel;
-
-
-            menuButtons.forEach(
-              item =>
-                item.classList.remove(
-                  "active"
-                )
-            );
-
-
-            panels.forEach(
-              panel =>
-                panel.classList.remove(
-                  "active"
-                )
-            );
-
-
-            button.classList.add(
-              "active"
-            );
-
-
-            const target =
-              document.getElementById(
-                "panel-" +
-                panelName
-              );
-
-
-            if (target) {
-
-              target.classList.add(
-                "active"
-              );
-
-            }
-
-          }
-        );
-
-      }
-    );
-
-
-    /* =================================================
+    /* ==========================================
        LOAD SETTINGS
-    ================================================= */
+    ========================================== */
 
     async function loadSettings() {
 
@@ -1994,17 +2541,21 @@
           settings
         );
 
+
         loadVideo(
           settings
         );
+
 
         loadSocial(
           settings
         );
 
+
         loadLive(
           settings
         );
+
 
         loadSite(
           settings
@@ -2017,6 +2568,7 @@
           error
         );
 
+
         showStatus(
           "Settings লোড করা যায়নি। Server চালু আছে কিনা দেখুন।",
           "error"
@@ -2027,9 +2579,9 @@
     }
 
 
-    /* =================================================
+    /* ==========================================
        ADS LOAD
-    ================================================= */
+    ========================================== */
 
     function loadAds(
       settings
@@ -2041,7 +2593,7 @@
       const footer =
         settings.footerAd || {};
 
-      const sidebar =
+      const sidebarAd =
         settings.sidebarAd || {};
 
       const popup =
@@ -2096,21 +2648,21 @@
         "sidebarAdEnabled"
       ).checked =
         Boolean(
-          sidebar.enabled
+          sidebarAd.enabled
         );
 
 
       document.getElementById(
         "sidebarAdType"
       ).value =
-        sidebar.type ||
+        sidebarAd.type ||
         "code";
 
 
       document.getElementById(
         "sidebarAdContent"
       ).value =
-        sidebar.content ||
+        sidebarAd.content ||
         "";
 
 
@@ -2146,9 +2698,9 @@
     }
 
 
-    /* =================================================
+    /* ==========================================
        VIDEO LOAD
-    ================================================= */
+    ========================================== */
 
     function loadVideo(
       settings
@@ -2190,9 +2742,9 @@
     }
 
 
-    /* =================================================
+    /* ==========================================
        SOCIAL LOAD
-    ================================================= */
+    ========================================== */
 
     function loadSocial(
       settings
@@ -2254,9 +2806,9 @@
     }
 
 
-    /* =================================================
+    /* ==========================================
        LIVE LOAD
-    ================================================= */
+    ========================================== */
 
     function loadLive(
       settings
@@ -2317,9 +2869,9 @@
     }
 
 
-    /* =================================================
+    /* ==========================================
        SITE LOAD
-    ================================================= */
+    ========================================== */
 
     function loadSite(
       settings
@@ -2367,9 +2919,9 @@
     }
 
 
-    /* =================================================
+    /* ==========================================
        SAVE SETTINGS
-    ================================================= */
+    ========================================== */
 
     async function saveSettings(
       settings,
@@ -2403,6 +2955,7 @@
           error
         );
 
+
         showStatus(
           error.message ||
           "Settings save করা যায়নি।",
@@ -2414,9 +2967,28 @@
     }
 
 
-    /* =================================================
+    /* ==========================================
+       GET CURRENT SETTINGS
+    ========================================== */
+
+    async function getCurrentSettings() {
+
+      const data =
+        await apiRequest(
+          "/api/settings"
+        );
+
+
+      return (
+        data.settings || {}
+      );
+
+    }
+
+
+    /* ==========================================
        SAVE ADS
-    ================================================= */
+    ========================================== */
 
     document
       .getElementById(
@@ -2426,109 +2998,126 @@
         "click",
         async () => {
 
-          const settings =
-            await getCurrentSettings();
+          try {
+
+            const settings =
+              await getCurrentSettings();
 
 
-          settings.headerAd = {
+            settings.headerAd = {
 
-            enabled:
-              document.getElementById(
-                "headerAdEnabled"
-              ).checked,
-
-            type:
-              document.getElementById(
-                "headerAdType"
-              ).value,
-
-            content:
-              document.getElementById(
-                "headerAdContent"
-              ).value.trim()
-
-          };
-
-
-          settings.footerAd = {
-
-            enabled:
-              document.getElementById(
-                "footerAdEnabled"
-              ).checked,
-
-            type:
-              document.getElementById(
-                "footerAdType"
-              ).value,
-
-            content:
-              document.getElementById(
-                "footerAdContent"
-              ).value.trim()
-
-          };
-
-
-          settings.sidebarAd = {
-
-            enabled:
-              document.getElementById(
-                "sidebarAdEnabled"
-              ).checked,
-
-            type:
-              document.getElementById(
-                "sidebarAdType"
-              ).value,
-
-            content:
-              document.getElementById(
-                "sidebarAdContent"
-              ).value.trim()
-
-          };
-
-
-          settings.popupAd = {
-
-            enabled:
-              document.getElementById(
-                "popupAdEnabled"
-              ).checked,
-
-            type:
-              document.getElementById(
-                "popupAdType"
-              ).value,
-
-            content:
-              document.getElementById(
-                "popupAdContent"
-              ).value.trim(),
-
-            delay:
-              Number(
+              enabled:
                 document.getElementById(
-                  "popupAdDelay"
-                ).value
-              ) || 5000
+                  "headerAdEnabled"
+                ).checked,
 
-          };
+              type:
+                document.getElementById(
+                  "headerAdType"
+                ).value,
+
+              content:
+                document.getElementById(
+                  "headerAdContent"
+                ).value.trim()
+
+            };
 
 
-          await saveSettings(
-            settings,
-            "সব বিজ্ঞাপন Settings সফলভাবে Save হয়েছে।"
-          );
+            settings.footerAd = {
+
+              enabled:
+                document.getElementById(
+                  "footerAdEnabled"
+                ).checked,
+
+              type:
+                document.getElementById(
+                  "footerAdType"
+                ).value,
+
+              content:
+                document.getElementById(
+                  "footerAdContent"
+                ).value.trim()
+
+            };
+
+
+            settings.sidebarAd = {
+
+              enabled:
+                document.getElementById(
+                  "sidebarAdEnabled"
+                ).checked,
+
+              type:
+                document.getElementById(
+                  "sidebarAdType"
+                ).value,
+
+              content:
+                document.getElementById(
+                  "sidebarAdContent"
+                ).value.trim()
+
+            };
+
+
+            settings.popupAd = {
+
+              enabled:
+                document.getElementById(
+                  "popupAdEnabled"
+                ).checked,
+
+              type:
+                document.getElementById(
+                  "popupAdType"
+                ).value,
+
+              content:
+                document.getElementById(
+                  "popupAdContent"
+                ).value.trim(),
+
+              delay:
+                Number(
+                  document.getElementById(
+                    "popupAdDelay"
+                  ).value
+                ) || 5000
+
+            };
+
+
+            await saveSettings(
+              settings,
+              "সব বিজ্ঞাপন Settings সফলভাবে Save হয়েছে।"
+            );
+
+          } catch (error) {
+
+            console.error(
+              error
+            );
+
+
+            showStatus(
+              error.message ||
+              "বিজ্ঞাপন Settings Save করা যায়নি।",
+              "error"
+            );
+
+          }
 
         }
       );
 
 
-    /* =================================================
+    /* ==========================================
        SAVE VIDEO
-    ================================================= */
+    ========================================== */
 
     document
       .getElementById(
@@ -2538,48 +3127,65 @@
         "click",
         async () => {
 
-          const settings =
-            await getCurrentSettings();
+          try {
+
+            const settings =
+              await getCurrentSettings();
 
 
-          settings.videoNews = {
+            settings.videoNews = {
 
-            enabled:
-              document.getElementById(
-                "videoEnabled"
-              ).checked,
+              enabled:
+                document.getElementById(
+                  "videoEnabled"
+                ).checked,
 
-            title:
-              document.getElementById(
-                "videoTitle"
-              ).value.trim() ||
-              "ভিডিও নিউজ",
+              title:
+                document.getElementById(
+                  "videoTitle"
+                ).value.trim() ||
+                "ভিডিও নিউজ",
 
-            videoUrl:
-              document.getElementById(
-                "videoUrl"
-              ).value.trim(),
+              videoUrl:
+                document.getElementById(
+                  "videoUrl"
+                ).value.trim(),
 
-            embedCode:
-              document.getElementById(
-                "videoEmbedCode"
-              ).value.trim()
+              embedCode:
+                document.getElementById(
+                  "videoEmbedCode"
+                ).value.trim()
 
-          };
+            };
 
 
-          await saveSettings(
-            settings,
-            "ভিডিও নিউজ Settings সফলভাবে Save হয়েছে।"
-          );
+            await saveSettings(
+              settings,
+              "ভিডিও নিউজ Settings সফলভাবে Save হয়েছে।"
+            );
+
+          } catch (error) {
+
+            console.error(
+              error
+            );
+
+
+            showStatus(
+              error.message ||
+              "ভিডিও Settings Save করা যায়নি।",
+              "error"
+            );
+
+          }
 
         }
       );
 
 
-    /* =================================================
+    /* ==========================================
        SAVE SOCIAL
-    ================================================= */
+    ========================================== */
 
     document
       .getElementById(
@@ -2589,62 +3195,79 @@
         "click",
         async () => {
 
-          const settings =
-            await getCurrentSettings();
+          try {
+
+            const settings =
+              await getCurrentSettings();
 
 
-          settings.social = {
+            settings.social = {
 
-            facebook:
-              document.getElementById(
-                "socialFacebook"
-              ).value.trim(),
+              facebook:
+                document.getElementById(
+                  "socialFacebook"
+                ).value.trim(),
 
-            youtube:
-              document.getElementById(
-                "socialYoutube"
-              ).value.trim(),
+              youtube:
+                document.getElementById(
+                  "socialYoutube"
+                ).value.trim(),
 
-            instagram:
-              document.getElementById(
-                "socialInstagram"
-              ).value.trim(),
+              instagram:
+                document.getElementById(
+                  "socialInstagram"
+                ).value.trim(),
 
-            twitter:
-              document.getElementById(
-                "socialTwitter"
-              ).value.trim(),
+              twitter:
+                document.getElementById(
+                  "socialTwitter"
+                ).value.trim(),
 
-            tiktok:
-              document.getElementById(
-                "socialTiktok"
-              ).value.trim(),
+              tiktok:
+                document.getElementById(
+                  "socialTiktok"
+                ).value.trim(),
 
-            telegram:
-              document.getElementById(
-                "socialTelegram"
-              ).value.trim(),
+              telegram:
+                document.getElementById(
+                  "socialTelegram"
+                ).value.trim(),
 
-            whatsapp:
-              document.getElementById(
-                "socialWhatsapp"
-              ).value.trim()
+              whatsapp:
+                document.getElementById(
+                  "socialWhatsapp"
+                ).value.trim()
 
-          };
+            };
 
 
-          await saveSettings(
-            settings,
-            "Social Media Links সফলভাবে Save হয়েছে।"
-          );
+            await saveSettings(
+              settings,
+              "Social Media Links সফলভাবে Save হয়েছে।"
+            );
+
+          } catch (error) {
+
+            console.error(
+              error
+            );
+
+
+            showStatus(
+              error.message ||
+              "Social Media Settings Save করা যায়নি।",
+              "error"
+            );
+
+          }
 
         }
       );
 
 
-    /* =================================================
+    /* ==========================================
        SAVE LIVE
-    ================================================= */
+    ========================================== */
 
     document
       .getElementById(
@@ -2654,62 +3277,79 @@
         "click",
         async () => {
 
-          const settings =
-            await getCurrentSettings();
+          try {
+
+            const settings =
+              await getCurrentSettings();
 
 
-          settings.facebookLive = {
+            settings.facebookLive = {
 
-            enabled:
-              document.getElementById(
-                "facebookLiveEnabled"
-              ).checked,
+              enabled:
+                document.getElementById(
+                  "facebookLiveEnabled"
+                ).checked,
 
-            pageUrl:
-              document.getElementById(
-                "facebookLivePageUrl"
-              ).value.trim(),
+              pageUrl:
+                document.getElementById(
+                  "facebookLivePageUrl"
+                ).value.trim(),
 
-            embedCode:
-              document.getElementById(
-                "facebookLiveEmbedCode"
-              ).value.trim()
+              embedCode:
+                document.getElementById(
+                  "facebookLiveEmbedCode"
+                ).value.trim()
 
-          };
-
-
-          settings.youtubeLive = {
-
-            enabled:
-              document.getElementById(
-                "youtubeLiveEnabled"
-              ).checked,
-
-            channelUrl:
-              document.getElementById(
-                "youtubeLiveChannelUrl"
-              ).value.trim(),
-
-            embedCode:
-              document.getElementById(
-                "youtubeLiveEmbedCode"
-              ).value.trim()
-
-          };
+            };
 
 
-          await saveSettings(
-            settings,
-            "Facebook এবং YouTube Live Settings সফলভাবে Save হয়েছে।"
-          );
+            settings.youtubeLive = {
+
+              enabled:
+                document.getElementById(
+                  "youtubeLiveEnabled"
+                ).checked,
+
+              channelUrl:
+                document.getElementById(
+                  "youtubeLiveChannelUrl"
+                ).value.trim(),
+
+              embedCode:
+                document.getElementById(
+                  "youtubeLiveEmbedCode"
+                ).value.trim()
+
+            };
+
+
+            await saveSettings(
+              settings,
+              "Facebook এবং YouTube Live Settings সফলভাবে Save হয়েছে।"
+            );
+
+          } catch (error) {
+
+            console.error(
+              error
+            );
+
+
+            showStatus(
+              error.message ||
+              "Live Settings Save করা যায়নি।",
+              "error"
+            );
+
+          }
 
         }
       );
 
 
-    /* =================================================
+    /* ==========================================
        SAVE SITE
-    ================================================= */
+    ========================================== */
 
     document
       .getElementById(
@@ -2719,86 +3359,71 @@
         "click",
         async () => {
 
-          const settings =
-            await getCurrentSettings();
+          try {
+
+            const settings =
+              await getCurrentSettings();
 
 
-          settings.site = {
+            settings.site = {
 
-            name:
-              document.getElementById(
-                "siteName"
-              ).value.trim() ||
-              "IMU EDITZ News",
+              name:
+                document.getElementById(
+                  "siteName"
+                ).value.trim() ||
+                "IMU EDITZ News",
 
-            tagline:
-              document.getElementById(
-                "siteTagline"
-              ).value.trim() ||
-              "সত্যের সঙ্গে, মানুষের পাশে",
+              tagline:
+                document.getElementById(
+                  "siteTagline"
+                ).value.trim() ||
+                "সত্যের সঙ্গে, মানুষের পাশে",
 
-            logo:
-              document.getElementById(
-                "siteLogo"
-              ).value.trim(),
+              logo:
+                document.getElementById(
+                  "siteLogo"
+                ).value.trim(),
 
-            favicon:
-              document.getElementById(
-                "siteFavicon"
-              ).value.trim(),
+              favicon:
+                document.getElementById(
+                  "siteFavicon"
+                ).value.trim(),
 
-            description:
-              document.getElementById(
-                "siteDescription"
-              ).value.trim()
+              description:
+                document.getElementById(
+                  "siteDescription"
+                ).value.trim()
 
-          };
+            };
 
 
-          await saveSettings(
-            settings,
-            "Site Settings সফলভাবে Save হয়েছে।"
-          );
+            await saveSettings(
+              settings,
+              "Site Settings সফলভাবে Save হয়েছে।"
+            );
+
+          } catch (error) {
+
+            console.error(
+              error
+            );
+
+
+            showStatus(
+              error.message ||
+              "Site Settings Save করা যায়নি।",
+              "error"
+            );
+
+          }
 
         }
       );
 
 
-    /* =================================================
-       GET CURRENT SETTINGS
-    ================================================= */
-
-    async function getCurrentSettings() {
-
-      try {
-
-        const data =
-          await apiRequest(
-            "/api/settings"
-          );
-
-
-        return (
-          data.settings || {}
-        );
-
-      } catch (error) {
-
-        showStatus(
-          "বর্তমান Settings পাওয়া যাচ্ছে না।",
-          "error"
-        );
-
-        throw error;
-
-      }
-
-    }
-
-
-    /* =================================================
+    /* ==========================================
        START
-    ================================================= */
+    ========================================== */
 
     loadSettings();
 
