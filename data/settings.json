@@ -1,0 +1,36 @@
+{
+  "ads": {
+    "header": {
+      "enabled": false,
+      "code": ""
+    },
+    "footer": {
+      "enabled": false,
+      "code": ""
+    },
+    "sidebar": {
+      "enabled": false,
+      "code": ""
+    },
+    "popup": {
+      "enabled": false,
+      "code": "",
+      "delay": 5000
+    }
+  },
+  "video": {
+    "enabled": false,
+    "embed": ""
+  },
+  "social": {
+    "facebook": "",
+    "youtube": "",
+    "instagram": "",
+    "tiktok": "",
+    "x": ""
+  },
+  "live": {
+    "facebook": "",
+    "youtube": ""
+  }
+}
