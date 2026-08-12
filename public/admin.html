@@ -2,830 +2,812 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <meta
-    name="description"
-    content="IMU EDITZ News Admin Panel"
-  >
-
-  <title>IMU EDITZ News — Admin Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel — IMU EDITZ News</title>
 
   <style>
-    :root {
-      --red: #e21b2d;
-      --red-dark: #b91424;
-      --black: #111827;
-      --text: #171717;
-      --muted: #6b7280;
-      --border: #e5e7eb;
-      --bg: #f5f6f8;
-      --card: #ffffff;
-      --green: #16a34a;
-      --blue: #2563eb;
-    }
-
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
-    html {
-      scroll-behavior: smooth;
+    :root {
+      --primary: #e91e63;
+      --primary-dark: #c2185b;
+      --blue: #1565c0;
+      --green: #198754;
+      --red: #dc3545;
+      --orange: #f59e0b;
+      --dark: #101828;
+      --text: #1f2937;
+      --muted: #667085;
+      --border: #e4e7ec;
+      --bg: #f6f7fb;
+      --white: #ffffff;
+      --shadow: 0 8px 30px rgba(16, 24, 40, 0.07);
+      --radius: 14px;
     }
 
     body {
       font-family:
         "Noto Sans Bengali",
-        "Noto Sans",
-        system-ui,
+        "SolaimanLipi",
+        "Arial",
         sans-serif;
-
       background: var(--bg);
       color: var(--text);
-      line-height: 1.6;
-    }
-
-    body.menu-open {
-      overflow: hidden;
+      min-height: 100vh;
     }
 
     button,
     input,
     textarea,
     select {
-      font: inherit;
+      font-family: inherit;
     }
 
     button {
       cursor: pointer;
     }
 
-    .container {
-      width: min(
-        1180px,
-        calc(100% - 30px)
-      );
+    /* =====================================================
+       TOPBAR
+    ===================================================== */
 
-      margin: 0 auto;
-    }
-
-    /* ==========================================
-       HEADER
-    ========================================== */
-
-    .admin-header {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-
-      background: var(--black);
-      color: #fff;
-
-      box-shadow:
-        0 3px 15px rgba(0, 0, 0, .15);
-    }
-
-    .header-inner {
-      min-height: 70px;
-
+    .topbar {
+      height: 66px;
+      background: #101828;
+      color: white;
       display: flex;
       align-items: center;
       justify-content: space-between;
-
-      gap: 20px;
+      padding: 0 24px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 3px 15px rgba(0,0,0,.15);
     }
 
     .brand {
       display: flex;
       align-items: center;
       gap: 12px;
-
-      min-width: 0;
     }
 
-    .logo {
-      width: 42px;
-      height: 42px;
-
-      display: grid;
-      place-items: center;
-
-      flex-shrink: 0;
-
+    .brand-logo {
+      width: 38px;
+      height: 38px;
       border-radius: 8px;
-
-      background: var(--red);
-
-      color: #fff;
-
-      font-weight: 950;
-    }
-
-    .brand-title {
-      font-size: 19px;
-      font-weight: 900;
-
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .brand-subtitle {
-      color: #9ca3af;
-      font-size: 11px;
-    }
-
-    .site-link {
-      padding: 8px 13px;
-
-      border: 1px solid #374151;
-      border-radius: 7px;
-
-      color: #fff;
-
-      font-size: 13px;
-      font-weight: 700;
-
-      text-decoration: none;
-
-      white-space: nowrap;
-    }
-
-    .site-link:hover {
-      background: #1f2937;
-    }
-
-    /* MOBILE MENU BUTTON */
-
-    .menu-toggle {
-      display: none;
-
-      width: 42px;
-      height: 42px;
-
-      flex-shrink: 0;
-
-      border: 1px solid #374151;
-      border-radius: 8px;
-
-      background: #1f2937;
-      color: #fff;
-
-      font-size: 23px;
-      line-height: 1;
-
-      place-items: center;
-    }
-
-    .menu-toggle:hover {
-      background: #374151;
-    }
-
-    /* ==========================================
-       LAYOUT
-    ========================================== */
-
-    .admin-layout {
-      display: grid;
-
-      grid-template-columns:
-        240px
-        minmax(0, 1fr);
-
-      min-height: calc(100vh - 70px);
-    }
-
-    /* ==========================================
-       SIDEBAR
-    ========================================== */
-
-    .admin-sidebar {
-      background: #fff;
-
-      border-right:
-        1px solid var(--border);
-
-      padding: 20px 12px;
-    }
-
-    .sidebar-label {
-      padding: 8px 12px;
-
-      color: var(--muted);
-
-      font-size: 11px;
-      font-weight: 900;
-
-      text-transform: uppercase;
-    }
-
-    .sidebar-menu {
-      display: grid;
-      gap: 4px;
-    }
-
-    .menu-button {
-      width: 100%;
-
+      background: #e91e63;
       display: flex;
       align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      color: white;
+      font-size: 15px;
+    }
 
+    .brand-text strong {
+      display: block;
+      font-size: 17px;
+    }
+
+    .brand-text span {
+      display: block;
+      font-size: 10px;
+      color: #aab3c2;
+      margin-top: 2px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
       gap: 10px;
+    }
 
-      padding: 11px 12px;
-
-      border: 0;
-      border-radius: 7px;
-
-      background: transparent;
-      color: #374151;
-
-      text-align: left;
-
+    .site-button {
+      border: 1px solid #344054;
+      background: #182230;
+      color: white;
+      padding: 9px 13px;
+      border-radius: 8px;
+      text-decoration: none;
       font-size: 13px;
-      font-weight: 750;
     }
 
-    .menu-button:hover,
-    .menu-button.active {
-      background: #fef2f2;
-      color: var(--red);
+    /* =====================================================
+       LAYOUT
+    ===================================================== */
+
+    .layout {
+      display: flex;
+      min-height: calc(100vh - 66px);
     }
 
-    .menu-icon {
-      width: 23px;
-
+    .sidebar {
+      width: 235px;
+      background: white;
+      border-right: 1px solid var(--border);
+      padding: 20px 12px;
       flex-shrink: 0;
+    }
 
+    .sidebar-title {
+      font-size: 11px;
+      color: #98a2b3;
+      margin: 5px 10px 10px;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+    }
+
+    .nav-button {
+      width: 100%;
+      border: none;
+      background: transparent;
+      padding: 12px 13px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      color: #475467;
+      font-size: 14px;
+      text-align: left;
+      margin-bottom: 4px;
+    }
+
+    .nav-button:hover {
+      background: #f9fafb;
+    }
+
+    .nav-button.active {
+      background: #fff0f4;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .nav-icon {
+      width: 20px;
       text-align: center;
+      font-size: 16px;
     }
 
-    /* ==========================================
-       MOBILE SIDEBAR OVERLAY
-    ========================================== */
-
-    .sidebar-overlay {
-      display: none;
-    }
-
-    /* ==========================================
-       CONTENT
-    ========================================== */
-
-    .admin-content {
-      padding: 28px;
+    .main {
+      flex: 1;
+      padding: 26px;
       min-width: 0;
     }
 
-    .page-title {
-      margin-bottom: 5px;
+    /* =====================================================
+       PAGE
+    ===================================================== */
 
-      font-size: 26px;
-      font-weight: 950;
-    }
-
-    .page-description {
-      margin-bottom: 25px;
-
-      color: var(--muted);
-
-      font-size: 13px;
-    }
-
-    /* ==========================================
-       PANELS
-    ========================================== */
-
-    .panel {
+    .page {
       display: none;
     }
 
-    .panel.active {
+    .page.active {
       display: block;
     }
 
-    /* ==========================================
+    .page-header {
+      margin-bottom: 22px;
+    }
+
+    .page-header h1 {
+      font-size: 27px;
+      margin-bottom: 5px;
+    }
+
+    .page-header p {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* =====================================================
+       DASHBOARD CARDS
+    ===================================================== */
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 22px;
+    }
+
+    .stat-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 7px;
+    }
+
+    .stat-number {
+      font-size: 27px;
+      font-weight: 800;
+    }
+
+    .stat-card.pink .stat-number {
+      color: var(--primary);
+    }
+
+    .stat-card.green .stat-number {
+      color: var(--green);
+    }
+
+    .stat-card.orange .stat-number {
+      color: var(--orange);
+    }
+
+    .stat-card.blue .stat-number {
+      color: var(--blue);
+    }
+
+    /* =====================================================
        CARD
-    ========================================== */
+    ===================================================== */
 
     .card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
       margin-bottom: 20px;
-
       overflow: hidden;
-
-      border:
-        1px solid var(--border);
-
-      border-radius: 10px;
-
-      background: var(--card);
-
-      box-shadow:
-        0 2px 8px rgba(0, 0, 0, .03);
     }
 
     .card-header {
-      padding: 15px 18px;
-
-      border-bottom:
-        1px solid var(--border);
-
-      background: #fafafa;
+      padding: 17px 19px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
     }
 
-    .card-title {
+    .card-header h2 {
       font-size: 16px;
-      font-weight: 900;
     }
 
-    .card-description {
-      margin-top: 2px;
-
+    .card-header p {
       color: var(--muted);
-
       font-size: 12px;
+      margin-top: 3px;
     }
 
     .card-body {
-      padding: 18px;
+      padding: 20px;
     }
 
-    /* ==========================================
-       FORM
-    ========================================== */
+    /* =====================================================
+       BUTTONS
+    ===================================================== */
+
+    .btn {
+      border: none;
+      border-radius: 8px;
+      padding: 10px 15px;
+      font-size: 13px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      transition: .2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-success {
+      background: var(--green);
+      color: white;
+    }
+
+    .btn-danger {
+      background: var(--red);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #eef2f6;
+      color: #344054;
+    }
+
+    .btn-blue {
+      background: var(--blue);
+      color: white;
+    }
+
+    .btn-small {
+      padding: 7px 10px;
+      font-size: 11px;
+    }
+
+    /* =====================================================
+       FORMS
+    ===================================================== */
 
     .form-grid {
       display: grid;
-
-      grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
+      grid-template-columns: 1fr 1fr;
       gap: 17px;
     }
 
     .form-group {
-      display: grid;
-      gap: 6px;
+      margin-bottom: 17px;
     }
 
     .form-group.full {
       grid-column: 1 / -1;
     }
 
-    label {
-      font-size: 13px;
-      font-weight: 850;
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 7px;
+      color: #344054;
+    }
+
+    .required {
+      color: var(--red);
     }
 
     input,
     textarea,
     select {
       width: 100%;
-
-      padding: 10px 12px;
-
-      border:
-        1px solid #d1d5db;
-
-      border-radius: 7px;
-
+      border: 1px solid #d0d5dd;
+      border-radius: 8px;
+      padding: 11px 12px;
       outline: none;
-
-      background: #fff;
-      color: #111827;
-
       font-size: 13px;
-    }
-
-    textarea {
-      min-height: 130px;
-
-      resize: vertical;
-
-      font-family:
-        ui-monospace,
-        SFMono-Regular,
-        Menlo,
-        monospace;
-
-      line-height: 1.5;
+      background: white;
+      color: #101828;
+      transition: .2s;
     }
 
     input:focus,
     textarea:focus,
     select:focus {
-      border-color: var(--red);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(233,30,99,.08);
+    }
 
-      box-shadow:
-        0 0 0 3px
-        rgba(226, 27, 45, .09);
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+      line-height: 1.8;
+    }
+
+    textarea.large {
+      min-height: 320px;
     }
 
     .help {
-      color: var(--muted);
-
-      font-size: 11px;
+      color: #98a2b3;
+      font-size: 10px;
+      margin-top: 5px;
     }
 
-    /* ==========================================
-       SWITCH
-    ========================================== */
+    /* =====================================================
+       IMAGE PREVIEW
+    ===================================================== */
 
-    .switch-row {
+    .image-preview {
+      margin-top: 10px;
+      display: none;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #f8fafc;
+    }
+
+    .image-preview.show {
+      display: block;
+    }
+
+    .image-preview img {
+      width: 100%;
+      max-height: 280px;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* =====================================================
+       EDITOR ACTIONS
+    ===================================================== */
+
+    .form-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 9px;
+      border-top: 1px solid var(--border);
+      padding-top: 18px;
+      margin-top: 4px;
+    }
+
+    /* =====================================================
+       SEARCH
+    ===================================================== */
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 220px;
+    }
+
+    /* =====================================================
+       TABLE
+    ===================================================== */
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 850px;
+    }
+
+    th,
+    td {
+      padding: 12px 13px;
+      border-bottom: 1px solid #eef0f3;
+      text-align: left;
+      vertical-align: middle;
+      font-size: 12px;
+    }
+
+    th {
+      background: #f9fafb;
+      color: #667085;
+      font-weight: 700;
+    }
+
+    tr:hover td {
+      background: #fcfcfd;
+    }
+
+    .article-title-cell {
+      max-width: 340px;
+    }
+
+    .article-title {
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .article-meta {
+      color: #98a2b3;
+      font-size: 10px;
+      margin-top: 3px;
+    }
+
+    .thumb {
+      width: 62px;
+      height: 46px;
+      object-fit: cover;
+      border-radius: 6px;
+      background: #eef2f6;
+    }
+
+    .no-image {
+      width: 62px;
+      height: 46px;
+      border-radius: 6px;
+      background: #eef2f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #98a2b3;
+      font-size: 10px;
+    }
+
+    .status {
+      display: inline-flex;
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .status.published {
+      background: #ecfdf3;
+      color: #027a48;
+    }
+
+    .status.draft {
+      background: #fff7ed;
+      color: #c2410c;
+    }
+
+    .actions {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    /* =====================================================
+       TOGGLE
+    ===================================================== */
+
+    .toggle-row {
+      background: #fafafa;
+      border: 1px solid #eaecf0;
+      border-radius: 9px;
+      padding: 13px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-
-      gap: 15px;
-
-      padding: 12px;
-
-      border:
-        1px solid var(--border);
-
-      border-radius: 8px;
-
-      background: #fafafa;
+      margin-bottom: 17px;
     }
 
-    .switch-text strong {
-      display: block;
-
+    .toggle-title {
       font-size: 13px;
+      font-weight: 700;
     }
 
-    .switch-text span {
-      display: block;
-
-      color: var(--muted);
-
-      font-size: 11px;
+    .toggle-description {
+      font-size: 10px;
+      color: #98a2b3;
+      margin-top: 3px;
     }
 
     .switch {
       position: relative;
-
-      width: 46px;
-      height: 25px;
-
+      width: 42px;
+      height: 23px;
       flex-shrink: 0;
     }
 
     .switch input {
-      opacity: 0;
-
-      width: 0;
-      height: 0;
+      display: none;
     }
 
     .slider {
       position: absolute;
       inset: 0;
-
+      background: #d0d5dd;
       border-radius: 30px;
-
-      background: #d1d5db;
-
       transition: .2s;
+      cursor: pointer;
     }
 
-    .slider::before {
+    .slider:before {
       content: "";
-
       position: absolute;
-
-      width: 19px;
-      height: 19px;
-
+      width: 17px;
+      height: 17px;
       left: 3px;
       top: 3px;
-
+      background: white;
       border-radius: 50%;
-
-      background: #fff;
-
       transition: .2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,.2);
     }
 
     .switch input:checked + .slider {
-      background: var(--green);
+      background: var(--primary);
     }
 
-    .switch input:checked + .slider::before {
-      transform: translateX(21px);
+    .switch input:checked + .slider:before {
+      transform: translateX(19px);
     }
 
-    /* ==========================================
-       BUTTON
-    ========================================== */
+    /* =====================================================
+       TOAST
+    ===================================================== */
 
-    .button-row {
+    .toast-container {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 5000;
       display: flex;
-
-      align-items: center;
-
-      gap: 10px;
-
-      margin-top: 20px;
+      flex-direction: column;
+      gap: 9px;
+      width: min(360px, calc(100vw - 36px));
     }
 
-    .btn {
-      padding: 10px 17px;
-
-      border: 0;
-
-      border-radius: 7px;
-
-      font-size: 13px;
-      font-weight: 850;
-    }
-
-    .btn-primary {
-      background: var(--red);
-      color: #fff;
-    }
-
-    .btn-primary:hover {
-      background: var(--red-dark);
-    }
-
-    .btn-secondary {
-      background: #e5e7eb;
-      color: #374151;
-    }
-
-    .btn:disabled {
-      opacity: .6;
-      cursor: not-allowed;
-    }
-
-    /* ==========================================
-       STATUS
-    ========================================== */
-
-    .status {
-      display: none;
-
-      margin-bottom: 18px;
-
-      padding: 12px 15px;
-
-      border-radius: 7px;
-
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .status.show {
-      display: block;
-    }
-
-    .status.success {
-      background: #dcfce7;
-      color: #166534;
-    }
-
-    .status.error {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-
-    /* ==========================================
-       AD PREVIEW
-    ========================================== */
-
-    .preview-box {
-      margin-top: 12px;
-
-      padding: 15px;
-
-      border:
-        1px dashed #cbd5e1;
-
-      border-radius: 8px;
-
-      background:
-        repeating-linear-gradient(
-          45deg,
-          #f8fafc,
-          #f8fafc 10px,
-          #f1f5f9 10px,
-          #f1f5f9 20px
-        );
-
-      color: var(--muted);
-
-      text-align: center;
-
-      font-size: 12px;
-    }
-
-    /* ==========================================
-       SOCIAL
-    ========================================== */
-
-    .social-item {
-      display: grid;
-
-      grid-template-columns:
-        100px
-        1fr;
-
-      align-items: center;
-
-      gap: 12px;
-
-      margin-bottom: 10px;
-    }
-
-    .social-item:last-child {
-      margin-bottom: 0;
-    }
-
-    .social-name {
-      font-size: 13px;
-      font-weight: 800;
-    }
-
-    /* ==========================================
-       INFO
-    ========================================== */
-
-    .info-box {
-      margin-bottom: 18px;
-
+    .toast {
+      background: #101828;
+      color: white;
+      border-radius: 10px;
       padding: 13px 15px;
-
-      border-left:
-        4px solid var(--blue);
-
-      background: #eff6ff;
-
-      color: #1e40af;
-
       font-size: 12px;
+      box-shadow: 0 12px 30px rgba(0,0,0,.2);
+      animation: toastIn .25s ease;
     }
 
-    /* ==========================================
-       DESKTOP / TABLET
-    ========================================== */
+    .toast.success {
+      border-left: 4px solid #12b76a;
+    }
 
-    @media (max-width: 850px) {
+    .toast.error {
+      border-left: 4px solid #f04438;
+    }
 
-      .admin-header {
-        z-index: 1000;
-      }
+    .toast.info {
+      border-left: 4px solid #2e90fa;
+    }
 
-      .header-inner {
-        min-height: 62px;
-
-        gap: 10px;
-      }
-
-      .menu-toggle {
-        display: grid;
-      }
-
-      .admin-layout {
-        display: block;
-
-        min-height: calc(100vh - 62px);
-      }
-
-      /* Slide-out sidebar */
-
-      .admin-sidebar {
-        position: fixed;
-
-        top: 62px;
-        left: 0;
-        bottom: 0;
-
-        z-index: 1100;
-
-        width: 275px;
-
-        padding: 20px 12px;
-
-        overflow-y: auto;
-
-        border-right:
-          1px solid var(--border);
-
-        border-bottom: 0;
-
-        transform:
-          translateX(-105%);
-
-        transition:
-          transform .25s ease;
-
-        box-shadow:
-          5px 0 25px
-          rgba(0, 0, 0, .18);
-      }
-
-      .admin-sidebar.open {
-        transform:
-          translateX(0);
-      }
-
-      .sidebar-menu {
-        display: grid;
-
-        overflow: visible;
-      }
-
-      .sidebar-label {
-        display: block;
-      }
-
-      .menu-button {
-        width: 100%;
-
-        white-space: normal;
-      }
-
-      /* Overlay */
-
-      .sidebar-overlay {
-        position: fixed;
-
-        inset: 0;
-
-        z-index: 1050;
-
-        display: block;
-
-        background:
-          rgba(0, 0, 0, .45);
-
+    @keyframes toastIn {
+      from {
         opacity: 0;
-
-        visibility: hidden;
-
-        pointer-events: none;
-
-        transition:
-          opacity .25s ease,
-          visibility .25s ease;
+        transform: translateY(10px);
       }
-
-      .sidebar-overlay.show {
+      to {
         opacity: 1;
-
-        visibility: visible;
-
-        pointer-events: auto;
-      }
-
-      .admin-content {
-        width: 100%;
-
-        padding: 20px 15px;
+        transform: translateY(0);
       }
     }
 
-    /* ==========================================
-       MOBILE
-    ========================================== */
+    /* =====================================================
+       LOADING
+    ===================================================== */
 
-    @media (max-width: 600px) {
+    .loading {
+      padding: 35px;
+      text-align: center;
+      color: #98a2b3;
+      font-size: 13px;
+    }
 
-      .header-inner {
-        min-height: 62px;
+    /* =====================================================
+       EMPTY
+    ===================================================== */
+
+    .empty {
+      padding: 45px 20px;
+      text-align: center;
+      color: #98a2b3;
+    }
+
+    .empty-icon {
+      font-size: 36px;
+      margin-bottom: 8px;
+    }
+
+    /* =====================================================
+       MODAL
+    ===================================================== */
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(16,24,40,.55);
+      z-index: 3000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal {
+      background: white;
+      width: min(650px, 100%);
+      max-height: 90vh;
+      overflow-y: auto;
+      border-radius: 15px;
+      box-shadow: 0 25px 60px rgba(0,0,0,.25);
+    }
+
+    .modal-header {
+      padding: 17px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h3 {
+      font-size: 16px;
+    }
+
+    .close-btn {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: #f2f4f7;
+      border-radius: 7px;
+      font-size: 18px;
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+
+    @media (max-width: 1000px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
       }
 
-      .menu-toggle {
-        width: 40px;
-        height: 40px;
+      .sidebar {
+        width: 205px;
+      }
+    }
 
-        font-size: 21px;
+    @media (max-width: 720px) {
+      .topbar {
+        padding: 0 12px;
       }
 
-      .logo {
-        width: 38px;
-        height: 38px;
-      }
-
-      .brand-title {
-        font-size: 15px;
-      }
-
-      .brand-subtitle {
+      .brand-text {
         display: none;
       }
 
-      .site-link {
-        padding: 7px 9px;
+      .layout {
+        display: block;
+      }
 
-        font-size: 10px;
+      .sidebar {
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding: 8px;
+        display: flex;
+        gap: 5px;
+        overflow-x: auto;
+      }
+
+      .sidebar-title {
+        display: none;
+      }
+
+      .nav-button {
+        width: auto;
+        min-width: max-content;
+        margin: 0;
+        padding: 9px 12px;
+      }
+
+      .main {
+        padding: 15px;
+      }
+
+      .stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 9px;
+      }
+
+      .stat-card {
+        padding: 13px;
       }
 
       .form-grid {
@@ -836,56 +818,17 @@
         grid-column: auto;
       }
 
-      .social-item {
-        grid-template-columns: 1fr;
-
-        gap: 4px;
-      }
-
-      .page-title {
+      .page-header h1 {
         font-size: 22px;
       }
 
-      .page-description {
-        font-size: 12px;
-      }
-
       .card-body {
-        padding: 14px;
+        padding: 15px;
       }
 
-      .card-header {
-        padding: 13px 14px;
-      }
-
-      .button-row {
-        flex-wrap: wrap;
-      }
-
-      .btn {
-        width: 100%;
-      }
-    }
-
-    /* ==========================================
-       VERY SMALL PHONE
-    ========================================== */
-
-    @media (max-width: 380px) {
-
-      .site-link {
-        font-size: 9px;
-
-        padding:
-          6px 7px;
-      }
-
-      .brand-title {
-        font-size: 14px;
-      }
-
-      .admin-sidebar {
-        width: 250px;
+      .top-actions .site-button {
+        font-size: 11px;
+        padding: 8px;
       }
     }
   </style>
@@ -893,485 +836,429 @@
 
 <body>
 
-  <!-- ==========================================
-       HEADER
-  ========================================== -->
+  <!-- =====================================================
+       TOPBAR
+  ====================================================== -->
 
-  <header class="admin-header">
+  <header class="topbar">
 
-    <div class="container header-inner">
+    <div class="brand">
 
-      <!-- MOBILE MENU -->
-
-      <button
-        id="menuToggle"
-        class="menu-toggle"
-        type="button"
-        aria-label="Menu খুলুন"
-        aria-expanded="false"
-      >
-        ☰
-      </button>
-
-
-      <!-- BRAND -->
-
-      <div class="brand">
-
-        <div class="logo">
-          IE
-        </div>
-
-        <div>
-
-          <div class="brand-title">
-            IMU EDITZ News
-          </div>
-
-          <div class="brand-subtitle">
-            Administrator Panel
-          </div>
-
-        </div>
-
+      <div class="brand-logo">
+        IE
       </div>
 
+      <div class="brand-text">
+        <strong>IMU EDITZ News</strong>
+        <span>Administrator Panel</span>
+      </div>
 
-      <!-- WEBSITE -->
+    </div>
 
+    <div class="top-actions">
       <a
-        class="site-link"
         href="/"
         target="_blank"
-        rel="noopener noreferrer"
+        class="site-button"
       >
         🌐 ওয়েবসাইট দেখুন
       </a>
-
     </div>
 
   </header>
 
 
-  <!-- ==========================================
+  <!-- =====================================================
        LAYOUT
-  ========================================== -->
+  ====================================================== -->
 
-  <div class="admin-layout">
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+      <div class="sidebar-title">
+        Content Management
+      </div>
+
+      <button
+        class="nav-button active"
+        data-page="dashboard"
+        onclick="showPage('dashboard')"
+      >
+        <span class="nav-icon">📊</span>
+        Dashboard
+      </button>
+
+      <button
+        class="nav-button"
+        data-page="articles"
+        onclick="showPage('articles')"
+      >
+        <span class="nav-icon">📰</span>
+        নিউজ ম্যানেজমেন্ট
+      </button>
+
+      <button
+        class="nav-button"
+        data-page="new-article"
+        onclick="showPage('new-article')"
+      >
+        <span class="nav-icon">✍️</span>
+        নতুন নিউজ
+      </button>
 
 
-    <!-- ========================================
-         SIDEBAR
-    ========================================= -->
-
-    <aside
-      id="adminSidebar"
-      class="admin-sidebar"
-    >
-
-      <div class="sidebar-label">
+      <div class="sidebar-title" style="margin-top:25px;">
         Settings
       </div>
 
-
-      <div class="sidebar-menu">
-
-
-        <!-- ADS -->
-
-        <button
-          class="menu-button active"
-          data-panel="ads"
-          type="button"
-        >
-
-          <span class="menu-icon">
-            📢
-          </span>
-
-          বিজ্ঞাপন
-
-        </button>
-
-
-        <!-- VIDEO -->
-
-        <button
-          class="menu-button"
-          data-panel="video"
-          type="button"
-        >
-
-          <span class="menu-icon">
-            🎬
-          </span>
-
-          ভিডিও নিউজ
-
-        </button>
-
-
-        <!-- SOCIAL -->
-
-        <button
-          class="menu-button"
-          data-panel="social"
-          type="button"
-        >
-
-          <span class="menu-icon">
-            🔗
-          </span>
-
-          Social Media
-
-        </button>
-
-
-        <!-- LIVE -->
-
-        <button
-          class="menu-button"
-          data-panel="live"
-          type="button"
-        >
-
-          <span class="menu-icon">
-            🔴
-          </span>
-
-          Live Show
-
-        </button>
-
-
-        <!-- SITE -->
-
-        <button
-          class="menu-button"
-          data-panel="site"
-          type="button"
-        >
-
-          <span class="menu-icon">
-            ⚙️
-          </span>
-
-          Site Settings
-
-        </button>
-
-
-      </div>
+      <button
+        class="nav-button"
+        data-page="settings"
+        onclick="showPage('settings')"
+      >
+        <span class="nav-icon">⚙️</span>
+        Site Settings
+      </button>
 
     </aside>
 
 
-    <!-- MOBILE OVERLAY -->
+    <!-- MAIN -->
 
-    <div
-      id="sidebarOverlay"
-      class="sidebar-overlay"
-      aria-hidden="true"
-    ></div>
+    <main class="main">
 
 
-    <!-- ========================================
-         MAIN CONTENT
-    ========================================= -->
-
-    <main class="admin-content">
-
-      <!-- STATUS -->
-
-      <div
-        id="status"
-        class="status"
-        role="alert"
-        aria-live="polite"
-      ></div>
-
-
-      <!-- ======================================
-           ADS PANEL
-      ======================================= -->
+      <!-- =================================================
+           DASHBOARD
+      ================================================== -->
 
       <section
-        id="panel-ads"
-        class="panel active"
+        id="page-dashboard"
+        class="page active"
       >
 
-        <h1 class="page-title">
-          বিজ্ঞাপন ব্যবস্থাপনা
-        </h1>
+        <div class="page-header">
 
-        <p class="page-description">
-          Header, Footer, Sidebar এবং Popup বিজ্ঞাপন
-          এখান থেকে নিয়ন্ত্রণ করুন।
-        </p>
+          <h1>
+            Dashboard
+          </h1>
+
+          <p>
+            আপনার নিউজ সাইটের বর্তমান অবস্থা এখান থেকে দেখুন।
+          </p>
+
+        </div>
 
 
-        <!-- HEADER AD -->
+        <div class="stats">
 
-        <div class="card">
-
-          <div class="card-header">
-
-            <div class="card-title">
-              📌 Header Advertisement
+          <div class="stat-card pink">
+            <div class="stat-label">
+              মোট নিউজ
             </div>
-
-            <div class="card-description">
-              ওয়েবসাইটের Header-এর নিচে বিজ্ঞাপন দেখাবে।
+            <div
+              id="statTotal"
+              class="stat-number"
+            >
+              0
             </div>
-
           </div>
 
 
-          <div class="card-body">
-
-            <div class="switch-row">
-
-              <div class="switch-text">
-
-                <strong>
-                  Header Advertisement চালু করুন
-                </strong>
-
-                <span>
-                  চালু করলে Header বিজ্ঞাপন Website-এ দেখা যাবে।
-                </span>
-
-              </div>
-
-
-              <label class="switch">
-
-                <input
-                  id="headerAdEnabled"
-                  type="checkbox"
-                >
-
-                <span class="slider"></span>
-
-              </label>
-
+          <div class="stat-card green">
+            <div class="stat-label">
+              Published
             </div>
-
-
-            <br>
-
-
-            <div class="form-grid">
-
-              <div class="form-group">
-
-                <label>
-                  বিজ্ঞাপনের ধরন
-                </label>
-
-                <select id="headerAdType">
-
-                  <option value="code">
-                    HTML / Ad Code
-                  </option>
-
-                  <option value="link">
-                    Advertisement Link
-                  </option>
-
-                </select>
-
-              </div>
-
-
-              <div></div>
-
-
-              <div class="form-group full">
-
-                <label>
-                  Advertisement Code / Link
-                </label>
-
-                <textarea
-                  id="headerAdContent"
-                  placeholder="<script>...</script> অথবা https://example.com"
-                ></textarea>
-
-                <div class="help">
-                  Ad Network-এর HTML/JS code অথবা একটি URL দিন।
-                </div>
-
-              </div>
-
+            <div
+              id="statPublished"
+              class="stat-number"
+            >
+              0
             </div>
+          </div>
 
+
+          <div class="stat-card orange">
+            <div class="stat-label">
+              Draft
+            </div>
+            <div
+              id="statDraft"
+              class="stat-number"
+            >
+              0
+            </div>
+          </div>
+
+
+          <div class="stat-card blue">
+            <div class="stat-label">
+              মোট Views
+            </div>
+            <div
+              id="statViews"
+              class="stat-number"
+            >
+              0
+            </div>
           </div>
 
         </div>
 
 
-        <!-- FOOTER AD -->
+        <div class="card">
+
+          <div class="card-header">
+
+            <div>
+              <h2>
+                📰 সর্বশেষ নিউজ
+              </h2>
+
+              <p>
+                সর্বশেষ প্রকাশিত সংবাদ
+              </p>
+            </div>
+
+            <button
+              class="btn btn-primary"
+              onclick="showPage('new-article')"
+            >
+              ＋ নতুন নিউজ
+            </button>
+
+          </div>
+
+          <div
+            id="dashboardLatest"
+            class="card-body"
+          >
+            <div class="loading">
+              নিউজ লোড হচ্ছে...
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =================================================
+           ARTICLES
+      ================================================== -->
+
+      <section
+        id="page-articles"
+        class="page"
+      >
+
+        <div class="page-header">
+
+          <h1>
+            📰 নিউজ ম্যানেজমেন্ট
+          </h1>
+
+          <p>
+            এখান থেকে সব নিউজ Edit, Delete, Draft এবং Publish করতে পারবেন।
+          </p>
+
+        </div>
+
 
         <div class="card">
 
           <div class="card-header">
 
-            <div class="card-title">
-              📌 Footer Advertisement
+            <div>
+              <h2>
+                সকল নিউজ
+              </h2>
+
+              <p>
+                নিউজের সম্পূর্ণ তালিকা
+              </p>
             </div>
 
-            <div class="card-description">
-              Footer-এর উপরে বিজ্ঞাপন দেখাবে।
-            </div>
+            <button
+              class="btn btn-primary"
+              onclick="showPage('new-article')"
+            >
+              ＋ নতুন নিউজ
+            </button>
 
           </div>
 
 
           <div class="card-body">
 
-            <div class="switch-row">
+            <div class="toolbar">
 
-              <div class="switch-text">
-
-                <strong>
-                  Footer Advertisement চালু করুন
-                </strong>
-
-                <span>
-                  Footer বিজ্ঞাপন Website-এ দেখাবে।
-                </span>
-
+              <div class="search-box">
+                <input
+                  id="articleSearch"
+                  type="search"
+                  placeholder="🔎 শিরোনাম, ক্যাটাগরি বা ID দিয়ে খুঁজুন..."
+                  oninput="renderArticlesTable()"
+                >
               </div>
 
-
-              <label class="switch">
-
-                <input
-                  id="footerAdEnabled"
-                  type="checkbox"
-                >
-
-                <span class="slider"></span>
-
-              </label>
-
-            </div>
-
-
-            <br>
-
-
-            <div class="form-group">
-
-              <label>
-                Advertisement Type
-              </label>
-
-              <select id="footerAdType">
-
-                <option value="code">
-                  HTML / Ad Code
+              <select
+                id="statusFilter"
+                onchange="renderArticlesTable()"
+                style="max-width:180px;"
+              >
+                <option value="all">
+                  সব Status
                 </option>
 
-                <option value="link">
-                  Advertisement Link
+                <option value="published">
+                  Published
                 </option>
 
+                <option value="draft">
+                  Draft
+                </option>
               </select>
 
-            </div>
-
-
-            <br>
-
-
-            <div class="form-group">
-
-              <label>
-                Advertisement Code / Link
-              </label>
-
-              <textarea
-                id="footerAdContent"
-                placeholder="<script>...</script>"
-              ></textarea>
+              <button
+                class="btn btn-secondary"
+                onclick="loadArticles()"
+              >
+                🔄 Refresh
+              </button>
 
             </div>
 
+          </div>
+
+
+          <div
+            id="articlesTableContainer"
+            class="table-wrap"
+          >
+            <div class="loading">
+              নিউজ লোড হচ্ছে...
+            </div>
           </div>
 
         </div>
 
+      </section>
 
-        <!-- SIDEBAR AD -->
 
-        <div class="card">
 
-          <div class="card-header">
+      <!-- =================================================
+           NEW / EDIT ARTICLE
+      ================================================== -->
 
-            <div class="card-title">
-              📌 Sidebar Advertisement
-            </div>
+      <section
+        id="page-new-article"
+        class="page"
+      >
 
-            <div class="card-description">
-              Website-এর Sidebar-এ বিজ্ঞাপন দেখাবে।
-            </div>
+        <div class="page-header">
 
-          </div>
+          <h1 id="editorTitle">
+            ✍️ নতুন নিউজ লিখুন
+          </h1>
 
+          <p id="editorSubtitle">
+            নতুন সংবাদ তৈরি করে Publish অথবা Draft হিসেবে সংরক্ষণ করুন।
+          </p>
+
+        </div>
+
+
+        <form
+          id="articleForm"
+          class="card"
+          onsubmit="saveArticle(event)"
+        >
 
           <div class="card-body">
 
-            <div class="switch-row">
+            <div class="form-grid">
 
-              <div class="switch-text">
 
-                <strong>
-                  Sidebar Advertisement চালু করুন
-                </strong>
+              <!-- TITLE -->
 
-                <span>
-                  Sidebar বিজ্ঞাপন চালু / বন্ধ করুন।
-                </span>
+              <div class="form-group full">
+
+                <label class="form-label">
+                  নিউজের শিরোনাম
+                  <span class="required">*</span>
+                </label>
+
+                <input
+                  id="articleTitle"
+                  type="text"
+                  required
+                  placeholder="সংবাদের আকর্ষণীয় শিরোনাম লিখুন"
+                >
 
               </div>
 
 
-              <label class="switch">
-
-                <input
-                  id="sidebarAdEnabled"
-                  type="checkbox"
-                >
-
-                <span class="slider"></span>
-
-              </label>
-
-            </div>
-
-
-            <br>
-
-
-            <div class="form-grid">
+              <!-- CATEGORY -->
 
               <div class="form-group">
 
-                <label>
-                  Advertisement Type
+                <label class="form-label">
+                  ক্যাটাগরি
                 </label>
 
-                <select id="sidebarAdType">
+                <select id="articleCategory">
 
-                  <option value="code">
-                    HTML / Ad Code
+                  <option value="সর্বশেষ">
+                    সর্বশেষ
                   </option>
 
-                  <option value="link">
-                    Advertisement Link
+                  <option value="জাতীয়">
+                    জাতীয়
+                  </option>
+
+                  <option value="আন্তর্জাতিক">
+                    আন্তর্জাতিক
+                  </option>
+
+                  <option value="রাজনীতি">
+                    রাজনীতি
+                  </option>
+
+                  <option value="শিক্ষা">
+                    শিক্ষা
+                  </option>
+
+                  <option value="স্বাস্থ্য">
+                    স্বাস্থ্য
+                  </option>
+
+                  <option value="অর্থনীতি">
+                    অর্থনীতি
+                  </option>
+
+                  <option value="খেলাধুলা">
+                    খেলাধুলা
+                  </option>
+
+                  <option value="বিনোদন">
+                    বিনোদন
+                  </option>
+
+                  <option value="প্রযুক্তি">
+                    প্রযুক্তি
+                  </option>
+
+                  <option value="সারাদেশ">
+                    সারাদেশ
+                  </option>
+
+                  <option value="অন্যান্য">
+                    অন্যান্য
                   </option>
 
                 </select>
@@ -1379,2055 +1266,56 @@
               </div>
 
 
-              <div></div>
+              <!-- SOURCE -->
 
+              <div class="form-group">
+
+                <label class="form-label">
+                  Source / প্রতিবেদক
+                </label>
+
+                <input
+                  id="articleSource"
+                  type="text"
+                  placeholder="যেমন: IMU EDITZ News"
+                  value="IMU EDITZ News"
+                >
+
+              </div>
+
+
+              <!-- IMAGE -->
 
               <div class="form-group full">
 
-                <label>
-                  Advertisement Code / Link
-                </label>
-
-                <textarea
-                  id="sidebarAdContent"
-                  placeholder="Advertisement code অথবা URL"
-                ></textarea>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <!-- POPUP AD -->
-
-        <div class="card">
-
-          <div class="card-header">
-
-            <div class="card-title">
-              🪟 Popup Advertisement
-            </div>
-
-            <div class="card-description">
-              Visitor Website-এ প্রবেশ করার পর Popup বিজ্ঞাপন দেখাবে।
-            </div>
-
-          </div>
-
-
-          <div class="card-body">
-
-            <div class="switch-row">
-
-              <div class="switch-text">
-
-                <strong>
-                  Popup Advertisement চালু করুন
-                </strong>
-
-                <span>
-                  Popup বিজ্ঞাপন চালু / বন্ধ করুন।
-                </span>
-
-              </div>
-
-
-              <label class="switch">
-
-                <input
-                  id="popupAdEnabled"
-                  type="checkbox"
-                >
-
-                <span class="slider"></span>
-
-              </label>
-
-            </div>
-
-
-            <br>
-
-
-            <div class="form-grid">
-
-              <div class="form-group">
-
-                <label>
-                  Advertisement Type
-                </label>
-
-                <select id="popupAdType">
-
-                  <option value="code">
-                    HTML / Ad Code
-                  </option>
-
-                  <option value="link">
-                    Advertisement Link
-                  </option>
-
-                </select>
-
-              </div>
-
-
-              <div class="form-group">
-
-                <label>
-                  Popup Delay — মিলিসেকেন্ড
+                <label class="form-label">
+                  নিউজের ছবি URL
                 </label>
 
                 <input
-                  id="popupAdDelay"
-                  type="number"
-                  min="0"
-                  value="5000"
+                  id="articleImage"
+                  type="url"
+                  placeholder="https://example.com/news-image.jpg"
+                  oninput="previewArticleImage()"
                 >
 
                 <div class="help">
-                  5000 = ৫ সেকেন্ড
+                  সরাসরি ছবির URL দিন। এই ছবিই নিউজ এবং পরবর্তীতে নিউজ ফটো কার্ডে ব্যবহার হবে।
+                </div>
+
+                <div
+                  id="articleImagePreview"
+                  class="image-preview"
+                >
+                  <img
+                    id="articlePreviewImg"
+                    alt="News preview"
+                  >
                 </div>
 
               </div>
 
 
-              <div class="form-group full">
-
-                <label>
-                  Advertisement Code / Link
-                </label>
-
-                <textarea
-                  id="popupAdContent"
-                  placeholder="Advertisement code অথবা URL"
-                ></textarea>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <div class="button-row">
-
-          <button
-            id="saveAds"
-            class="btn btn-primary"
-            type="button"
-          >
-            💾 বিজ্ঞাপন Save করুন
-          </button>
-
-        </div>
-
-      </section>
-
-
-      <!-- ======================================
-           VIDEO PANEL
-      ======================================= -->
-
-      <section
-        id="panel-video"
-        class="panel"
-      >
-
-        <h1 class="page-title">
-          ভিডিও নিউজ
-        </h1>
-
-        <p class="page-description">
-          YouTube বা অন্য Video Platform-এর Embed Code দিয়ে ভিডিও নিউজ যুক্ত করুন।
-        </p>
-
-
-        <div class="card">
-
-          <div class="card-header">
-
-            <div class="card-title">
-              🎬 Video News Settings
-            </div>
-
-          </div>
-
-
-          <div class="card-body">
-
-            <div class="switch-row">
-
-              <div class="switch-text">
-
-                <strong>
-                  Video News চালু করুন
-                </strong>
-
-                <span>
-                  চালু করলে Homepage-এ ভিডিও নিউজ দেখানো যাবে।
-                </span>
-
-              </div>
-
-
-              <label class="switch">
-
-                <input
-                  id="videoEnabled"
-                  type="checkbox"
-                >
-
-                <span class="slider"></span>
-
-              </label>
-
-            </div>
-
-
-            <br>
-
-
-            <div class="form-grid">
-
-              <div class="form-group">
-
-                <label>
-                  ভিডিও সেকশনের Title
-                </label>
-
-                <input
-                  id="videoTitle"
-                  type="text"
-                  placeholder="ভিডিও নিউজ"
-                >
-
-              </div>
-
-
-              <div class="form-group">
-
-                <label>
-                  Video URL
-                </label>
-
-                <input
-                  id="videoUrl"
-                  type="url"
-                  placeholder="https://www.youtube.com/watch?v=..."
-                >
-
-              </div>
-
+              <!-- SUMMARY -->
 
               <div class="form-group full">
-
-                <label>
-                  Embed Code
-                </label>
-
-                <textarea
-                  id="videoEmbedCode"
-                  placeholder='<iframe src="https://www.youtube.com/embed/..."></iframe>'
-                ></textarea>
-
-                <div class="help">
-                  YouTube → Share → Embed থেকে পাওয়া iframe code এখানে দিন।
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <div class="button-row">
-
-          <button
-            id="saveVideo"
-            class="btn btn-primary"
-            type="button"
-          >
-            💾 ভিডিও নিউজ Save করুন
-          </button>
-
-        </div>
-
-      </section>
-
-
-      <!-- ======================================
-           SOCIAL PANEL
-      ======================================= -->
-
-      <section
-        id="panel-social"
-        class="panel"
-      >
-
-        <h1 class="page-title">
-          Social Media
-        </h1>
-
-        <p class="page-description">
-          তোমার Social Media Page/Channel-এর লিংক এখানে যুক্ত করো।
-        </p>
-
-
-        <div class="card">
-
-          <div class="card-header">
-
-            <div class="card-title">
-              🔗 Social Media Links
-            </div>
-
-          </div>
-
-
-          <div class="card-body">
-
-
-            <div class="social-item">
-
-              <div class="social-name">
-                🔵 Facebook
-              </div>
-
-              <input
-                id="socialFacebook"
-                type="url"
-                placeholder="https://facebook.com/..."
-              >
-
-            </div>
-
-
-            <div class="social-item">
-
-              <div class="social-name">
-                🔴 YouTube
-              </div>
-
-              <input
-                id="socialYoutube"
-                type="url"
-                placeholder="https://youtube.com/@..."
-              >
-
-            </div>
-
-
-            <div class="social-item">
-
-              <div class="social-name">
-                🟣 Instagram
-              </div>
-
-              <input
-                id="socialInstagram"
-                type="url"
-                placeholder="https://instagram.com/..."
-              >
-
-            </div>
-
-
-            <div class="social-item">
-
-              <div class="social-name">
-                ⚫ X / Twitter
-              </div>
-
-              <input
-                id="socialTwitter"
-                type="url"
-                placeholder="https://x.com/..."
-              >
-
-            </div>
-
-
-            <div class="social-item">
-
-              <div class="social-name">
-                🎵 TikTok
-              </div>
-
-              <input
-                id="socialTiktok"
-                type="url"
-                placeholder="https://tiktok.com/@..."
-              >
-
-            </div>
-
-
-            <div class="social-item">
-
-              <div class="social-name">
-                ✈️ Telegram
-              </div>
-
-              <input
-                id="socialTelegram"
-                type="url"
-                placeholder="https://t.me/..."
-              >
-
-            </div>
-
-
-            <div class="social-item">
-
-              <div class="social-name">
-                🟢 WhatsApp
-              </div>
-
-              <input
-                id="socialWhatsapp"
-                type="url"
-                placeholder="https://wa.me/..."
-              >
-
-            </div>
-
-
-          </div>
-
-        </div>
-
-
-        <div class="button-row">
-
-          <button
-            id="saveSocial"
-            class="btn btn-primary"
-            type="button"
-          >
-            💾 Social Media Save করুন
-          </button>
-
-        </div>
-
-      </section>
-
-
-      <!-- ======================================
-           LIVE PANEL
-      ======================================= -->
-
-      <section
-        id="panel-live"
-        class="panel"
-      >
-
-        <h1 class="page-title">
-          Live Show
-        </h1>
-
-        <p class="page-description">
-          Facebook Page এবং YouTube Channel-এর Live Show Website-এ দেখানোর ব্যবস্থা।
-        </p>
-
-
-        <!-- FACEBOOK LIVE -->
-
-        <div class="card">
-
-          <div class="card-header">
-
-            <div class="card-title">
-              🔵 Facebook Page Live
-            </div>
-
-            <div class="card-description">
-              Facebook Page-এর Live Video Embed করুন।
-            </div>
-
-          </div>
-
-
-          <div class="card-body">
-
-            <div class="switch-row">
-
-              <div class="switch-text">
-
-                <strong>
-                  Facebook Live চালু করুন
-                </strong>
-
-                <span>
-                  Homepage-এ Facebook Live Show দেখাবে।
-                </span>
-
-              </div>
-
-
-              <label class="switch">
-
-                <input
-                  id="facebookLiveEnabled"
-                  type="checkbox"
-                >
-
-                <span class="slider"></span>
-
-              </label>
-
-            </div>
-
-
-            <br>
-
-
-            <div class="form-group">
-
-              <label>
-                Facebook Page URL
-              </label>
-
-              <input
-                id="facebookLivePageUrl"
-                type="url"
-                placeholder="https://www.facebook.com/yourpage"
-              >
-
-            </div>
-
-
-            <br>
-
-
-            <div class="form-group">
-
-              <label>
-                Facebook Live Embed Code
-              </label>
-
-              <textarea
-                id="facebookLiveEmbedCode"
-                placeholder='<iframe src="..."></iframe>'
-              ></textarea>
-
-              <div class="help">
-                Facebook-এর Embed Code এখানে বসাও।
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <!-- YOUTUBE LIVE -->
-
-        <div class="card">
-
-          <div class="card-header">
-
-            <div class="card-title">
-              🔴 YouTube Channel Live
-            </div>
-
-            <div class="card-description">
-              YouTube Live Stream Website-এ দেখানোর জন্য।
-            </div>
-
-          </div>
-
-
-          <div class="card-body">
-
-            <div class="switch-row">
-
-              <div class="switch-text">
-
-                <strong>
-                  YouTube Live চালু করুন
-                </strong>
-
-                <span>
-                  Homepage-এ YouTube Live Show দেখাবে।
-                </span>
-
-              </div>
-
-
-              <label class="switch">
-
-                <input
-                  id="youtubeLiveEnabled"
-                  type="checkbox"
-                >
-
-                <span class="slider"></span>
-
-              </label>
-
-            </div>
-
-
-            <br>
-
-
-            <div class="form-group">
-
-              <label>
-                YouTube Channel URL
-              </label>
-
-              <input
-                id="youtubeLiveChannelUrl"
-                type="url"
-                placeholder="https://youtube.com/@yourchannel"
-              >
-
-            </div>
-
-
-            <br>
-
-
-            <div class="form-group">
-
-              <label>
-                YouTube Live Embed Code
-              </label>
-
-              <textarea
-                id="youtubeLiveEmbedCode"
-                placeholder='<iframe src="https://www.youtube.com/embed/..."></iframe>'
-              ></textarea>
-
-              <div class="help">
-                YouTube Live Video-এর Embed Code এখানে বসাও।
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <div class="button-row">
-
-          <button
-            id="saveLive"
-            class="btn btn-primary"
-            type="button"
-          >
-            💾 Live Settings Save করুন
-          </button>
-
-        </div>
-
-      </section>
-
-
-      <!-- ======================================
-           SITE SETTINGS
-      ======================================= -->
-
-      <section
-        id="panel-site"
-        class="panel"
-      >
-
-        <h1 class="page-title">
-          Site Settings
-        </h1>
-
-        <p class="page-description">
-          Website-এর নাম, tagline, logo এবং description পরিবর্তন করুন।
-        </p>
-
-
-        <div class="card">
-
-          <div class="card-header">
-
-            <div class="card-title">
-              ⚙️ Website Information
-            </div>
-
-          </div>
-
-
-          <div class="card-body">
-
-            <div class="form-grid">
-
-
-              <div class="form-group">
-
-                <label>
-                  Website Name
-                </label>
-
-                <input
-                  id="siteName"
-                  type="text"
-                  placeholder="IMU EDITZ News"
-                >
-
-              </div>
-
-
-              <div class="form-group">
-
-                <label>
-                  Tagline
-                </label>
-
-                <input
-                  id="siteTagline"
-                  type="text"
-                  placeholder="সত্যের সঙ্গে, মানুষের পাশে"
-                >
-
-              </div>
-
-
-              <div class="form-group full">
-
-                <label>
-                  Logo URL
-                </label>
-
-                <input
-                  id="siteLogo"
-                  type="url"
-                  placeholder="https://example.com/logo.png"
-                >
-
-              </div>
-
-
-              <div class="form-group full">
-
-                <label>
-                  Favicon URL
-                </label>
-
-                <input
-                  id="siteFavicon"
-                  type="url"
-                  placeholder="https://example.com/favicon.png"
-                >
-
-              </div>
-
-
-              <div class="form-group full">
-
-                <label>
-                  Website Description
-                </label>
-
-                <textarea
-                  id="siteDescription"
-                  placeholder="Website সম্পর্কে সংক্ষিপ্ত বিবরণ"
-                ></textarea>
-
-              </div>
-
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <div class="button-row">
-
-          <button
-            id="saveSite"
-            class="btn btn-primary"
-            type="button"
-          >
-            💾 Site Settings Save করুন
-          </button>
-
-        </div>
-
-      </section>
-
-    </main>
-
-  </div>
-
-
-  <!-- ==========================================
-       JAVASCRIPT
-  ========================================== -->
-
-  <script>
-    "use strict";
-
-
-    /* ==========================================
-       ELEMENTS
-    ========================================== */
-
-    const statusBox =
-      document.getElementById(
-        "status"
-      );
-
-    const menuToggle =
-      document.getElementById(
-        "menuToggle"
-      );
-
-    const sidebar =
-      document.getElementById(
-        "adminSidebar"
-      );
-
-    const sidebarOverlay =
-      document.getElementById(
-        "sidebarOverlay"
-      );
-
-    const menuButtons =
-      document.querySelectorAll(
-        ".menu-button"
-      );
-
-    const panels =
-      document.querySelectorAll(
-        ".panel"
-      );
-
-
-    /* ==========================================
-       STATUS
-    ========================================== */
-
-    let statusTimer = null;
-
-
-    function showStatus(
-      message,
-      type = "success"
-    ) {
-
-      clearTimeout(
-        statusTimer
-      );
-
-
-      statusBox.textContent =
-        message;
-
-
-      statusBox.className =
-        "status show " +
-        type;
-
-
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
-
-
-      statusTimer =
-        setTimeout(
-          () => {
-
-            statusBox.className =
-              "status";
-
-          },
-          4000
-        );
-
-    }
-
-
-    /* ==========================================
-       MOBILE MENU
-    ========================================== */
-
-    function openSidebar() {
-
-      sidebar.classList.add(
-        "open"
-      );
-
-      sidebarOverlay.classList.add(
-        "show"
-      );
-
-      document.body.classList.add(
-        "menu-open"
-      );
-
-      menuToggle.setAttribute(
-        "aria-expanded",
-        "true"
-      );
-
-      menuToggle.setAttribute(
-        "aria-label",
-        "Menu বন্ধ করুন"
-      );
-
-      menuToggle.textContent =
-        "✕";
-
-    }
-
-
-    function closeSidebar() {
-
-      sidebar.classList.remove(
-        "open"
-      );
-
-      sidebarOverlay.classList.remove(
-        "show"
-      );
-
-      document.body.classList.remove(
-        "menu-open"
-      );
-
-      menuToggle.setAttribute(
-        "aria-expanded",
-        "false"
-      );
-
-      menuToggle.setAttribute(
-        "aria-label",
-        "Menu খুলুন"
-      );
-
-      menuToggle.textContent =
-        "☰";
-
-    }
-
-
-    function toggleSidebar() {
-
-      if (
-        sidebar.classList.contains(
-          "open"
-        )
-      ) {
-
-        closeSidebar();
-
-      } else {
-
-        openSidebar();
-
-      }
-
-    }
-
-
-    menuToggle.addEventListener(
-      "click",
-      toggleSidebar
-    );
-
-
-    sidebarOverlay.addEventListener(
-      "click",
-      closeSidebar
-    );
-
-
-    /* ==========================================
-       NAVIGATION
-    ========================================== */
-
-    function showPanel(
-      panelName
-    ) {
-
-      menuButtons.forEach(
-        button => {
-
-          button.classList.toggle(
-            "active",
-            button.dataset.panel ===
-            panelName
-          );
-
-        }
-      );
-
-
-      panels.forEach(
-        panel => {
-
-          panel.classList.toggle(
-            "active",
-            panel.id ===
-            "panel-" +
-            panelName
-          );
-
-        }
-      );
-
-    }
-
-
-    menuButtons.forEach(
-      button => {
-
-        button.addEventListener(
-          "click",
-          () => {
-
-            const panelName =
-              button.dataset.panel;
-
-
-            showPanel(
-              panelName
-            );
-
-
-            if (
-              window.innerWidth <= 850
-            ) {
-
-              closeSidebar();
-
-            }
-
-          }
-        );
-
-      }
-    );
-
-
-    /* ==========================================
-       ESC KEY
-    ========================================== */
-
-    document.addEventListener(
-      "keydown",
-      event => {
-
-        if (
-          event.key === "Escape"
-        ) {
-
-          closeSidebar();
-
-        }
-
-      }
-    );
-
-
-    /* ==========================================
-       RESIZE
-    ========================================== */
-
-    window.addEventListener(
-      "resize",
-      () => {
-
-        if (
-          window.innerWidth > 850
-        ) {
-
-          closeSidebar();
-
-        }
-
-      }
-    );
-
-
-    /* ==========================================
-       API REQUEST
-    ========================================== */
-
-    async function apiRequest(
-      url,
-      options = {}
-    ) {
-
-      const requestOptions = {
-        ...options,
-        headers: {
-          "Content-Type":
-            "application/json",
-          ...(options.headers || {})
-        }
-      };
-
-
-      const response =
-        await fetch(
-          url,
-          requestOptions
-        );
-
-
-      let data = {};
-
-
-      try {
-
-        data =
-          await response.json();
-
-      } catch {
-
-        data = {};
-
-      }
-
-
-      if (!response.ok) {
-
-        throw new Error(
-          data.message ||
-          "Server error"
-        );
-
-      }
-
-
-      return data;
-
-    }
-
-
-    /* ==========================================
-       LOAD SETTINGS
-    ========================================== */
-
-    async function loadSettings() {
-
-      try {
-
-        const data =
-          await apiRequest(
-            "/api/settings"
-          );
-
-
-        const settings =
-          data.settings || {};
-
-
-        loadAds(
-          settings
-        );
-
-
-        loadVideo(
-          settings
-        );
-
-
-        loadSocial(
-          settings
-        );
-
-
-        loadLive(
-          settings
-        );
-
-
-        loadSite(
-          settings
-        );
-
-
-      } catch (error) {
-
-        console.error(
-          error
-        );
-
-
-        showStatus(
-          "Settings লোড করা যায়নি। Server চালু আছে কিনা দেখুন।",
-          "error"
-        );
-
-      }
-
-    }
-
-
-    /* ==========================================
-       ADS LOAD
-    ========================================== */
-
-    function loadAds(
-      settings
-    ) {
-
-      const header =
-        settings.headerAd || {};
-
-      const footer =
-        settings.footerAd || {};
-
-      const sidebarAd =
-        settings.sidebarAd || {};
-
-      const popup =
-        settings.popupAd || {};
-
-
-      document.getElementById(
-        "headerAdEnabled"
-      ).checked =
-        Boolean(
-          header.enabled
-        );
-
-
-      document.getElementById(
-        "headerAdType"
-      ).value =
-        header.type ||
-        "code";
-
-
-      document.getElementById(
-        "headerAdContent"
-      ).value =
-        header.content ||
-        "";
-
-
-      document.getElementById(
-        "footerAdEnabled"
-      ).checked =
-        Boolean(
-          footer.enabled
-        );
-
-
-      document.getElementById(
-        "footerAdType"
-      ).value =
-        footer.type ||
-        "code";
-
-
-      document.getElementById(
-        "footerAdContent"
-      ).value =
-        footer.content ||
-        "";
-
-
-      document.getElementById(
-        "sidebarAdEnabled"
-      ).checked =
-        Boolean(
-          sidebarAd.enabled
-        );
-
-
-      document.getElementById(
-        "sidebarAdType"
-      ).value =
-        sidebarAd.type ||
-        "code";
-
-
-      document.getElementById(
-        "sidebarAdContent"
-      ).value =
-        sidebarAd.content ||
-        "";
-
-
-      document.getElementById(
-        "popupAdEnabled"
-      ).checked =
-        Boolean(
-          popup.enabled
-        );
-
-
-      document.getElementById(
-        "popupAdType"
-      ).value =
-        popup.type ||
-        "code";
-
-
-      document.getElementById(
-        "popupAdContent"
-      ).value =
-        popup.content ||
-        "";
-
-
-      document.getElementById(
-        "popupAdDelay"
-      ).value =
-        Number(
-          popup.delay
-        ) || 5000;
-
-    }
-
-
-    /* ==========================================
-       VIDEO LOAD
-    ========================================== */
-
-    function loadVideo(
-      settings
-    ) {
-
-      const video =
-        settings.videoNews ||
-        {};
-
-
-      document.getElementById(
-        "videoEnabled"
-      ).checked =
-        Boolean(
-          video.enabled
-        );
-
-
-      document.getElementById(
-        "videoTitle"
-      ).value =
-        video.title ||
-        "ভিডিও নিউজ";
-
-
-      document.getElementById(
-        "videoUrl"
-      ).value =
-        video.videoUrl ||
-        "";
-
-
-      document.getElementById(
-        "videoEmbedCode"
-      ).value =
-        video.embedCode ||
-        "";
-
-    }
-
-
-    /* ==========================================
-       SOCIAL LOAD
-    ========================================== */
-
-    function loadSocial(
-      settings
-    ) {
-
-      const social =
-        settings.social ||
-        {};
-
-
-      document.getElementById(
-        "socialFacebook"
-      ).value =
-        social.facebook ||
-        "";
-
-
-      document.getElementById(
-        "socialYoutube"
-      ).value =
-        social.youtube ||
-        "";
-
-
-      document.getElementById(
-        "socialInstagram"
-      ).value =
-        social.instagram ||
-        "";
-
-
-      document.getElementById(
-        "socialTwitter"
-      ).value =
-        social.twitter ||
-        "";
-
-
-      document.getElementById(
-        "socialTiktok"
-      ).value =
-        social.tiktok ||
-        "";
-
-
-      document.getElementById(
-        "socialTelegram"
-      ).value =
-        social.telegram ||
-        "";
-
-
-      document.getElementById(
-        "socialWhatsapp"
-      ).value =
-        social.whatsapp ||
-        "";
-
-    }
-
-
-    /* ==========================================
-       LIVE LOAD
-    ========================================== */
-
-    function loadLive(
-      settings
-    ) {
-
-      const facebook =
-        settings.facebookLive ||
-        {};
-
-      const youtube =
-        settings.youtubeLive ||
-        {};
-
-
-      document.getElementById(
-        "facebookLiveEnabled"
-      ).checked =
-        Boolean(
-          facebook.enabled
-        );
-
-
-      document.getElementById(
-        "facebookLivePageUrl"
-      ).value =
-        facebook.pageUrl ||
-        "";
-
-
-      document.getElementById(
-        "facebookLiveEmbedCode"
-      ).value =
-        facebook.embedCode ||
-        "";
-
-
-      document.getElementById(
-        "youtubeLiveEnabled"
-      ).checked =
-        Boolean(
-          youtube.enabled
-        );
-
-
-      document.getElementById(
-        "youtubeLiveChannelUrl"
-      ).value =
-        youtube.channelUrl ||
-        "";
-
-
-      document.getElementById(
-        "youtubeLiveEmbedCode"
-      ).value =
-        youtube.embedCode ||
-        "";
-
-    }
-
-
-    /* ==========================================
-       SITE LOAD
-    ========================================== */
-
-    function loadSite(
-      settings
-    ) {
-
-      const site =
-        settings.site ||
-        {};
-
-
-      document.getElementById(
-        "siteName"
-      ).value =
-        site.name ||
-        "IMU EDITZ News";
-
-
-      document.getElementById(
-        "siteTagline"
-      ).value =
-        site.tagline ||
-        "সত্যের সঙ্গে, মানুষের পাশে";
-
-
-      document.getElementById(
-        "siteLogo"
-      ).value =
-        site.logo ||
-        "";
-
-
-      document.getElementById(
-        "siteFavicon"
-      ).value =
-        site.favicon ||
-        "";
-
-
-      document.getElementById(
-        "siteDescription"
-      ).value =
-        site.description ||
-        "";
-
-    }
-
-
-    /* ==========================================
-       SAVE SETTINGS
-    ========================================== */
-
-    async function saveSettings(
-      settings,
-      successMessage
-    ) {
-
-      try {
-
-        await apiRequest(
-          "/api/settings",
-          {
-            method: "PUT",
-
-            body:
-              JSON.stringify(
-                settings
-              )
-          }
-        );
-
-
-        showStatus(
-          successMessage,
-          "success"
-        );
-
-
-      } catch (error) {
-
-        console.error(
-          error
-        );
-
-
-        showStatus(
-          error.message ||
-          "Settings save করা যায়নি।",
-          "error"
-        );
-
-      }
-
-    }
-
-
-    /* ==========================================
-       GET CURRENT SETTINGS
-    ========================================== */
-
-    async function getCurrentSettings() {
-
-      const data =
-        await apiRequest(
-          "/api/settings"
-        );
-
-
-      return (
-        data.settings || {}
-      );
-
-    }
-
-
-    /* ==========================================
-       SAVE ADS
-    ========================================== */
-
-    document
-      .getElementById(
-        "saveAds"
-      )
-      .addEventListener(
-        "click",
-        async () => {
-
-          try {
-
-            const settings =
-              await getCurrentSettings();
-
-
-            settings.headerAd = {
-
-              enabled:
-                document.getElementById(
-                  "headerAdEnabled"
-                ).checked,
-
-              type:
-                document.getElementById(
-                  "headerAdType"
-                ).value,
-
-              content:
-                document.getElementById(
-                  "headerAdContent"
-                ).value.trim()
-
-            };
-
-
-            settings.footerAd = {
-
-              enabled:
-                document.getElementById(
-                  "footerAdEnabled"
-                ).checked,
-
-              type:
-                document.getElementById(
-                  "footerAdType"
-                ).value,
-
-              content:
-                document.getElementById(
-                  "footerAdContent"
-                ).value.trim()
-
-            };
-
-
-            settings.sidebarAd = {
-
-              enabled:
-                document.getElementById(
-                  "sidebarAdEnabled"
-                ).checked,
-
-              type:
-                document.getElementById(
-                  "sidebarAdType"
-                ).value,
-
-              content:
-                document.getElementById(
-                  "sidebarAdContent"
-                ).value.trim()
-
-            };
-
-
-            settings.popupAd = {
-
-              enabled:
-                document.getElementById(
-                  "popupAdEnabled"
-                ).checked,
-
-              type:
-                document.getElementById(
-                  "popupAdType"
-                ).value,
-
-              content:
-                document.getElementById(
-                  "popupAdContent"
-                ).value.trim(),
-
-              delay:
-                Number(
-                  document.getElementById(
-                    "popupAdDelay"
-                  ).value
-                ) || 5000
-
-            };
-
-
-            await saveSettings(
-              settings,
-              "সব বিজ্ঞাপন Settings সফলভাবে Save হয়েছে।"
-            );
-
-          } catch (error) {
-
-            console.error(
-              error
-            );
-
-
-            showStatus(
-              error.message ||
-              "বিজ্ঞাপন Settings Save করা যায়নি।",
-              "error"
-            );
-
-          }
-
-        }
-      );
-
-
-    /* ==========================================
-       SAVE VIDEO
-    ========================================== */
-
-    document
-      .getElementById(
-        "saveVideo"
-      )
-      .addEventListener(
-        "click",
-        async () => {
-
-          try {
-
-            const settings =
-              await getCurrentSettings();
-
-
-            settings.videoNews = {
-
-              enabled:
-                document.getElementById(
-                  "videoEnabled"
-                ).checked,
-
-              title:
-                document.getElementById(
-                  "videoTitle"
-                ).value.trim() ||
-                "ভিডিও নিউজ",
-
-              videoUrl:
-                document.getElementById(
-                  "videoUrl"
-                ).value.trim(),
-
-              embedCode:
-                document.getElementById(
-                  "videoEmbedCode"
-                ).value.trim()
-
-            };
-
-
-            await saveSettings(
-              settings,
-              "ভিডিও নিউজ Settings সফলভাবে Save হয়েছে।"
-            );
-
-          } catch (error) {
-
-            console.error(
-              error
-            );
-
-
-            showStatus(
-              error.message ||
-              "ভিডিও Settings Save করা যায়নি।",
-              "error"
-            );
-
-          }
-
-        }
-      );
-
-
-    /* ==========================================
-       SAVE SOCIAL
-    ========================================== */
-
-    document
-      .getElementById(
-        "saveSocial"
-      )
-      .addEventListener(
-        "click",
-        async () => {
-
-          try {
-
-            const settings =
-              await getCurrentSettings();
-
-
-            settings.social = {
-
-              facebook:
-                document.getElementById(
-                  "socialFacebook"
-                ).value.trim(),
-
-              youtube:
-                document.getElementById(
-                  "socialYoutube"
-                ).value.trim(),
-
-              instagram:
-                document.getElementById(
-                  "socialInstagram"
-                ).value.trim(),
-
-              twitter:
-                document.getElementById(
-                  "socialTwitter"
-                ).value.trim(),
-
-              tiktok:
-                document.getElementById(
-                  "socialTiktok"
-                ).value.trim(),
-
-              telegram:
-                document.getElementById(
-                  "socialTelegram"
-                ).value.trim(),
-
-              whatsapp:
-                document.getElementById(
-                  "socialWhatsapp"
-                ).value.trim()
-
-            };
-
-
-            await saveSettings(
-              settings,
-              "Social Media Links সফলভাবে Save হয়েছে।"
-            );
-
-          } catch (error) {
-
-            console.error(
-              error
-            );
-
-
-            showStatus(
-              error.message ||
-              "Social Media Settings Save করা যায়নি।",
-              "error"
-            );
-
-          }
-
-        }
-      );
-
-
-    /* ==========================================
-       SAVE LIVE
-    ========================================== */
-
-    document
-      .getElementById(
-        "saveLive"
-      )
-      .addEventListener(
-        "click",
-        async () => {
-
-          try {
-
-            const settings =
-              await getCurrentSettings();
-
-
-            settings.facebookLive = {
-
-              enabled:
-                document.getElementById(
-                  "facebookLiveEnabled"
-                ).checked,
-
-              pageUrl:
-                document.getElementById(
-                  "facebookLivePageUrl"
-                ).value.trim(),
-
-              embedCode:
-                document.getElementById(
-                  "facebookLiveEmbedCode"
-                ).value.trim()
-
-            };
-
-
-            settings.youtubeLive = {
-
-              enabled:
-                document.getElementById(
-                  "youtubeLiveEnabled"
-                ).checked,
-
-              channelUrl:
-                document.getElementById(
-                  "youtubeLiveChannelUrl"
-                ).value.trim(),
-
-              embedCode:
-                document.getElementById(
-                  "youtubeLiveEmbedCode"
-                ).value.trim()
-
-            };
-
-
-            await saveSettings(
-              settings,
-              "Facebook এবং YouTube Live Settings সফলভাবে Save হয়েছে।"
-            );
-
-          } catch (error) {
-
-            console.error(
-              error
-            );
-
-
-            showStatus(
-              error.message ||
-              "Live Settings Save করা যায়নি।",
-              "error"
-            );
-
-          }
-
-        }
-      );
-
-
-    /* ==========================================
-       SAVE SITE
-    ========================================== */
-
-    document
-      .getElementById(
-        "saveSite"
-      )
-      .addEventListener(
-        "click",
-        async () => {
-
-          try {
-
-            const settings =
-              await getCurrentSettings();
-
-
-            settings.site = {
-
-              name:
-                document.getElementById(
-                  "siteName"
-                ).value.trim() ||
-                "IMU EDITZ News",
-
-              tagline:
-                document.getElementById(
-                  "siteTagline"
-                ).value.trim() ||
-                "সত্যের সঙ্গে, মানুষের পাশে",
-
-              logo:
-                document.getElementById(
-                  "siteLogo"
-                ).value.trim(),
-
-              favicon:
-                document.getElementById(
-                  "siteFavicon"
-                ).value.trim(),
-
-              description:
-                document.getElementById(
-                  "siteDescription"
-                ).value.trim()
-
-            };
-
-
-            await saveSettings(
-              settings,
-              "Site Settings সফলভাবে Save হয়েছে।"
-            );
-
-          } catch (error) {
-
-            console.error(
-              error
-            );
-
-
-            showStatus(
-              error.message ||
-              "Site Settings Save করা যায়নি।",
-              "error"
-            );
-
-          }
-
-        }
-      );
-
-
-    /* ==========================================
-       START
-    ========================================== */
-
-    loadSettings();
-
-  </script>
-
-</body>
-</html>
