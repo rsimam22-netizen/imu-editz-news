@@ -1,20 +1,17 @@
 {
   "name": "imu-editz-news",
   "version": "1.0.0",
-  "description": "IMU EDITZ News - AI Powered News Collector",
-  "private": true,
+  "description": "IMU EDITZ News website with admin panel and news management",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch server.js"
-  },
-  "engines": {
-    "node": "22.x"
+    "dev": "node server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "dotenv": "^17.2.1",
-    "express": "^5.1.0",
-    "rss-parser": "^3.13.0"
+    "express": "^5.1.0"
+  },
+  "engines": {
+    "node": "22.x"
   }
 }
