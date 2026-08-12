@@ -1,36 +1,55 @@
 {
-  "ads": {
-    "header": {
-      "enabled": false,
-      "code": ""
-    },
-    "footer": {
-      "enabled": false,
-      "code": ""
-    },
-    "sidebar": {
-      "enabled": false,
-      "code": ""
-    },
-    "popup": {
-      "enabled": false,
-      "code": "",
-      "delay": 5000
-    }
-  },
-  "video": {
+  "headerAd": {
     "enabled": false,
-    "embed": ""
+    "type": "code",
+    "content": ""
+  },
+  "footerAd": {
+    "enabled": false,
+    "type": "code",
+    "content": ""
+  },
+  "sidebarAd": {
+    "enabled": false,
+    "type": "code",
+    "content": ""
+  },
+  "popupAd": {
+    "enabled": false,
+    "type": "code",
+    "content": "",
+    "delay": 5000
+  },
+  "videoNews": {
+    "enabled": false,
+    "title": "ভিডিও নিউজ",
+    "videoUrl": "",
+    "embedCode": ""
   },
   "social": {
     "facebook": "",
     "youtube": "",
     "instagram": "",
+    "twitter": "",
     "tiktok": "",
-    "x": ""
+    "telegram": "",
+    "whatsapp": ""
   },
-  "live": {
-    "facebook": "",
-    "youtube": ""
+  "facebookLive": {
+    "enabled": false,
+    "pageUrl": "",
+    "embedCode": ""
+  },
+  "youtubeLive": {
+    "enabled": false,
+    "channelUrl": "",
+    "embedCode": ""
+  },
+  "site": {
+    "name": "IMU EDITZ News",
+    "tagline": "সত্যের সঙ্গে, মানুষের পাশে",
+    "logo": "",
+    "favicon": "",
+    "description": ""
   }
 }
