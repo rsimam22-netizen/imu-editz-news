@@ -4861,6 +4861,491 @@
     loadSiteSettings();
 
   </script>
+<!-- =========================================
+     ADVERTISEMENT SETTINGS
+========================================= -->
 
+<section class="card">
+
+  <div class="card-header">
+
+    <div class="card-title">
+      📢 Advertisement Settings
+    </div>
+
+    <div class="card-description">
+      Website-এর Header, Sidebar, Footer এবং Popup বিজ্ঞাপন এখান থেকে পরিচালনা করুন।
+    </div>
+
+  </div>
+
+  <div class="card-body">
+
+    <!-- HEADER AD -->
+
+    <div class="form-group">
+
+      <label for="headerAdCode">
+        Header Advertisement
+      </label>
+
+      <textarea
+        id="headerAdCode"
+        placeholder="এখানে Header বিজ্ঞাপনের HTML/Ad Code অথবা Link দিন..."
+        style="min-height:120px;"
+      ></textarea>
+
+      <div class="help">
+        উদাহরণ: Google AdSense code, banner HTML অথবা advertisement link।
+      </div>
+
+    </div>
+
+
+    <!-- SIDEBAR AD -->
+
+    <div class="form-group">
+
+      <label for="sidebarAdCode">
+        Sidebar Advertisement
+      </label>
+
+      <textarea
+        id="sidebarAdCode"
+        placeholder="এখানে Sidebar বিজ্ঞাপনের HTML/Ad Code অথবা Link দিন..."
+        style="min-height:120px;"
+      ></textarea>
+
+    </div>
+
+
+    <!-- FOOTER AD -->
+
+    <div class="form-group">
+
+      <label for="footerAdCode">
+        Footer Advertisement
+      </label>
+
+      <textarea
+        id="footerAdCode"
+        placeholder="এখানে Footer বিজ্ঞাপনের HTML/Ad Code অথবা Link দিন..."
+        style="min-height:120px;"
+      ></textarea>
+
+    </div>
+
+
+    <!-- POPUP AD -->
+
+    <div class="form-group">
+
+      <label for="popupAdCode">
+        Popup Advertisement
+      </label>
+
+      <textarea
+        id="popupAdCode"
+        placeholder="এখানে Popup বিজ্ঞাপনের HTML/Ad Code অথবা Link দিন..."
+        style="min-height:120px;"
+      ></textarea>
+
+    </div>
+
+
+    <!-- ENABLE / DISABLE -->
+
+    <div class="two-columns">
+
+      <div class="form-group">
+
+        <label for="headerAdEnabled">
+          Header Ad Status
+        </label>
+
+        <select id="headerAdEnabled">
+
+          <option value="true">
+            Enabled
+          </option>
+
+          <option value="false">
+            Disabled
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="sidebarAdEnabled">
+          Sidebar Ad Status
+        </label>
+
+        <select id="sidebarAdEnabled">
+
+          <option value="true">
+            Enabled
+          </option>
+
+          <option value="false">
+            Disabled
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="footerAdEnabled">
+          Footer Ad Status
+        </label>
+
+        <select id="footerAdEnabled">
+
+          <option value="true">
+            Enabled
+          </option>
+
+          <option value="false">
+            Disabled
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="popupAdEnabled">
+          Popup Ad Status
+        </label>
+
+        <select id="popupAdEnabled">
+
+          <option value="true">
+            Enabled
+          </option>
+
+          <option value="false">
+            Disabled
+          </option>
+
+        </select>
+
+      </div>
+
+    </div>
+
+
+    <!-- ACTIONS -->
+
+    <div class="actions">
+
+      <button
+        type="button"
+        id="saveAdSettingsBtn"
+        class="btn btn-primary"
+      >
+        💾 Save Advertisement Settings
+      </button>
+
+      <button
+        type="button"
+        id="clearAdSettingsBtn"
+        class="btn btn-light"
+      >
+        🗑️ Clear Advertisement Settings
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<script>
+
+/* =========================================
+   ADVERTISEMENT SETTINGS
+========================================= */
+
+const AD_SETTINGS_KEY =
+  "imu-editz-advertisement-settings";
+
+
+const headerAdCode =
+  document.getElementById(
+    "headerAdCode"
+  );
+
+
+const sidebarAdCode =
+  document.getElementById(
+    "sidebarAdCode"
+  );
+
+
+const footerAdCode =
+  document.getElementById(
+    "footerAdCode"
+  );
+
+
+const popupAdCode =
+  document.getElementById(
+    "popupAdCode"
+  );
+
+
+const headerAdEnabled =
+  document.getElementById(
+    "headerAdEnabled"
+  );
+
+
+const sidebarAdEnabled =
+  document.getElementById(
+    "sidebarAdEnabled"
+  );
+
+
+const footerAdEnabled =
+  document.getElementById(
+    "footerAdEnabled"
+  );
+
+
+const popupAdEnabled =
+  document.getElementById(
+    "popupAdEnabled"
+  );
+
+
+/* LOAD SAVED SETTINGS */
+
+function loadAdvertisementSettings() {
+
+  try {
+
+    const saved =
+      localStorage.getItem(
+        AD_SETTINGS_KEY
+      );
+
+
+    if (!saved) {
+      return;
+    }
+
+
+    const settings =
+      JSON.parse(saved);
+
+
+    headerAdCode.value =
+      settings.headerAdCode || "";
+
+
+    sidebarAdCode.value =
+      settings.sidebarAdCode || "";
+
+
+    footerAdCode.value =
+      settings.footerAdCode || "";
+
+
+    popupAdCode.value =
+      settings.popupAdCode || "";
+
+
+    headerAdEnabled.value =
+      String(
+        settings.headerAdEnabled !== false
+      );
+
+
+    sidebarAdEnabled.value =
+      String(
+        settings.sidebarAdEnabled !== false
+      );
+
+
+    footerAdEnabled.value =
+      String(
+        settings.footerAdEnabled !== false
+      );
+
+
+    popupAdEnabled.value =
+      String(
+        settings.popupAdEnabled !== false
+      );
+
+  } catch (error) {
+
+    console.error(
+      "Advertisement settings load failed:",
+      error
+    );
+
+  }
+
+}
+
+
+/* SAVE SETTINGS */
+
+function saveAdvertisementSettings() {
+
+  const settings = {
+
+    headerAdCode:
+      headerAdCode.value.trim(),
+
+    sidebarAdCode:
+      sidebarAdCode.value.trim(),
+
+    footerAdCode:
+      footerAdCode.value.trim(),
+
+    popupAdCode:
+      popupAdCode.value.trim(),
+
+    headerAdEnabled:
+      headerAdEnabled.value === "true",
+
+    sidebarAdEnabled:
+      sidebarAdEnabled.value === "true",
+
+    footerAdEnabled:
+      footerAdEnabled.value === "true",
+
+    popupAdEnabled:
+      popupAdEnabled.value === "true",
+
+    updatedAt:
+      new Date().toISOString()
+
+  };
+
+
+  localStorage.setItem(
+    AD_SETTINGS_KEY,
+    JSON.stringify(settings)
+  );
+
+
+  if (
+    typeof showToast ===
+    "function"
+  ) {
+
+    showToast(
+      "Advertisement settings saved ✔️"
+    );
+
+  } else {
+
+    alert(
+      "Advertisement settings saved."
+    );
+
+  }
+
+}
+
+
+/* CLEAR SETTINGS */
+
+function clearAdvertisementSettings() {
+
+  const confirmed =
+    window.confirm(
+      "সব Advertisement settings মুছে ফেলতে চান?"
+    );
+
+
+  if (!confirmed) {
+    return;
+  }
+
+
+  localStorage.removeItem(
+    AD_SETTINGS_KEY
+  );
+
+
+  headerAdCode.value = "";
+  sidebarAdCode.value = "";
+  footerAdCode.value = "";
+  popupAdCode.value = "";
+
+  headerAdEnabled.value =
+    "true";
+
+  sidebarAdEnabled.value =
+    "true";
+
+  footerAdEnabled.value =
+    "true";
+
+  popupAdEnabled.value =
+    "true";
+
+
+  if (
+    typeof showToast ===
+    "function"
+  ) {
+
+    showToast(
+      "Advertisement settings cleared."
+    );
+
+  } else {
+
+    alert(
+      "Advertisement settings cleared."
+    );
+
+  }
+
+}
+
+
+/* EVENTS */
+
+document
+  .getElementById(
+    "saveAdSettingsBtn"
+  )
+  .addEventListener(
+    "click",
+    saveAdvertisementSettings
+  );
+
+
+document
+  .getElementById(
+    "clearAdSettingsBtn"
+  )
+  .addEventListener(
+    "click",
+    clearAdvertisementSettings
+  );
+
+
+/* INITIALIZE */
+
+loadAdvertisementSettings();
+
+</script>
 </body>
 </html>
