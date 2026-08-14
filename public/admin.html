@@ -2,6 +2,7 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
+
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
@@ -9,7 +10,23 @@
 
   <title>IMU EDITZ News - Admin Panel</title>
 
+  <!-- =====================================================
+       FONT AWESOME - ORIGINAL SOCIAL BRAND ICONS
+  ====================================================== -->
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  >
+
   <style>
+
+    /* =====================================================
+       RESET
+    ====================================================== */
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -19,18 +36,30 @@
     :root {
       --primary: #f50071;
       --primary-dark: #d90063;
+
       --navy: #061a33;
       --blue: #0069a8;
+
       --bg: #f4f6fb;
       --card: #ffffff;
+
       --text: #18202a;
       --muted: #7a8491;
+
       --border: #e5e9ef;
+
       --success: #18a558;
       --danger: #e53935;
       --warning: #f3a400;
-      --shadow: 0 8px 25px rgba(16, 32, 64, .07);
+
+      --shadow:
+        0 8px 25px rgba(16, 32, 64, .07);
     }
+
+
+    /* =====================================================
+       BODY
+    ====================================================== */
 
     body {
       font-family:
@@ -41,8 +70,10 @@
 
       background: var(--bg);
       color: var(--text);
+
       min-height: 100vh;
     }
+
 
     button,
     input,
@@ -51,21 +82,30 @@
       font: inherit;
     }
 
+
     button {
       cursor: pointer;
     }
+
 
     a {
       color: inherit;
       text-decoration: none;
     }
 
+
+    img {
+      max-width: 100%;
+    }
+
+
     /* =====================================================
        TOP BAR
-    ===================================================== */
+    ====================================================== */
 
     .topbar {
       height: 64px;
+
       background: var(--navy);
       color: white;
 
@@ -77,8 +117,17 @@
 
       position: sticky;
       top: 0;
+
       z-index: 1000;
     }
+
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
 
     .brand {
       display: flex;
@@ -86,100 +135,141 @@
       gap: 10px;
     }
 
+
     .brand-logo {
       width: 38px;
       height: 38px;
+
       background: var(--primary);
+
       border-radius: 7px;
 
       display: flex;
       align-items: center;
       justify-content: center;
 
+      overflow: hidden;
+
       font-weight: 900;
       font-size: 13px;
     }
+
+
+    .brand-logo img {
+      width: 100%;
+      height: 100%;
+
+      object-fit: contain;
+    }
+
 
     .brand-text strong {
       display: block;
       font-size: 16px;
     }
 
+
     .brand-text small {
       color: #b9c3d0;
       font-size: 10px;
     }
 
+
     .view-site {
       background: rgba(255,255,255,.08);
+
       border: 1px solid rgba(255,255,255,.1);
+
       color: white;
 
       padding: 9px 14px;
+
       border-radius: 7px;
 
       font-size: 13px;
     }
 
+
     /* =====================================================
        LAYOUT
-    ===================================================== */
+    ====================================================== */
 
     .layout {
       display: flex;
-      min-height: calc(100vh - 64px);
+
+      min-height:
+        calc(100vh - 64px);
     }
+
 
     .sidebar {
       width: 220px;
+
       background: white;
-      border-right: 1px solid var(--border);
+
+      border-right:
+        1px solid var(--border);
 
       padding: 18px 10px;
 
       position: fixed;
+
       top: 64px;
       bottom: 0;
       left: 0;
 
       overflow-y: auto;
+
       z-index: 900;
     }
 
+
     .menu-title {
       color: #9aa3ae;
+
       font-size: 10px;
+
       font-weight: 700;
 
-      margin: 10px 10px 8px;
+      margin:
+        10px 10px 8px;
 
-      text-transform: uppercase;
+      text-transform:
+        uppercase;
     }
+
 
     .menu-item {
       width: 100%;
+
       border: 0;
+
       background: transparent;
 
       display: flex;
       align-items: center;
+
       gap: 10px;
 
       padding: 11px 12px;
+
       margin-bottom: 3px;
 
       border-radius: 7px;
 
       color: #34404d;
+
       text-align: left;
 
       font-size: 13px;
     }
 
+
     .menu-item:hover {
       background: #fff0f6;
       color: var(--primary);
     }
+
 
     .menu-item.active {
       background: #fff0f6;
@@ -187,165 +277,231 @@
       font-weight: 700;
     }
 
+
     .menu-icon {
       width: 22px;
+
       text-align: center;
+
       font-size: 15px;
     }
 
+
     .content {
       margin-left: 220px;
-      width: calc(100% - 220px);
+
+      width:
+        calc(100% - 220px);
 
       padding: 25px;
     }
 
+
     /* =====================================================
        PAGE
-    ===================================================== */
+    ====================================================== */
 
     .page {
       display: none;
     }
 
+
     .page.active {
       display: block;
     }
+
 
     .page-header {
       margin-bottom: 20px;
     }
 
+
     .page-header h1 {
       font-family: Georgia, serif;
+
       font-size: 26px;
+
       margin-bottom: 5px;
     }
 
+
     .page-header p {
       color: var(--muted);
+
       font-size: 12px;
     }
 
+
     /* =====================================================
        CARDS
-    ===================================================== */
+    ====================================================== */
 
     .card {
       background: var(--card);
-      border: 1px solid var(--border);
+
+      border:
+        1px solid var(--border);
+
       border-radius: 10px;
+
       box-shadow: var(--shadow);
+
       margin-bottom: 18px;
+
       overflow: hidden;
     }
 
+
     .card-header {
       padding: 15px 18px;
-      border-bottom: 1px solid var(--border);
+
+      border-bottom:
+        1px solid var(--border);
 
       display: flex;
+
       align-items: center;
+
       justify-content: space-between;
+
       gap: 10px;
     }
+
 
     .card-header h2 {
       font-size: 16px;
     }
 
+
     .card-header p {
       color: var(--muted);
+
       font-size: 11px;
+
       margin-top: 3px;
     }
+
 
     .card-body {
       padding: 18px;
     }
 
+
     /* =====================================================
        DASHBOARD
-    ===================================================== */
+    ====================================================== */
 
     .stats {
       display: grid;
+
       grid-template-columns:
         repeat(4, minmax(0, 1fr));
 
       gap: 14px;
+
       margin-bottom: 18px;
     }
 
+
     .stat {
       background: white;
-      border: 1px solid var(--border);
+
+      border:
+        1px solid var(--border);
+
       border-radius: 10px;
+
       padding: 18px;
+
       box-shadow: var(--shadow);
     }
 
+
     .stat-label {
       color: var(--muted);
+
       font-size: 11px;
+
       margin-bottom: 8px;
     }
 
+
     .stat-value {
       font-size: 28px;
+
       font-weight: 800;
     }
 
-    .stat:nth-child(1) .stat-value {
+
+    .stat:nth-child(1)
+    .stat-value {
       color: var(--primary);
     }
 
-    .stat:nth-child(2) .stat-value {
+
+    .stat:nth-child(2)
+    .stat-value {
       color: var(--success);
     }
 
-    .stat:nth-child(3) .stat-value {
+
+    .stat:nth-child(3)
+    .stat-value {
       color: var(--warning);
     }
 
-    .stat:nth-child(4) .stat-value {
+
+    .stat:nth-child(4)
+    .stat-value {
       color: var(--blue);
     }
 
+
     /* =====================================================
        FORM
-    ===================================================== */
+    ====================================================== */
 
     .form-grid {
       display: grid;
+
       grid-template-columns:
         repeat(2, minmax(0, 1fr));
 
       gap: 16px;
     }
 
+
     .form-group {
       margin-bottom: 15px;
     }
+
 
     .form-group.full {
       grid-column: 1 / -1;
     }
 
+
     label {
       display: block;
+
       font-size: 12px;
+
       font-weight: 700;
+
       margin-bottom: 7px;
+
       color: #303944;
     }
+
 
     input,
     textarea,
     select {
       width: 100%;
 
-      border: 1px solid #dce1e7;
+      border:
+        1px solid #dce1e7;
+
       background: white;
 
       border-radius: 7px;
@@ -355,100 +511,299 @@
       outline: none;
 
       color: #252d36;
+
       font-size: 13px;
 
       transition: .2s;
     }
 
+
     input:focus,
     textarea:focus,
     select:focus {
-      border-color: var(--primary);
+      border-color:
+        var(--primary);
+
       box-shadow:
-        0 0 0 3px rgba(245,0,113,.08);
+        0 0 0 3px
+        rgba(245,0,113,.08);
     }
+
 
     textarea {
       min-height: 120px;
+
       resize: vertical;
     }
+
 
     textarea.article-content {
       min-height: 260px;
     }
 
+
     .hint {
       display: block;
+
       color: var(--muted);
+
       font-size: 10px;
+
       margin-top: 5px;
     }
 
+
     /* =====================================================
        BUTTONS
-    ===================================================== */
+    ====================================================== */
 
     .btn {
       border: 0;
+
       border-radius: 7px;
 
       padding: 10px 16px;
 
       font-size: 12px;
+
       font-weight: 700;
 
       display: inline-flex;
+
       align-items: center;
+
       justify-content: center;
+
       gap: 6px;
     }
 
+
+    .btn:disabled {
+      opacity: .6;
+
+      cursor: not-allowed;
+    }
+
+
     .btn-primary {
-      background: var(--primary);
+      background:
+        var(--primary);
+
       color: white;
     }
 
+
     .btn-primary:hover {
-      background: var(--primary-dark);
+      background:
+        var(--primary-dark);
     }
 
+
     .btn-secondary {
-      background: #edf1f5;
+      background:
+        #edf1f5;
+
       color: #34404d;
     }
 
+
     .btn-success {
-      background: var(--success);
+      background:
+        var(--success);
+
       color: white;
     }
+
 
     .btn-danger {
-      background: var(--danger);
+      background:
+        var(--danger);
+
       color: white;
     }
 
+
     .btn-warning {
-      background: var(--warning);
+      background:
+        var(--warning);
+
       color: white;
     }
+
 
     .actions {
       display: flex;
+
       gap: 8px;
+
       flex-wrap: wrap;
     }
 
+
+    /* =====================================================
+       UPLOAD BOX
+    ====================================================== */
+
+    .upload-box {
+      border:
+        1px dashed #bfc8d4;
+
+      border-radius: 9px;
+
+      background:
+        #fafbfd;
+
+      padding: 13px;
+
+      margin-top: 8px;
+    }
+
+
+    .upload-row {
+      display: flex;
+
+      align-items: center;
+
+      gap: 10px;
+
+      flex-wrap: wrap;
+    }
+
+
+    .upload-file {
+      display: none;
+    }
+
+
+    .upload-button {
+      display: inline-flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      gap: 7px;
+
+      padding: 10px 13px;
+
+      background: #edf1f5;
+
+      color: #34404d;
+
+      border-radius: 7px;
+
+      font-size: 12px;
+
+      font-weight: 700;
+
+      cursor: pointer;
+    }
+
+
+    .upload-button:hover {
+      background: #e1e7ee;
+    }
+
+
+    .preview-box {
+      display: none;
+
+      margin-top: 12px;
+
+      border:
+        1px solid var(--border);
+
+      border-radius: 8px;
+
+      background: white;
+
+      padding: 10px;
+    }
+
+
+    .preview-box.show {
+      display: block;
+    }
+
+
+    .preview-image {
+      display: block;
+
+      width: 100%;
+
+      max-height: 260px;
+
+      object-fit: contain;
+
+      background: #f1f3f6;
+
+      border-radius: 6px;
+    }
+
+
+    .logo-preview-image {
+      width: 130px;
+
+      height: 80px;
+
+      object-fit: contain;
+
+      background: #f1f3f6;
+
+      border-radius: 7px;
+    }
+
+
+    .preview-actions {
+      margin-top: 8px;
+
+      display: flex;
+
+      gap: 7px;
+
+      flex-wrap: wrap;
+    }
+
+
+    /* =====================================================
+       IMAGE STATUS
+    ====================================================== */
+
+    .image-status {
+      font-size: 10px;
+
+      margin-top: 7px;
+
+      color: var(--muted);
+    }
+
+
+    .image-status.success {
+      color: var(--success);
+    }
+
+
+    .image-status.error {
+      color: var(--danger);
+    }
+
+
     /* =====================================================
        TOGGLE
-    ===================================================== */
+    ====================================================== */
 
     .toggle-row {
       display: flex;
+
       align-items: center;
+
       justify-content: space-between;
 
-      background: #fafbfd;
-      border: 1px solid var(--border);
+      background:
+        #fafbfd;
+
+      border:
+        1px solid var(--border);
 
       padding: 13px;
 
@@ -457,37 +812,52 @@
       margin-bottom: 14px;
     }
 
+
     .toggle-title {
       font-size: 12px;
+
       font-weight: 700;
     }
 
+
     .toggle-description {
       color: var(--muted);
+
       font-size: 10px;
+
       margin-top: 3px;
     }
 
+
     .switch {
       position: relative;
+
       width: 48px;
+
       height: 26px;
+
       flex: 0 0 auto;
     }
+
 
     .switch input {
       display: none;
     }
 
+
     .slider {
       position: absolute;
+
       inset: 0;
 
-      background: #d6dce4;
+      background:
+        #d6dce4;
+
       border-radius: 30px;
 
       transition: .2s;
     }
+
 
     .slider:before {
       content: "";
@@ -495,30 +865,41 @@
       position: absolute;
 
       width: 20px;
+
       height: 20px;
 
       left: 3px;
+
       top: 3px;
 
       background: white;
+
       border-radius: 50%;
 
-      box-shadow: 0 2px 5px rgba(0,0,0,.2);
+      box-shadow:
+        0 2px 5px rgba(0,0,0,.2);
 
       transition: .2s;
     }
 
-    .switch input:checked + .slider {
-      background: var(--primary);
+
+    .switch input:checked
+    + .slider {
+      background:
+        var(--primary);
     }
 
-    .switch input:checked + .slider:before {
-      transform: translateX(22px);
+
+    .switch input:checked
+    + .slider:before {
+      transform:
+        translateX(22px);
     }
+
 
     /* =====================================================
        SETTINGS GRID
-    ===================================================== */
+    ====================================================== */
 
     .settings-grid {
       display: grid;
@@ -529,290 +910,704 @@
       gap: 16px;
     }
 
+
     .settings-box {
-      border: 1px solid var(--border);
+      border:
+        1px solid var(--border);
+
       border-radius: 9px;
+
       padding: 15px;
+
       background: #fff;
     }
+
 
     .settings-box.full {
       grid-column: 1 / -1;
     }
 
+
     .settings-box h3 {
       font-size: 14px;
+
       margin-bottom: 4px;
     }
 
+
     .settings-box > p {
       color: var(--muted);
+
       font-size: 10px;
+
       margin-bottom: 14px;
     }
 
+
     /* =====================================================
        ARTICLES
-    ===================================================== */
+    ====================================================== */
 
     .article-list {
       display: grid;
+
       gap: 10px;
     }
 
+
     .article-row {
-      border: 1px solid var(--border);
+      border:
+        1px solid var(--border);
+
       border-radius: 8px;
+
       padding: 13px;
 
       display: flex;
+
       align-items: center;
+
       gap: 13px;
     }
 
+
     .article-image {
       width: 85px;
+
       height: 65px;
 
       object-fit: cover;
 
       border-radius: 6px;
-      background: #edf1f5;
+
+      background:
+        #edf1f5;
 
       flex: 0 0 auto;
     }
 
+
     .article-info {
       min-width: 0;
+
       flex: 1;
     }
 
+
     .article-info h3 {
       font-size: 14px;
+
       margin-bottom: 5px;
     }
 
+
     .article-meta {
       color: var(--muted);
+
       font-size: 10px;
     }
 
+
     .badge {
       display: inline-flex;
+
       padding: 4px 7px;
+
       border-radius: 20px;
+
       font-size: 9px;
+
       font-weight: 700;
     }
 
+
     .badge-published {
       color: #087a3f;
+
       background: #e8f8ef;
     }
 
+
     .badge-draft {
       color: #9a6500;
+
       background: #fff4d8;
     }
 
+
+    /* =====================================================
+       PHOTO CARD
+    ====================================================== */
+
+    .photo-card-wrapper {
+      display: flex;
+
+      justify-content: center;
+
+      padding: 10px 0 4px;
+    }
+
+
+    .photo-card {
+      width: min(100%, 430px);
+
+      background:
+        linear-gradient(
+          145deg,
+          #092c61,
+          #031b45
+        );
+
+      border:
+        4px solid #0785ff;
+
+      border-radius: 16px;
+
+      padding: 8px;
+
+      box-shadow:
+        0 18px 45px
+        rgba(0,0,0,.25);
+
+      color: white;
+
+      overflow: hidden;
+    }
+
+
+    .photo-card-inner {
+      border:
+        2px solid #0b9bff;
+
+      border-radius: 10px;
+
+      overflow: hidden;
+
+      background:
+        linear-gradient(
+          145deg,
+          #0d58a1,
+          #05265a
+        );
+    }
+
+
+    .photo-card-image-wrap {
+      position: relative;
+
+      width: 100%;
+
+      aspect-ratio: 16 / 9;
+
+      background:
+        #07356d;
+
+      overflow: hidden;
+    }
+
+
+    .photo-card-image {
+      width: 100%;
+
+      height: 100%;
+
+      object-fit: cover;
+
+      display: block;
+    }
+
+
+    .photo-card-overlay {
+      position: absolute;
+
+      inset: 0;
+
+      background:
+        linear-gradient(
+          to top,
+          rgba(0,0,0,.7),
+          rgba(0,0,0,.05)
+        );
+    }
+
+
+    .photo-card-logo {
+      position: absolute;
+
+      left: 12px;
+
+      top: 12px;
+
+      width: 62px;
+
+      height: 45px;
+
+      object-fit: contain;
+
+      background:
+        rgba(255,255,255,.88);
+
+      border-radius: 6px;
+
+      padding: 4px;
+    }
+
+
+    .photo-card-category {
+      position: absolute;
+
+      right: 10px;
+
+      top: 10px;
+
+      background:
+        var(--primary);
+
+      color: white;
+
+      padding: 5px 9px;
+
+      border-radius: 20px;
+
+      font-size: 9px;
+
+      font-weight: 700;
+    }
+
+
+    .photo-card-small-title {
+      position: absolute;
+
+      left: 12px;
+
+      right: 12px;
+
+      bottom: 12px;
+
+      font-size: 11px;
+
+      font-weight: 700;
+
+      line-height: 1.4;
+    }
+
+
+    .photo-card-body {
+      padding: 15px 12px 10px;
+    }
+
+
+    .photo-card-title {
+      font-size: 19px;
+
+      line-height: 1.5;
+
+      font-weight: 800;
+
+      text-align: center;
+    }
+
+
+    .photo-card-divider {
+      height: 2px;
+
+      background:
+        rgba(255,255,255,.9);
+
+      margin:
+        12px 0 8px;
+    }
+
+
+    .photo-card-footer {
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      gap: 10px;
+
+      font-size: 8px;
+
+      color: #dce9ff;
+    }
+
+
+    /* =====================================================
+       SOCIAL MEDIA PREVIEW
+    ====================================================== */
+
+    .social-preview {
+      display: grid;
+
+      grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+      gap: 10px;
+
+      margin-top: 15px;
+    }
+
+
+    .social-preview-item {
+      border:
+        1px solid var(--border);
+
+      border-radius: 8px;
+
+      padding: 12px 7px;
+
+      text-align: center;
+
+      background: #fff;
+    }
+
+
+    .social-preview-item i {
+      font-size: 24px;
+
+      margin-bottom: 7px;
+
+      display: block;
+    }
+
+
+    .social-preview-item span {
+      display: block;
+
+      font-size: 9px;
+
+      color: var(--muted);
+    }
+
+
+    .facebook-icon {
+      color: #1877f2;
+    }
+
+
+    .youtube-icon {
+      color: #ff0000;
+    }
+
+
+    .instagram-icon {
+      color: #e4405f;
+    }
+
+
+    .x-icon {
+      color: #111;
+    }
+
+
+    .tiktok-icon {
+      color: #111;
+    }
+
+
+    .telegram-icon {
+      color: #229ed9;
+    }
+
+
+    .whatsapp-icon {
+      color: #25d366;
+    }
+
+
     /* =====================================================
        TOAST
-    ===================================================== */
+    ====================================================== */
 
     #toast-container {
       position: fixed;
+
       right: 18px;
+
       bottom: 18px;
 
       z-index: 5000;
 
       display: flex;
+
       flex-direction: column;
+
       gap: 8px;
     }
 
+
     .toast {
       min-width: 260px;
+
       max-width: 360px;
 
       background: #1f2937;
+
       color: white;
 
       padding: 12px 15px;
 
       border-radius: 8px;
 
-      box-shadow: 0 10px 30px rgba(0,0,0,.2);
+      box-shadow:
+        0 10px 30px
+        rgba(0,0,0,.2);
 
       font-size: 12px;
 
-      animation: toastIn .25s ease;
+      animation:
+        toastIn .25s ease;
     }
+
 
     .toast.success {
-      border-left: 4px solid var(--success);
+      border-left:
+        4px solid var(--success);
     }
+
 
     .toast.error {
-      border-left: 4px solid var(--danger);
+      border-left:
+        4px solid var(--danger);
     }
 
+
     @keyframes toastIn {
+
       from {
         opacity: 0;
-        transform: translateY(10px);
+
+        transform:
+          translateY(10px);
       }
 
       to {
         opacity: 1;
-        transform: translateY(0);
+
+        transform:
+          translateY(0);
       }
+
     }
+
 
     /* =====================================================
        LOADING
-    ===================================================== */
+    ====================================================== */
 
     .loading {
       text-align: center;
+
       padding: 30px;
+
       color: var(--muted);
+
       font-size: 12px;
     }
+
 
     .empty {
       text-align: center;
+
       padding: 30px;
+
       color: var(--muted);
+
       font-size: 12px;
     }
 
+
     /* =====================================================
        MOBILE
-    ===================================================== */
+    ====================================================== */
 
     .mobile-menu {
       display: none;
     }
 
+
     @media (max-width: 900px) {
+
       .stats {
         grid-template-columns:
           repeat(2, minmax(0, 1fr));
       }
 
+
       .settings-grid {
         grid-template-columns: 1fr;
       }
 
+
       .settings-box.full {
         grid-column: auto;
       }
+
+
+      .social-preview {
+        grid-template-columns:
+          repeat(4, 1fr);
+      }
+
     }
 
+
     @media (max-width: 700px) {
+
       .topbar {
         padding: 0 12px;
       }
 
+
       .sidebar {
-        transform: translateX(-100%);
+        transform:
+          translateX(-100%);
+
         transition: .25s;
+
         width: 240px;
-        box-shadow: 10px 0 30px rgba(0,0,0,.1);
+
+        box-shadow:
+          10px 0 30px
+          rgba(0,0,0,.1);
       }
 
+
       .sidebar.open {
-        transform: translateX(0);
+        transform:
+          translateX(0);
       }
+
 
       .content {
         margin-left: 0;
+
         width: 100%;
+
         padding: 15px;
       }
+
 
       .mobile-menu {
         display: flex;
 
         width: 38px;
+
         height: 38px;
 
         border: 0;
+
         border-radius: 7px;
 
-        background: rgba(255,255,255,.1);
+        background:
+          rgba(255,255,255,.1);
+
         color: white;
 
         align-items: center;
+
         justify-content: center;
 
         font-size: 20px;
       }
 
-      .topbar-left {
-        display: flex;
-        align-items: center;
-        gap: 9px;
-      }
 
       .form-grid {
         grid-template-columns: 1fr;
       }
 
+
       .form-group.full {
         grid-column: auto;
       }
 
+
       .stats {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns:
+          1fr 1fr;
+
         gap: 8px;
       }
+
 
       .stat {
         padding: 13px;
       }
 
+
       .stat-value {
         font-size: 23px;
       }
 
+
       .article-row {
         align-items: flex-start;
+
         flex-wrap: wrap;
       }
 
+
       .article-info {
-        width: calc(100% - 100px);
+        width:
+          calc(100% - 100px);
       }
+
 
       .article-row .actions {
         width: 100%;
       }
 
+
       .page-header h1 {
         font-size: 22px;
       }
+
+
+      .social-preview {
+        grid-template-columns:
+          repeat(4, 1fr);
+      }
+
     }
 
+
     @media (max-width: 450px) {
+
       .brand-text {
         display: none;
       }
 
+
       .stats {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns:
+          1fr 1fr;
       }
+
 
       .view-site {
-        padding: 8px 9px;
+        padding:
+          8px 9px;
+
         font-size: 10px;
       }
+
+
+      .social-preview {
+        grid-template-columns:
+          repeat(2, 1fr);
+      }
+
     }
+
   </style>
+
 </head>
 
+
 <body>
+
 
   <!-- =====================================================
        TOP BAR
@@ -830,20 +1625,33 @@
         ☰
       </button>
 
+
       <div class="brand">
 
-        <div class="brand-logo">
+        <div
+          class="brand-logo"
+          id="adminBrandLogo"
+        >
           IE
         </div>
 
+
         <div class="brand-text">
-          <strong>IMU EDITZ News</strong>
-          <small>Administrator Panel</small>
+
+          <strong>
+            IMU EDITZ News
+          </strong>
+
+          <small>
+            Administrator Panel
+          </small>
+
         </div>
 
       </div>
 
     </div>
+
 
     <a
       href="/"
@@ -858,6 +1666,7 @@
 
   <div class="layout">
 
+
     <!-- ===================================================
          SIDEBAR
     ==================================================== -->
@@ -871,27 +1680,39 @@
         Content Management
       </div>
 
+
       <button
         class="menu-item active"
         data-page="dashboard"
       >
-        <span class="menu-icon">📊</span>
+        <span class="menu-icon">
+          📊
+        </span>
+
         Dashboard
       </button>
+
 
       <button
         class="menu-item"
         data-page="new-news"
       >
-        <span class="menu-icon">✍️</span>
+        <span class="menu-icon">
+          ✍️
+        </span>
+
         নতুন নিউজ
       </button>
+
 
       <button
         class="menu-item"
         data-page="news-management"
       >
-        <span class="menu-icon">📰</span>
+        <span class="menu-icon">
+          📰
+        </span>
+
         নিউজ ম্যানেজমেন্ট
       </button>
 
@@ -900,35 +1721,51 @@
         Website & Media
       </div>
 
+
       <button
         class="menu-item"
         data-page="video-news"
       >
-        <span class="menu-icon">🎬</span>
+        <span class="menu-icon">
+          🎬
+        </span>
+
         ভিডিও নিউজ
       </button>
+
 
       <button
         class="menu-item"
         data-page="social-media"
       >
-        <span class="menu-icon">🔗</span>
+        <span class="menu-icon">
+          🔗
+        </span>
+
         Social Media
       </button>
+
 
       <button
         class="menu-item"
         data-page="facebook-live"
       >
-        <span class="menu-icon">🔴</span>
+        <span class="menu-icon">
+          🔴
+        </span>
+
         Facebook Live
       </button>
+
 
       <button
         class="menu-item"
         data-page="youtube-live"
       >
-        <span class="menu-icon">▶️</span>
+        <span class="menu-icon">
+          ▶️
+        </span>
+
         YouTube Live
       </button>
 
@@ -937,11 +1774,15 @@
         Advertisement
       </div>
 
+
       <button
         class="menu-item"
         data-page="advertisements"
       >
-        <span class="menu-icon">📢</span>
+        <span class="menu-icon">
+          📢
+        </span>
+
         বিজ্ঞাপন
       </button>
 
@@ -950,11 +1791,15 @@
         Settings
       </div>
 
+
       <button
         class="menu-item"
         data-page="site-settings"
       >
-        <span class="menu-icon">⚙️</span>
+        <span class="menu-icon">
+          ⚙️
+        </span>
+
         Site Settings
       </button>
 
@@ -979,7 +1824,9 @@
 
         <div class="page-header">
 
-          <h1>Dashboard</h1>
+          <h1>
+            Dashboard
+          </h1>
 
           <p>
             আপনার নিউজ, মিডিয়া ও ওয়েবসাইটের সকল সেটিংস এখান থেকে পরিচালনা করুন।
@@ -991,6 +1838,7 @@
         <div class="stats">
 
           <div class="stat">
+
             <div class="stat-label">
               মোট নিউজ
             </div>
@@ -1001,10 +1849,12 @@
             >
               0
             </div>
+
           </div>
 
 
           <div class="stat">
+
             <div class="stat-label">
               Published
             </div>
@@ -1015,10 +1865,12 @@
             >
               0
             </div>
+
           </div>
 
 
           <div class="stat">
+
             <div class="stat-label">
               Draft
             </div>
@@ -1029,10 +1881,12 @@
             >
               0
             </div>
+
           </div>
 
 
           <div class="stat">
+
             <div class="stat-label">
               মোট Views
             </div>
@@ -1043,6 +1897,7 @@
             >
               0
             </div>
+
           </div>
 
         </div>
@@ -1053,12 +1908,17 @@
           <div class="card-header">
 
             <div>
-              <h2>📰 সর্বশেষ নিউজ</h2>
+
+              <h2>
+                📰 সর্বশেষ নিউজ
+              </h2>
 
               <p>
                 সর্বশেষ প্রকাশিত সংবাদ
               </p>
+
             </div>
+
 
             <button
               class="btn btn-primary"
@@ -1070,13 +1930,16 @@
 
           </div>
 
+
           <div
             class="card-body"
             id="dashboardArticles"
           >
+
             <div class="loading">
               নিউজ লোড হচ্ছে...
             </div>
+
           </div>
 
         </div>
@@ -1111,11 +1974,15 @@
           <div class="card-header">
 
             <div>
-              <h2>📝 নিউজ তথ্য</h2>
+
+              <h2>
+                📝 নিউজ তথ্য
+              </h2>
 
               <p>
                 সংবাদ প্রকাশের জন্য নিচের তথ্যগুলো পূরণ করুন।
               </p>
+
             </div>
 
           </div>
@@ -1132,6 +1999,7 @@
 
 
               <div class="form-grid">
+
 
                 <div class="form-group full">
 
@@ -1214,11 +2082,16 @@
                 </div>
 
 
+                <!-- =======================================
+                     NEWS IMAGE
+                ======================================== -->
+
                 <div class="form-group full">
 
                   <label>
-                    নিউজ ছবির URL
+                    🖼️ নিউজের ছবি
                   </label>
+
 
                   <input
                     id="newsImage"
@@ -1226,9 +2099,67 @@
                     placeholder="https://example.com/news-image.jpg"
                   >
 
+
                   <span class="hint">
-                    সরাসরি image URL ব্যবহার করুন।
+                    সরাসরি image URL দিলে নিচের Preview-তে ছবি দেখা যাবে।
                   </span>
+
+
+                  <div class="upload-box">
+
+                    <div class="upload-row">
+
+                      <label
+                        class="upload-button"
+                        for="newsImageFile"
+                      >
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+
+                        ছবি Upload করুন
+                      </label>
+
+
+                      <input
+                        class="upload-file"
+                        id="newsImageFile"
+                        type="file"
+                        accept="image/*"
+                      >
+
+
+                      <button
+                        class="btn btn-secondary"
+                        type="button"
+                        id="clearNewsImageBtn"
+                      >
+                        ✕ ছবি সরান
+                      </button>
+
+                    </div>
+
+
+                    <div
+                      class="image-status"
+                      id="newsImageStatus"
+                    >
+                      Upload অথবা URL — যেকোনো একটি ব্যবহার করুন।
+                    </div>
+
+
+                    <div
+                      class="preview-box"
+                      id="newsImagePreviewBox"
+                    >
+
+                      <img
+                        class="preview-image"
+                        id="newsImagePreview"
+                        alt="News image preview"
+                      >
+
+                    </div>
+
+                  </div>
 
                 </div>
 
@@ -1296,6 +2227,7 @@
                   💾 নিউজ সংরক্ষণ
                 </button>
 
+
                 <button
                   class="btn btn-secondary"
                   type="button"
@@ -1307,6 +2239,114 @@
               </div>
 
             </form>
+
+          </div>
+
+        </div>
+
+
+        <!-- ===============================================
+             PHOTO CARD PREVIEW
+        ================================================ -->
+
+        <div class="card">
+
+          <div class="card-header">
+
+            <div>
+
+              <h2>
+                🖼️ Photo Card Preview
+              </h2>
+
+              <p>
+                নিউজের ছবি ও Site Logo ব্যবহার করে ফটো কার্ডের Preview।
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="card-body">
+
+            <div class="photo-card-wrapper">
+
+              <div class="photo-card">
+
+                <div class="photo-card-inner">
+
+                  <div class="photo-card-image-wrap">
+
+                    <img
+                      id="photoCardImage"
+                      class="photo-card-image"
+                      src="https://placehold.co/800x450/0d58a1/ffffff?text=News+Photo"
+                      alt="Photo Card"
+                    >
+
+
+                    <div class="photo-card-overlay"></div>
+
+
+                    <img
+                      id="photoCardLogo"
+                      class="photo-card-logo"
+                      src="https://placehold.co/150x80/ffffff/061a33?text=LOGO"
+                      alt="Logo"
+                    >
+
+
+                    <div
+                      class="photo-card-category"
+                      id="photoCardCategory"
+                    >
+                      সর্বশেষ
+                    </div>
+
+
+                    <div
+                      class="photo-card-small-title"
+                      id="photoCardSmallTitle"
+                    >
+                      সংবাদের শিরোনাম এখানে দেখা যাবে
+                    </div>
+
+                  </div>
+
+
+                  <div class="photo-card-body">
+
+                    <div
+                      class="photo-card-title"
+                      id="photoCardTitle"
+                    >
+                      সংবাদের শিরোনাম এখানে দেখা যাবে
+                    </div>
+
+
+                    <div class="photo-card-divider"></div>
+
+
+                    <div class="photo-card-footer">
+
+                      <span>
+                        IMU EDITZ News
+                      </span>
+
+                      <span id="photoCardDate">
+                        আজ
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
 
           </div>
 
@@ -1326,7 +2366,9 @@
 
         <div class="page-header">
 
-          <h1>নিউজ ম্যানেজমেন্ট</h1>
+          <h1>
+            নিউজ ম্যানেজমেন্ট
+          </h1>
 
           <p>
             সকল নিউজ Edit, Publish, Draft এবং Delete করুন।
@@ -1342,6 +2384,7 @@
             <h2>
               📰 সকল সংবাদ
             </h2>
+
 
             <button
               class="btn btn-primary"
@@ -1360,9 +2403,11 @@
               class="article-list"
               id="articleList"
             >
+
               <div class="loading">
                 নিউজ লোড হচ্ছে...
               </div>
+
             </div>
 
           </div>
@@ -1383,7 +2428,9 @@
 
         <div class="page-header">
 
-          <h1>🎬 ভিডিও নিউজ</h1>
+          <h1>
+            🎬 ভিডিও নিউজ
+          </h1>
 
           <p>
             ওয়েবসাইটের Video News section পরিচালনা করুন।
@@ -1397,12 +2444,17 @@
           <div class="card-header">
 
             <div>
-              <h2>🎬 Video News Settings</h2>
+
+              <h2>
+                🎬 Video News Settings
+              </h2>
 
               <p>
                 YouTube বা অন্য ভিডিও URL / Embed Code যুক্ত করুন।
               </p>
+
             </div>
+
 
             <label class="switch">
 
@@ -1498,7 +2550,9 @@
 
         <div class="page-header">
 
-          <h1>🔗 Social Media</h1>
+          <h1>
+            🔗 Social Media
+          </h1>
 
           <p>
             আপনার Social Media page/profile-এর লিংক যুক্ত করুন।
@@ -1512,11 +2566,15 @@
           <div class="card-header">
 
             <div>
-              <h2>🌐 Social Media Links</h2>
+
+              <h2>
+                🌐 Social Media Links
+              </h2>
 
               <p>
                 যেগুলো ব্যবহার করেন সেগুলোর URL দিন।
               </p>
+
             </div>
 
           </div>
@@ -1526,9 +2584,11 @@
 
             <div class="form-grid">
 
+
               <div class="form-group">
 
                 <label>
+                  <i class="fa-brands fa-facebook facebook-icon"></i>
                   Facebook
                 </label>
 
@@ -1544,6 +2604,7 @@
               <div class="form-group">
 
                 <label>
+                  <i class="fa-brands fa-youtube youtube-icon"></i>
                   YouTube
                 </label>
 
@@ -1559,6 +2620,7 @@
               <div class="form-group">
 
                 <label>
+                  <i class="fa-brands fa-instagram instagram-icon"></i>
                   Instagram
                 </label>
 
@@ -1574,6 +2636,7 @@
               <div class="form-group">
 
                 <label>
+                  <i class="fa-brands fa-x-twitter x-icon"></i>
                   Twitter / X
                 </label>
 
@@ -1589,6 +2652,7 @@
               <div class="form-group">
 
                 <label>
+                  <i class="fa-brands fa-tiktok tiktok-icon"></i>
                   TikTok
                 </label>
 
@@ -1604,6 +2668,7 @@
               <div class="form-group">
 
                 <label>
+                  <i class="fa-brands fa-telegram telegram-icon"></i>
                   Telegram
                 </label>
 
@@ -1619,6 +2684,7 @@
               <div class="form-group">
 
                 <label>
+                  <i class="fa-brands fa-whatsapp whatsapp-icon"></i>
                   WhatsApp
                 </label>
 
@@ -1633,7 +2699,90 @@
             </div>
 
 
-            <div class="actions">
+            <!-- ORIGINAL ICON PREVIEW -->
+
+            <div class="social-preview">
+
+              <div class="social-preview-item">
+
+                <i class="fa-brands fa-facebook facebook-icon"></i>
+
+                <span>
+                  Facebook
+                </span>
+
+              </div>
+
+
+              <div class="social-preview-item">
+
+                <i class="fa-brands fa-youtube youtube-icon"></i>
+
+                <span>
+                  YouTube
+                </span>
+
+              </div>
+
+
+              <div class="social-preview-item">
+
+                <i class="fa-brands fa-instagram instagram-icon"></i>
+
+                <span>
+                  Instagram
+                </span>
+
+              </div>
+
+
+              <div class="social-preview-item">
+
+                <i class="fa-brands fa-x-twitter x-icon"></i>
+
+                <span>
+                  X
+                </span>
+
+              </div>
+
+
+              <div class="social-preview-item">
+
+                <i class="fa-brands fa-tiktok tiktok-icon"></i>
+
+                <span>
+                  TikTok
+                </span>
+
+              </div>
+
+
+              <div class="social-preview-item">
+
+                <i class="fa-brands fa-telegram telegram-icon"></i>
+
+                <span>
+                  Telegram
+                </span>
+
+              </div>
+
+
+              <div class="social-preview-item">
+
+                <i class="fa-brands fa-whatsapp whatsapp-icon"></i>
+
+                <span>
+                  WhatsApp
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <div class="actions" style="margin-top:15px;">
 
               <button
                 class="btn btn-primary"
@@ -1663,7 +2812,9 @@
 
         <div class="page-header">
 
-          <h1>🔴 Facebook Page Live</h1>
+          <h1>
+            🔴 Facebook Page Live
+          </h1>
 
           <p>
             Facebook Page-এর Live stream ওয়েবসাইটে দেখানোর সেটিংস।
@@ -1677,11 +2828,15 @@
           <div class="card-header">
 
             <div>
-              <h2>🔴 Facebook Live Settings</h2>
+
+              <h2>
+                🔴 Facebook Live Settings
+              </h2>
 
               <p>
                 Page URL অথবা Facebook embed code ব্যবহার করুন।
               </p>
+
             </div>
 
 
@@ -1769,7 +2924,9 @@
 
         <div class="page-header">
 
-          <h1>▶️ YouTube Channel Live</h1>
+          <h1>
+            ▶️ YouTube Channel Live
+          </h1>
 
           <p>
             YouTube Channel-এর Live stream ওয়েবসাইটে দেখানোর সেটিংস।
@@ -1783,11 +2940,15 @@
           <div class="card-header">
 
             <div>
-              <h2>▶️ YouTube Live Settings</h2>
+
+              <h2>
+                ▶️ YouTube Live Settings
+              </h2>
 
               <p>
                 Channel URL এবং Live embed code যুক্ত করুন।
               </p>
+
             </div>
 
 
@@ -1875,7 +3036,9 @@
 
         <div class="page-header">
 
-          <h1>📢 বিজ্ঞাপন ব্যবস্থাপনা</h1>
+          <h1>
+            📢 বিজ্ঞাপন ব্যবস্থাপনা
+          </h1>
 
           <p>
             Website-এর বিভিন্ন জায়গায় Advertisement পরিচালনা করুন।
@@ -1916,6 +3079,7 @@
                 <div class="toggle-row">
 
                   <div>
+
                     <div class="toggle-title">
                       Header Advertisement চালু করুন
                     </div>
@@ -1923,7 +3087,9 @@
                     <div class="toggle-description">
                       চালু করলে Header Advertisement দেখাবে।
                     </div>
+
                   </div>
+
 
                   <label class="switch">
 
@@ -1992,6 +3158,7 @@
                 <div class="toggle-row">
 
                   <div>
+
                     <div class="toggle-title">
                       Footer Advertisement চালু করুন
                     </div>
@@ -1999,7 +3166,9 @@
                     <div class="toggle-description">
                       Footer Advertisement চালু / বন্ধ করুন।
                     </div>
+
                   </div>
+
 
                   <label class="switch">
 
@@ -2068,6 +3237,7 @@
                 <div class="toggle-row">
 
                   <div>
+
                     <div class="toggle-title">
                       Sidebar Advertisement চালু করুন
                     </div>
@@ -2075,7 +3245,9 @@
                     <div class="toggle-description">
                       Sidebar বিজ্ঞাপন চালু / বন্ধ করুন।
                     </div>
+
                   </div>
+
 
                   <label class="switch">
 
@@ -2144,6 +3316,7 @@
                 <div class="toggle-row">
 
                   <div>
+
                     <div class="toggle-title">
                       Popup Advertisement চালু করুন
                     </div>
@@ -2151,7 +3324,9 @@
                     <div class="toggle-description">
                       Popup Advertisement চালু / বন্ধ করুন।
                     </div>
+
                   </div>
+
 
                   <label class="switch">
 
@@ -2252,10 +3427,12 @@
 
         <div class="page-header">
 
-          <h1>⚙️ Site Settings</h1>
+          <h1>
+            ⚙️ Site Settings
+          </h1>
 
           <p>
-            ওয়েবসাইটের নাম, Logo, Tagline ও Description পরিবর্তন করুন।
+            ওয়েবসাইটের নাম, Logo, Favicon, Tagline ও Description পরিবর্তন করুন।
           </p>
 
         </div>
@@ -2275,6 +3452,9 @@
           <div class="card-body">
 
             <div class="settings-grid">
+
+
+              <!-- SITE INFORMATION -->
 
               <div class="settings-box">
 
@@ -2315,11 +3495,14 @@
                 </div>
 
 
+                <!-- LOGO -->
+
                 <div class="form-group">
 
                   <label>
-                    Logo URL
+                    🖼️ Website Logo
                   </label>
+
 
                   <input
                     id="siteLogo"
@@ -2327,20 +3510,147 @@
                     placeholder="https://..."
                   >
 
+
+                  <span class="hint">
+                    Logo URL অথবা Upload — যেকোনো একটি ব্যবহার করুন।
+                  </span>
+
+
+                  <div class="upload-box">
+
+                    <div class="upload-row">
+
+                      <label
+                        class="upload-button"
+                        for="siteLogoFile"
+                      >
+                        <i class="fa-solid fa-image"></i>
+
+                        Logo Upload
+                      </label>
+
+
+                      <input
+                        class="upload-file"
+                        id="siteLogoFile"
+                        type="file"
+                        accept="image/*"
+                      >
+
+
+                      <button
+                        class="btn btn-secondary"
+                        type="button"
+                        id="clearLogoBtn"
+                      >
+                        ✕ Logo সরান
+                      </button>
+
+                    </div>
+
+
+                    <div
+                      class="image-status"
+                      id="logoStatus"
+                    >
+                      Logo Preview
+                    </div>
+
+
+                    <div
+                      class="preview-box"
+                      id="logoPreviewBox"
+                    >
+
+                      <img
+                        class="logo-preview-image"
+                        id="logoPreview"
+                        alt="Logo preview"
+                      >
+
+                    </div>
+
+                  </div>
+
                 </div>
 
+
+                <!-- FAVICON -->
 
                 <div class="form-group">
 
                   <label>
-                    Favicon URL
+                    🔖 Favicon / Icon
                   </label>
+
 
                   <input
                     id="siteFavicon"
                     type="url"
                     placeholder="https://..."
                   >
+
+
+                  <span class="hint">
+                    Favicon URL অথবা Upload করা যাবে।
+                  </span>
+
+
+                  <div class="upload-box">
+
+                    <div class="upload-row">
+
+                      <label
+                        class="upload-button"
+                        for="siteFaviconFile"
+                      >
+                        <i class="fa-solid fa-star"></i>
+
+                        Icon Upload
+                      </label>
+
+
+                      <input
+                        class="upload-file"
+                        id="siteFaviconFile"
+                        type="file"
+                        accept="image/*,.ico"
+                      >
+
+
+                      <button
+                        class="btn btn-secondary"
+                        type="button"
+                        id="clearFaviconBtn"
+                      >
+                        ✕ Icon সরান
+                      </button>
+
+                    </div>
+
+
+                    <div
+                      class="image-status"
+                      id="faviconStatus"
+                    >
+                      Favicon Preview
+                    </div>
+
+
+                    <div
+                      class="preview-box"
+                      id="faviconPreviewBox"
+                    >
+
+                      <img
+                        class="logo-preview-image"
+                        id="faviconPreview"
+                        alt="Favicon preview"
+                      >
+
+                    </div>
+
+                  </div>
 
                 </div>
 
@@ -2434,34 +3744,39 @@
       const container =
         $("toast-container");
 
+
       const toast =
         document.createElement("div");
+
 
       toast.className =
         `toast ${type}`;
 
+
       toast.textContent =
         message;
+
 
       container.appendChild(
         toast
       );
+
 
       setTimeout(() => {
 
         toast.remove();
 
       }, 3500);
+
     }
 
 
-    function formatDate(
-      value
-    ) {
+    function formatDate(value) {
 
       if (!value) {
         return "";
       }
+
 
       try {
 
@@ -2477,7 +3792,9 @@
       } catch {
 
         return value;
+
       }
+
     }
 
 
@@ -2491,6 +3808,7 @@
           API + url,
           {
             ...options,
+
             headers: {
               "Content-Type":
                 "application/json",
@@ -2500,14 +3818,21 @@
           }
         );
 
+
       let data = null;
 
+
       try {
+
         data =
           await response.json();
+
       } catch {
+
         data = {};
+
       }
+
 
       if (!response.ok) {
 
@@ -2518,8 +3843,855 @@
 
       }
 
+
       return data;
+
     }
+
+
+    /* =====================================================
+       IMAGE PROCESSING
+       - Resize
+       - Compress
+       - Convert to Data URL
+    ====================================================== */
+
+    function processImageFile(
+      file,
+      options = {}
+    ) {
+
+      return new Promise(
+        (resolve, reject) => {
+
+          if (!file) {
+
+            reject(
+              new Error(
+                "কোনো ছবি নির্বাচন করা হয়নি।"
+              )
+            );
+
+            return;
+          }
+
+
+          if (
+            !file.type ||
+            !file.type.startsWith("image/")
+          ) {
+
+            reject(
+              new Error(
+                "শুধু image file ব্যবহার করুন।"
+              )
+            );
+
+            return;
+
+          }
+
+
+          const maxWidth =
+            Number(options.maxWidth) ||
+            1600;
+
+
+          const maxHeight =
+            Number(options.maxHeight) ||
+            1200;
+
+
+          const quality =
+            Number(options.quality) ||
+            0.82;
+
+
+          const reader =
+            new FileReader();
+
+
+          reader.onload = event => {
+
+            const image =
+              new Image();
+
+
+            image.onload = () => {
+
+              let width =
+                image.naturalWidth;
+
+
+              let height =
+                image.naturalHeight;
+
+
+              const scale =
+                Math.min(
+                  1,
+                  maxWidth / width,
+                  maxHeight / height
+                );
+
+
+              width =
+                Math.max(
+                  1,
+                  Math.round(
+                    width * scale
+                  )
+                );
+
+
+              height =
+                Math.max(
+                  1,
+                  Math.round(
+                    height * scale
+                  )
+                );
+
+
+              const canvas =
+                document.createElement(
+                  "canvas"
+                );
+
+
+              canvas.width =
+                width;
+
+
+              canvas.height =
+                height;
+
+
+              const ctx =
+                canvas.getContext(
+                  "2d"
+                );
+
+
+              ctx.drawImage(
+                image,
+                0,
+                0,
+                width,
+                height
+              );
+
+
+              let dataUrl;
+
+
+              if (
+                file.type ===
+                "image/png"
+              ) {
+
+                dataUrl =
+                  canvas.toDataURL(
+                    "image/png"
+                  );
+
+              } else {
+
+                dataUrl =
+                  canvas.toDataURL(
+                    "image/jpeg",
+                    quality
+                  );
+
+              }
+
+
+              resolve(dataUrl);
+
+            };
+
+
+            image.onerror = () => {
+
+              reject(
+                new Error(
+                  "ছবিটি পড়া যায়নি।"
+                )
+              );
+
+            };
+
+
+            image.src =
+              event.target.result;
+
+          };
+
+
+          reader.onerror = () => {
+
+            reject(
+              new Error(
+                "ছবি পড়তে সমস্যা হয়েছে।"
+              )
+            );
+
+          };
+
+
+          reader.readAsDataURL(file);
+
+        }
+      );
+
+    }
+
+
+    /* =====================================================
+       IMAGE URL PREVIEW
+    ====================================================== */
+
+    function setImagePreview(
+      input,
+      preview,
+      previewBox,
+      status,
+      url,
+      fallbackText = "ছবি"
+    ) {
+
+      const value =
+        String(url || "").trim();
+
+
+      if (!value) {
+
+        previewBox.classList.remove(
+          "show"
+        );
+
+        status.textContent =
+          fallbackText;
+
+        status.className =
+          "image-status";
+
+        return;
+
+      }
+
+
+      preview.onload = () => {
+
+        previewBox.classList.add(
+          "show"
+        );
+
+        status.textContent =
+          "✔️ ছবি সফলভাবে লোড হয়েছে।";
+
+        status.className =
+          "image-status success";
+
+      };
+
+
+      preview.onerror = () => {
+
+        previewBox.classList.remove(
+          "show"
+        );
+
+        status.textContent =
+          "❌ ছবিটি লোড করা যায়নি। Direct image URL দিন।";
+
+        status.className =
+          "image-status error";
+
+      };
+
+
+      preview.src =
+        value;
+
+    }
+
+
+    /* =====================================================
+       NEWS IMAGE URL PREVIEW
+    ====================================================== */
+
+    $("newsImage")
+      .addEventListener(
+        "input",
+        () => {
+
+          const value =
+            $("newsImage")
+              .value
+              .trim();
+
+
+          if (value) {
+
+            setImagePreview(
+              $("newsImage"),
+              $("newsImagePreview"),
+              $("newsImagePreviewBox"),
+              $("newsImageStatus"),
+              value,
+              "ছবি URL অথবা Upload ব্যবহার করুন।"
+            );
+
+          } else {
+
+            $("newsImagePreviewBox")
+              .classList.remove(
+                "show"
+              );
+
+            $("newsImageStatus")
+              .textContent =
+              "ছবি URL অথবা Upload ব্যবহার করুন।";
+
+            $("newsImageStatus")
+              .className =
+              "image-status";
+
+          }
+
+
+          updatePhotoCard();
+
+        }
+      );
+
+
+    /* =====================================================
+       NEWS IMAGE UPLOAD
+    ====================================================== */
+
+    $("newsImageFile")
+      .addEventListener(
+        "change",
+        async () => {
+
+          const file =
+            $("newsImageFile")
+              .files[0];
+
+
+          if (!file) {
+            return;
+          }
+
+
+          try {
+
+            $("newsImageStatus")
+              .textContent =
+              "⏳ ছবি প্রস্তুত হচ্ছে...";
+
+            $("newsImageStatus")
+              .className =
+              "image-status";
+
+
+            const dataUrl =
+              await processImageFile(
+                file,
+                {
+                  maxWidth: 1600,
+                  maxHeight: 1000,
+                  quality: .82
+                }
+              );
+
+
+            $("newsImage")
+              .value =
+              dataUrl;
+
+
+            $("newsImagePreview")
+              .src =
+              dataUrl;
+
+
+            $("newsImagePreviewBox")
+              .classList.add(
+                "show"
+              );
+
+
+            $("newsImageStatus")
+              .textContent =
+              "✔️ ছবি Upload ও optimize হয়েছে।";
+
+            $("newsImageStatus")
+              .className =
+              "image-status success";
+
+
+            updatePhotoCard();
+
+          } catch (error) {
+
+            console.error(error);
+
+            $("newsImageStatus")
+              .textContent =
+              error.message;
+
+            $("newsImageStatus")
+              .className =
+              "image-status error";
+
+          }
+
+        }
+      );
+
+
+    /* =====================================================
+       CLEAR NEWS IMAGE
+    ====================================================== */
+
+    $("clearNewsImageBtn")
+      .addEventListener(
+        "click",
+        () => {
+
+          $("newsImage")
+            .value = "";
+
+
+          $("newsImageFile")
+            .value = "";
+
+
+          $("newsImagePreview")
+            .removeAttribute(
+              "src"
+            );
+
+
+          $("newsImagePreviewBox")
+            .classList.remove(
+              "show"
+            );
+
+
+          $("newsImageStatus")
+            .textContent =
+            "ছবি URL অথবা Upload ব্যবহার করুন।";
+
+          $("newsImageStatus")
+            .className =
+            "image-status";
+
+
+          updatePhotoCard();
+
+        }
+      );
+
+
+    /* =====================================================
+       LOGO URL PREVIEW
+    ====================================================== */
+
+    $("siteLogo")
+      .addEventListener(
+        "input",
+        () => {
+
+          const value =
+            $("siteLogo")
+              .value
+              .trim();
+
+
+          setImagePreview(
+            $("siteLogo"),
+            $("logoPreview"),
+            $("logoPreviewBox"),
+            $("logoStatus"),
+            value,
+            "Logo URL অথবা Upload ব্যবহার করুন।"
+          );
+
+
+          updatePhotoCard();
+
+        }
+      );
+
+
+    /* =====================================================
+       LOGO UPLOAD
+    ====================================================== */
+
+    $("siteLogoFile")
+      .addEventListener(
+        "change",
+        async () => {
+
+          const file =
+            $("siteLogoFile")
+              .files[0];
+
+
+          if (!file) {
+            return;
+          }
+
+
+          try {
+
+            $("logoStatus")
+              .textContent =
+              "⏳ Logo প্রস্তুত হচ্ছে...";
+
+            $("logoStatus")
+              .className =
+              "image-status";
+
+
+            const dataUrl =
+              await processImageFile(
+                file,
+                {
+                  maxWidth: 800,
+                  maxHeight: 500,
+                  quality: .9
+                }
+              );
+
+
+            $("siteLogo")
+              .value =
+              dataUrl;
+
+
+            $("logoPreview")
+              .src =
+              dataUrl;
+
+
+            $("logoPreviewBox")
+              .classList.add(
+                "show"
+              );
+
+
+            $("logoStatus")
+              .textContent =
+              "✔️ Logo Upload হয়েছে।";
+
+            $("logoStatus")
+              .className =
+              "image-status success";
+
+
+            updatePhotoCard();
+
+          } catch (error) {
+
+            console.error(error);
+
+            $("logoStatus")
+              .textContent =
+              error.message;
+
+            $("logoStatus")
+              .className =
+              "image-status error";
+
+          }
+
+        }
+      );
+
+
+    /* =====================================================
+       CLEAR LOGO
+    ====================================================== */
+
+    $("clearLogoBtn")
+      .addEventListener(
+        "click",
+        () => {
+
+          $("siteLogo")
+            .value = "";
+
+
+          $("siteLogoFile")
+            .value = "";
+
+
+          $("logoPreview")
+            .removeAttribute(
+              "src"
+            );
+
+
+          $("logoPreviewBox")
+            .classList.remove(
+              "show"
+            );
+
+
+          $("logoStatus")
+            .textContent =
+            "Logo URL অথবা Upload ব্যবহার করুন।";
+
+          $("logoStatus")
+            .className =
+            "image-status";
+
+
+          updatePhotoCard();
+
+        }
+      );
+
+
+    /* =====================================================
+       FAVICON URL PREVIEW
+    ====================================================== */
+
+    $("siteFavicon")
+      .addEventListener(
+        "input",
+        () => {
+
+          const value =
+            $("siteFavicon")
+              .value
+              .trim();
+
+
+          setImagePreview(
+            $("siteFavicon"),
+            $("faviconPreview"),
+            $("faviconPreviewBox"),
+            $("faviconStatus"),
+            value,
+            "Favicon URL অথবা Upload ব্যবহার করুন।"
+          );
+
+        }
+      );
+
+
+    /* =====================================================
+       FAVICON UPLOAD
+    ====================================================== */
+
+    $("siteFaviconFile")
+      .addEventListener(
+        "change",
+        async () => {
+
+          const file =
+            $("siteFaviconFile")
+              .files[0];
+
+
+          if (!file) {
+            return;
+          }
+
+
+          try {
+
+            $("faviconStatus")
+              .textContent =
+              "⏳ Icon প্রস্তুত হচ্ছে...";
+
+            $("faviconStatus")
+              .className =
+              "image-status";
+
+
+            const dataUrl =
+              await processImageFile(
+                file,
+                {
+                  maxWidth: 512,
+                  maxHeight: 512,
+                  quality: .92
+                }
+              );
+
+
+            $("siteFavicon")
+              .value =
+              dataUrl;
+
+
+            $("faviconPreview")
+              .src =
+              dataUrl;
+
+
+            $("faviconPreviewBox")
+              .classList.add(
+                "show"
+              );
+
+
+            $("faviconStatus")
+              .textContent =
+              "✔️ Icon Upload হয়েছে।";
+
+            $("faviconStatus")
+              .className =
+              "image-status success";
+
+
+          } catch (error) {
+
+            console.error(error);
+
+            $("faviconStatus")
+              .textContent =
+              error.message;
+
+            $("faviconStatus")
+              .className =
+              "image-status error";
+
+          }
+
+        }
+      );
+
+
+    /* =====================================================
+       CLEAR FAVICON
+    ====================================================== */
+
+    $("clearFaviconBtn")
+      .addEventListener(
+        "click",
+        () => {
+
+          $("siteFavicon")
+            .value = "";
+
+
+          $("siteFaviconFile")
+            .value = "";
+
+
+          $("faviconPreview")
+            .removeAttribute(
+              "src"
+            );
+
+
+          $("faviconPreviewBox")
+            .classList.remove(
+              "show"
+            );
+
+
+          $("faviconStatus")
+            .textContent =
+            "Favicon URL অথবা Upload ব্যবহার করুন।";
+
+          $("faviconStatus")
+            .className =
+            "image-status";
+
+        }
+      );
+
+
+    /* =====================================================
+       PHOTO CARD UPDATE
+    ====================================================== */
+
+    function updatePhotoCard() {
+
+      const title =
+        $("newsTitle")
+          .value
+          .trim();
+
+
+      const category =
+        $("newsCategory")
+          .value;
+
+
+      const image =
+        $("newsImage")
+          .value
+          .trim();
+
+
+      const logo =
+        $("siteLogo")
+          .value
+          .trim();
+
+
+      $("photoCardTitle")
+        .textContent =
+        title ||
+        "সংবাদের শিরোনাম এখানে দেখা যাবে";
+
+
+      $("photoCardSmallTitle")
+        .textContent =
+        title ||
+        "সংবাদের শিরোনাম এখানে দেখা যাবে";
+
+
+      $("photoCardCategory")
+        .textContent =
+        category ||
+        "সর্বশেষ";
+
+
+      $("photoCardImage")
+        .src =
+        image ||
+        "https://placehold.co/800x450/0d58a1/ffffff?text=News+Photo";
+
+
+      $("photoCardLogo")
+        .src =
+        logo ||
+        "https://placehold.co/150x80/ffffff/061a33?text=LOGO";
+
+
+      $("photoCardDate")
+        .textContent =
+        new Date()
+          .toLocaleDateString(
+            "bn-BD"
+          );
+
+    }
+
+
+    $("newsTitle")
+      .addEventListener(
+        "input",
+        updatePhotoCard
+      );
+
+
+    $("newsCategory")
+      .addEventListener(
+        "change",
+        updatePhotoCard
+      );
 
 
     /* =====================================================
@@ -2546,6 +4718,7 @@
           `page-${pageName}`
         );
 
+
       if (page) {
 
         page.classList.add(
@@ -2562,7 +4735,7 @@
           item.classList.toggle(
             "active",
             item.dataset.page ===
-              pageName
+            pageName
           );
 
         });
@@ -2590,6 +4763,16 @@
       ) {
 
         renderArticleList();
+
+      }
+
+
+      if (
+        pageName ===
+        "new-news"
+      ) {
+
+        updatePhotoCard();
 
       }
 
@@ -2663,12 +4846,14 @@
             "/api/articles"
           );
 
+
         articles =
           Array.isArray(
             data.articles
           )
             ? data.articles
             : [];
+
 
         updateStats();
 
@@ -2700,6 +4885,7 @@
       const total =
         articles.length;
 
+
       const published =
         articles.filter(
           article =>
@@ -2707,12 +4893,14 @@
             "published"
         ).length;
 
+
       const drafts =
         articles.filter(
           article =>
             article.status ===
             "draft"
         ).length;
+
 
       const views =
         articles.reduce(
@@ -2728,15 +4916,19 @@
 
 
       $("totalNews")
-        .textContent = total;
+        .textContent =
+        total;
+
 
       $("publishedNews")
         .textContent =
         published;
 
+
       $("draftNews")
         .textContent =
         drafts;
+
 
       $("totalViews")
         .textContent =
@@ -2754,6 +4946,7 @@
       const container =
         $("dashboardArticles");
 
+
       if (!articles.length) {
 
         container.innerHTML =
@@ -2762,6 +4955,7 @@
           </div>`;
 
         return;
+
       }
 
 
@@ -2777,17 +4971,22 @@
                 a.created_at
               )
           )
-          .slice(0, 5);
+          .slice(
+            0,
+            5
+          );
 
 
       container.innerHTML =
         `<div class="article-list">
-          ${latest.map(
-            article =>
-              articleHtml(
-                article
-              )
-          ).join("")}
+          ${latest
+            .map(
+              article =>
+                articleHtml(
+                  article
+                )
+            )
+            .join("")}
         </div>`;
 
     }
@@ -2809,13 +5008,19 @@
       const status =
         article.status ===
         "draft"
+
           ? `
-            <span class="badge badge-draft">
+            <span
+              class="badge badge-draft"
+            >
               Draft
             </span>
           `
+
           : `
-            <span class="badge badge-published">
+            <span
+              class="badge badge-published"
+            >
               Published
             </span>
           `;
@@ -2831,6 +5036,7 @@
             onerror="this.src='https://placehold.co/120x80/eef1f5/777?text=News'"
           >
 
+
           <div class="article-info">
 
             <h3>
@@ -2838,6 +5044,7 @@
                 article.title
               )}
             </h3>
+
 
             <div class="article-meta">
 
@@ -2877,6 +5084,7 @@
               ✏️ Edit
             </button>
 
+
             <button
               class="btn btn-danger"
               type="button"
@@ -2902,6 +5110,7 @@
       const container =
         $("articleList");
 
+
       if (!articles.length) {
 
         container.innerHTML =
@@ -2910,6 +5119,7 @@
           </div>`;
 
         return;
+
       }
 
 
@@ -2940,34 +5150,46 @@
 
           const id =
             $("editArticleId")
-              .value.trim();
+              .value
+              .trim();
 
 
           const payload = {
 
             title:
               $("newsTitle")
-                .value.trim(),
+                .value
+                .trim(),
+
 
             category:
               $("newsCategory")
                 .value,
 
+
             source_name:
               $("newsSource")
-                .value.trim(),
+                .value
+                .trim(),
+
 
             image:
               $("newsImage")
-                .value.trim(),
+                .value
+                .trim(),
+
 
             summary:
               $("newsSummary")
-                .value.trim(),
+                .value
+                .trim(),
+
 
             content:
               $("newsContent")
-                .value.trim(),
+                .value
+                .trim(),
+
 
             status:
               $("newsStatus")
@@ -2984,6 +5206,7 @@
             );
 
             return;
+
           }
 
 
@@ -2995,17 +5218,21 @@
             );
 
             return;
+
           }
 
 
           const button =
             $("newsSubmitBtn");
 
+
           const oldText =
             button.textContent;
 
+
           button.disabled =
             true;
+
 
           button.textContent =
             "⏳ সংরক্ষণ হচ্ছে...";
@@ -3023,6 +5250,7 @@
                   `/api/articles/${encodeURIComponent(id)}`,
                   {
                     method: "PUT",
+
                     body:
                       JSON.stringify(
                         payload
@@ -3037,6 +5265,7 @@
                   "/api/articles",
                   {
                     method: "POST",
+
                     body:
                       JSON.stringify(
                         payload
@@ -3055,7 +5284,9 @@
 
             resetNewsForm();
 
+
             await loadArticles();
+
 
             showPage(
               "news-management"
@@ -3065,6 +5296,7 @@
           } catch (error) {
 
             console.error(error);
+
 
             showToast(
               error.message ||
@@ -3076,6 +5308,7 @@
 
             button.disabled =
               false;
+
 
             button.textContent =
               oldText;
@@ -3101,6 +5334,7 @@
             `/api/articles/${encodeURIComponent(id)}`
           );
 
+
         const article =
           data.article;
 
@@ -3109,31 +5343,38 @@
           .value =
           article.id;
 
+
         $("newsTitle")
           .value =
           article.title || "";
+
 
         $("newsCategory")
           .value =
           article.category ||
           "সর্বশেষ";
 
+
         $("newsSource")
           .value =
           article.source_name ||
           "IMU EDITZ News";
 
+
         $("newsImage")
           .value =
           article.image || "";
+
 
         $("newsSummary")
           .value =
           article.summary || "";
 
+
         $("newsContent")
           .value =
           article.content || "";
+
 
         $("newsStatus")
           .value =
@@ -3145,9 +5386,44 @@
           .textContent =
           "নিউজ Edit করুন";
 
+
         $("newsSubmitBtn")
           .textContent =
           "💾 নিউজ Update করুন";
+
+
+        if (article.image) {
+
+          $("newsImagePreview")
+            .src =
+            article.image;
+
+
+          $("newsImagePreviewBox")
+            .classList.add(
+              "show"
+            );
+
+
+          $("newsImageStatus")
+            .textContent =
+            "✔️ Saved image";
+
+          $("newsImageStatus")
+            .className =
+            "image-status success";
+
+        } else {
+
+          $("newsImagePreviewBox")
+            .classList.remove(
+              "show"
+            );
+
+        }
+
+
+        updatePhotoCard();
 
 
         showPage(
@@ -3164,6 +5440,7 @@
       } catch (error) {
 
         console.error(error);
+
 
         showToast(
           error.message ||
@@ -3204,6 +5481,7 @@
         );
 
         return;
+
       }
 
 
@@ -3242,6 +5520,7 @@
 
         console.error(error);
 
+
         showToast(
           error.message ||
           "নিউজ Delete করা যায়নি।",
@@ -3266,28 +5545,57 @@
       $("newsForm")
         .reset();
 
+
       $("editArticleId")
         .value = "";
+
 
       $("newsSource")
         .value =
         "IMU EDITZ News";
 
+
       $("newsCategory")
         .value =
         "সর্বশেষ";
+
 
       $("newsStatus")
         .value =
         "published";
 
+
       $("newsFormTitle")
         .textContent =
         "নতুন নিউজ";
 
+
       $("newsSubmitBtn")
         .textContent =
         "💾 নিউজ সংরক্ষণ";
+
+
+      $("newsImagePreviewBox")
+        .classList.remove(
+          "show"
+        );
+
+
+      $("newsImageStatus")
+        .textContent =
+        "ছবি URL অথবা Upload ব্যবহার করুন।";
+
+
+      $("newsImageStatus")
+        .className =
+        "image-status";
+
+
+      $("newsImageFile")
+        .value = "";
+
+
+      updatePhotoCard();
 
     }
 
@@ -3312,16 +5620,20 @@
             "/api/settings"
           );
 
+
         settings =
           data.settings || {};
+
 
         fillSettings(
           settings
         );
 
+
       } catch (error) {
 
         console.error(error);
+
 
         showToast(
           "Settings লোড করা যায়নি: " +
@@ -3345,21 +5657,25 @@
       const video =
         data.videoNews || {};
 
+
       $("videoEnabled")
         .checked =
         Boolean(
           video.enabled
         );
 
+
       $("videoTitle")
         .value =
         video.title ||
         "ভিডিও নিউজ";
 
+
       $("videoUrl")
         .value =
         video.videoUrl ||
         "";
+
 
       $("videoEmbed")
         .value =
@@ -3367,40 +5683,52 @@
         "";
 
 
+      /* SOCIAL */
+
       const social =
         data.social || {};
+
 
       $("socialFacebook")
         .value =
         social.facebook || "";
 
+
       $("socialYoutube")
         .value =
         social.youtube || "";
+
 
       $("socialInstagram")
         .value =
         social.instagram || "";
 
+
       $("socialTwitter")
         .value =
         social.twitter || "";
+
 
       $("socialTiktok")
         .value =
         social.tiktok || "";
 
+
       $("socialTelegram")
         .value =
         social.telegram || "";
+
 
       $("socialWhatsapp")
         .value =
         social.whatsapp || "";
 
 
+      /* FACEBOOK LIVE */
+
       const facebookLive =
         data.facebookLive || {};
+
 
       $("facebookLiveEnabled")
         .checked =
@@ -3408,10 +5736,12 @@
           facebookLive.enabled
         );
 
+
       $("facebookPageUrl")
         .value =
         facebookLive.pageUrl ||
         "";
+
 
       $("facebookEmbedCode")
         .value =
@@ -3419,8 +5749,11 @@
         "";
 
 
+      /* YOUTUBE LIVE */
+
       const youtubeLive =
         data.youtubeLive || {};
+
 
       $("youtubeLiveEnabled")
         .checked =
@@ -3428,10 +5761,12 @@
           youtubeLive.enabled
         );
 
+
       $("youtubeChannelUrl")
         .value =
         youtubeLive.channelUrl ||
         "";
+
 
       $("youtubeEmbedCode")
         .value =
@@ -3439,31 +5774,38 @@
         "";
 
 
+      /* ADS */
+
       const ads = [
+
         [
           "headerAd",
           "headerAdEnabled",
           "headerAdType",
           "headerAdContent"
         ],
+
         [
           "footerAd",
           "footerAdEnabled",
           "footerAdType",
           "footerAdContent"
         ],
+
         [
           "sidebarAd",
           "sidebarAdEnabled",
           "sidebarAdType",
           "sidebarAdContent"
         ],
+
         [
           "popupAd",
           "popupAdEnabled",
           "popupAdType",
           "popupAdContent"
         ]
+
       ];
 
 
@@ -3473,16 +5815,19 @@
           const source =
             data[item[0]] || {};
 
+
           $(item[1])
             .checked =
             Boolean(
               source.enabled
             );
 
+
           $(item[2])
             .value =
             source.type ||
             "code";
+
 
           $(item[3])
             .value =
@@ -3500,39 +5845,187 @@
         ) || 5000;
 
 
+      /* SITE */
+
       const site =
         data.site || {};
+
 
       $("siteName")
         .value =
         site.name ||
         "IMU EDITZ News";
 
+
       $("siteTagline")
         .value =
         site.tagline ||
         "সত্যের সঙ্গে, মানুষের পাশে";
+
 
       $("siteLogo")
         .value =
         site.logo ||
         "";
 
+
       $("siteFavicon")
         .value =
         site.favicon ||
         "";
+
 
       $("siteDescription")
         .value =
         site.description ||
         "";
 
+
+      /* LOGO PREVIEW */
+
+      if (site.logo) {
+
+        $("logoPreview")
+          .src =
+          site.logo;
+
+
+        $("logoPreviewBox")
+          .classList.add(
+            "show"
+          );
+
+
+        $("logoStatus")
+          .textContent =
+          "✔️ Saved Logo";
+
+
+        $("logoStatus")
+          .className =
+          "image-status success";
+
+
+        updateAdminBrandLogo(
+          site.logo
+        );
+
+      }
+
+
+      /* FAVICON PREVIEW */
+
+      if (site.favicon) {
+
+        $("faviconPreview")
+          .src =
+          site.favicon;
+
+
+        $("faviconPreviewBox")
+          .classList.add(
+            "show"
+          );
+
+
+        $("faviconStatus")
+          .textContent =
+          "✔️ Saved Favicon";
+
+
+        $("faviconStatus")
+          .className =
+          "image-status success";
+
+
+        setFavicon(
+          site.favicon
+        );
+
+      }
+
+
+      updatePhotoCard();
+
     }
 
 
     /* =====================================================
-       GET CURRENT FORM SETTINGS
+       ADMIN BRAND LOGO
+    ====================================================== */
+
+    function updateAdminBrandLogo(
+      logo
+    ) {
+
+      const container =
+        $("adminBrandLogo");
+
+
+      if (!logo) {
+
+        container.innerHTML =
+          "IE";
+
+        return;
+
+      }
+
+
+      container.innerHTML =
+        `<img
+          src="${escapeHtml(logo)}"
+          alt="Logo"
+          onerror="this.parentElement.textContent='IE'"
+        >`;
+
+    }
+
+
+    /* =====================================================
+       FAVICON
+    ====================================================== */
+
+    function setFavicon(
+      url
+    ) {
+
+      if (!url) {
+        return;
+      }
+
+
+      let link =
+        document.querySelector(
+          'link[rel="icon"]'
+        );
+
+
+      if (!link) {
+
+        link =
+          document.createElement(
+            "link"
+          );
+
+        link.rel =
+          "icon";
+
+        document.head.appendChild(
+          link
+        );
+
+      }
+
+
+      link.href =
+        url;
+
+    }
+
+
+    /* =====================================================
+       COLLECT SETTINGS
     ====================================================== */
 
     function collectSettings() {
@@ -3551,7 +6044,8 @@
 
           content:
             $("headerAdContent")
-              .value.trim()
+              .value
+              .trim()
 
         },
 
@@ -3568,7 +6062,8 @@
 
           content:
             $("footerAdContent")
-              .value.trim()
+              .value
+              .trim()
 
         },
 
@@ -3585,7 +6080,8 @@
 
           content:
             $("sidebarAdContent")
-              .value.trim()
+              .value
+              .trim()
 
         },
 
@@ -3602,7 +6098,8 @@
 
           content:
             $("popupAdContent")
-              .value.trim(),
+              .value
+              .trim(),
 
           delay:
             Math.max(
@@ -3624,16 +6121,19 @@
 
           title:
             $("videoTitle")
-              .value.trim() ||
+              .value
+              .trim() ||
             "ভিডিও নিউজ",
 
           videoUrl:
             $("videoUrl")
-              .value.trim(),
+              .value
+              .trim(),
 
           embedCode:
             $("videoEmbed")
-              .value.trim()
+              .value
+              .trim()
 
         },
 
@@ -3642,31 +6142,38 @@
 
           facebook:
             $("socialFacebook")
-              .value.trim(),
+              .value
+              .trim(),
 
           youtube:
             $("socialYoutube")
-              .value.trim(),
+              .value
+              .trim(),
 
           instagram:
             $("socialInstagram")
-              .value.trim(),
+              .value
+              .trim(),
 
           twitter:
             $("socialTwitter")
-              .value.trim(),
+              .value
+              .trim(),
 
           tiktok:
             $("socialTiktok")
-              .value.trim(),
+              .value
+              .trim(),
 
           telegram:
             $("socialTelegram")
-              .value.trim(),
+              .value
+              .trim(),
 
           whatsapp:
             $("socialWhatsapp")
-              .value.trim()
+              .value
+              .trim()
 
         },
 
@@ -3679,11 +6186,13 @@
 
           pageUrl:
             $("facebookPageUrl")
-              .value.trim(),
+              .value
+              .trim(),
 
           embedCode:
             $("facebookEmbedCode")
-              .value.trim()
+              .value
+              .trim()
 
         },
 
@@ -3696,11 +6205,13 @@
 
           channelUrl:
             $("youtubeChannelUrl")
-              .value.trim(),
+              .value
+              .trim(),
 
           embedCode:
             $("youtubeEmbedCode")
-              .value.trim()
+              .value
+              .trim()
 
         },
 
@@ -3709,25 +6220,30 @@
 
           name:
             $("siteName")
-              .value.trim() ||
+              .value
+              .trim() ||
             "IMU EDITZ News",
 
           tagline:
             $("siteTagline")
-              .value.trim() ||
+              .value
+              .trim() ||
             "সত্যের সঙ্গে, মানুষের পাশে",
 
           logo:
             $("siteLogo")
-              .value.trim(),
+              .value
+              .trim(),
 
           favicon:
             $("siteFavicon")
-              .value.trim(),
+              .value
+              .trim(),
 
           description:
             $("siteDescription")
-              .value.trim()
+              .value
+              .trim()
 
         }
 
@@ -3755,6 +6271,7 @@
             "/api/settings",
             {
               method: "PUT",
+
               body:
                 JSON.stringify(
                   payload
@@ -3768,6 +6285,19 @@
           payload;
 
 
+        updateAdminBrandLogo(
+          payload.site.logo
+        );
+
+
+        setFavicon(
+          payload.site.favicon
+        );
+
+
+        updatePhotoCard();
+
+
         showToast(
           data.message ||
           successMessage ||
@@ -3778,6 +6308,7 @@
       } catch (error) {
 
         console.error(error);
+
 
         showToast(
           error.message ||
@@ -3918,6 +6449,9 @@
           loadSettings()
         ]);
 
+
+        updatePhotoCard();
+
       } catch (error) {
 
         console.error(
@@ -3929,6 +6463,10 @@
 
     }
 
+
+    /* =====================================================
+       START
+    ====================================================== */
 
     initialize();
 
